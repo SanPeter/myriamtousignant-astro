@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test:vitest": "vitest"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/SanPeter/myriamtousignant-astro#readme",
   "dependencies": {
-    "astro": "^5.5.2"
+    "astro": "^5.5.2",
+    "vitest": "^3.0.8"
   }
 }
