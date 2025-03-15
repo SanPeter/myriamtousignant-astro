@@ -1,3 +1,4 @@
+// example file fot playwright
 // import { test, expect } from '@playwright/test';
 
 // test('has title', async ({ page }) => {
