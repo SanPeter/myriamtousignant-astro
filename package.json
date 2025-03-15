@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/SanPeter/myriamtousignant-astro#readme",
   "dependencies": {
+    "@tailwindcss/vite": "^4.0.14",
     "astro": "^5.5.2",
+    "tailwindcss": "^4.0.14",
     "vitest": "^3.0.8"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@
 // Welcome to Astro! Everything between these triple-dash code fences
 // is your "component frontmatter". It never runs in the browser.
 console.log('This runs in your terminal, not the browser!');
+import "../styles/global.css";
 ---
 <!-- Below is your "component template." It's just HTML, but with
     some magic sprinkled in to help you build great templates. -->
@@ -10,11 +11,8 @@ console.log('This runs in your terminal, not the browser!');
     <title>Hello, Astro!</title>
   </head>
   <body>
-    <h1>Hello, World!</h1>
+    <h1 class="text-3xl text-blue-500">
+      Hello, World!
+    </h1>
   </body>
 </html>
-<style>
-  h1 {
-    color: orange;
-  }
-</style>
