@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: latest 
   
-      - name: install dependencies
-        run: npm ci
+    #   - name: install dependencies
+    #     run: npm ci
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
@@ -31,39 +31,7 @@ jobs:
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
     
-  
-#   test:
-#     name: Tests Playwright
-#     needs: build
-#     runs-on: ubuntu-latest  
-#     steps:
-          
-#     #   - name: Code checkout
-#     #     uses: actions/checkout@v3
-
-#     #   - name: Install Node.js
-#     #     uses: actions/setup-node@v3
-#     #     with:
-#     #       node-version: latest
-
-#       - name: install dependencies
-#         run: npm ci
-
-#       - name: Install Playwright Browsers
-#         run: npx playwright install chromium --with-deps
-
-#       - name: Build Astro site
-#         run: npm run build
-
-#       - name: Launch site preview
-#         run: npm run preview &
-
-#       - name: Run Playwright tests
-#         run: npm run test:e2e
-#         env:
-#           PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
-
-#   deploy:
+  #   deploy:
 #     name: Déploiement sur GitHub Pages
 #     needs: test # Dépend du job 'test'
 #     runs-on: ubuntu-latest
