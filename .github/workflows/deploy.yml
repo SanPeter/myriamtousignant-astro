@@ -11,45 +11,57 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
+
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        # with:
-          # path: . # The root location of your Astro project inside the repository. (optional)
-          # node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-          # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
-      - name: install dependencies
-        run: npm ci
+        with:
+          node-version: latest 
   
-  test:
-    name: Tests Playwright
-    needs: build
-    runs-on: ubuntu-latest  
-    steps:
-          
-    #   - name: Code checkout
-    #     uses: actions/checkout@v3
-
-    #   - name: Install Node.js
-    #     uses: actions/setup-node@v3
-    #     with:
-    #       node-version: latest
-
       - name: install dependencies
         run: npm ci
 
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Build Astro site
-        run: npm run build
-
-      - name: Launch site preview
+      - name: Launch site previe w
         run: npm run preview &
 
       - name: Run Playwright tests
         run: npm run test:e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
+    
+  
+#   test:
+#     name: Tests Playwright
+#     needs: build
+#     runs-on: ubuntu-latest  
+#     steps:
+          
+#     #   - name: Code checkout
+#     #     uses: actions/checkout@v3
+
+#     #   - name: Install Node.js
+#     #     uses: actions/setup-node@v3
+#     #     with:
+#     #       node-version: latest
+
+#       - name: install dependencies
+#         run: npm ci
+
+#       - name: Install Playwright Browsers
+#         run: npx playwright install chromium --with-deps
+
+#       - name: Build Astro site
+#         run: npm run build
+
+#       - name: Launch site preview
+#         run: npm run preview &
+
+#       - name: Run Playwright tests
+#         run: npm run test:e2e
+#         env:
+#           PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
 
 #   deploy:
 #     name: Déploiement sur GitHub Pages
