@@ -1,0 +1,61 @@
+name: Deployment and tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Tests Playwright
+    runs-on: ubuntu-latest  
+    steps:
+          
+      - name: Code checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Launch site preview
+        run: npm run preview &
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
+
+#   deploy:
+#     name: Déploiement sur GitHub Pages
+#     needs: test # Dépend du job 'test'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout du code
+#         uses: actions/checkout@v3
+
+#       - name: Installation de Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+
+#       - name: Installation des dépendances
+#         run: npm ci
+
+#       - name: Build du site Astro
+#         run: npm run build
+
+#       - name: Déploiement sur GitHub Pages
+#         uses: JamesIves/github-pages-deploy-action@v4
+#         with:
+#           folder: dist # Dossier de build d'Astro
