@@ -7,21 +7,49 @@ test('has title', async ({ page }) => {
   await expect(page).toHaveTitle(/Myriam Tousignant/);
 });
 
-// test('h1 has correct color', async ({ page }) => {
-//   await page.goto('http://localhost:4321/');
+test.describe('Footer layout', () => {
+  test('displays content in column on mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 }); // Taille d'un mobile
+    await page.goto('http://localhost:4321/');
 
-//   // Expect the h1 with text "Hello World!" to have the color oklch(0.623 0.214 259.815).
-//   const h1Element = page.locator('h1').filter({ hasText: 'Hello, World!' }).first();
-//   const color = await h1Element.evaluate((element) => getComputedStyle(element).color);
-//   expect(color).toBe('oklch(0.623 0.214 259.815)');
-// });
+    const footer = page.locator('footer');
+    const flexDirection = await footer.evaluate((element) => getComputedStyle(element).flexDirection);
+    expect(flexDirection).toBe('column');
+  });
 
-// test('h1 has correct classes', async ({ page }) => {
-//   await page.goto('http://localhost:4321/');
+  test('displays content in row on larger display', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 }); // Taille d'un écran plus grand
+    await page.goto('http://localhost:4321/');
 
-//   // Expect the h1 with text "Hello World!" to have classes "text-3xl" and "text-blue-500".
-//   const h1Element = page.locator('h1').filter({ hasText: 'Hello, World!' }).first();
-//   const classList = await h1Element.evaluate((element) => Array.from(element.classList));
-//   expect(classList).toContain('text-3xl');
-//   expect(classList).toContain('text-blue-500');
-// });
+    const footer = page.locator('footer');
+    const flexDirection = await footer.evaluate((element) => getComputedStyle(element).flexDirection);
+    expect(flexDirection).toBe('row');
+  });
+
+  test('each div under footer has a list of links', async ({ page }) => {
+    await page.goto('http://localhost:4321/');
+
+    const divs = page.locator('footer > div');
+    const divCount = await divs.count();
+
+    for (let i = 0; i < divCount; i++) {
+      const links = divs.nth(i).locator('a');
+      const linkCount = await links.count();
+      expect(linkCount).toBeGreaterThan(0);
+    }
+  });
+
+  test('each list of links has a title', async ({ page }) => {
+    await page.goto('http://localhost:4321/');
+
+    const divs = page.locator('footer > div');
+    const divCount = await divs.count();
+
+    for (let i = 0; i < divCount; i++) {
+      const title = divs.nth(i).locator('h2');
+      await expect(title).toBeVisible();
+    }
+  });
+  
+  
+});
