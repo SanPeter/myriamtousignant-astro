@@ -27,8 +27,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Launch site preview
-        run: npm run preview &
+      #- name: Launch site preview
+       # run: npm run preview &
 
       - name: Run Playwright tests
         run: npm run test:e2e
