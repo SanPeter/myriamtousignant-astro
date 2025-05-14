@@ -7,8 +7,7 @@ draft: false
 featured: false
 weight: 10
 summaryImage: 'images/mediation-boucherville-0.jpg'
-listImage: 'images/mediation-boucherville-1.jpg'
-projectImages:         
+listImage: 'images/mediation-boucherville-1.jpg'       
 ---
 
 {{< gallery match="images/mediation-boucherville-*" sortOrder="asc" rowHeight="200" margins="10" thumbnailResizeOptions="600x600 q100 Lanczos" showExif=false previewType="blur" embedPreview=true thumbnailHoverEffect=enlarge lastRow=nojustify >}}

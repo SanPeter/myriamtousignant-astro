@@ -147,10 +147,82 @@ declare module 'astro:content' {
 	};
 
 	type DataEntryMap = {
-		
+		"art-public": Record<string, {
+  id: string;
+  body?: string;
+  collection: "art-public";
+  data: InferEntrySchema<"art-public">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"biographie-demarche": Record<string, {
+  id: string;
+  body?: string;
+  collection: "biographie-demarche";
+  data: InferEntrySchema<"biographie-demarche">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"boutique": Record<string, {
+  id: string;
+  body?: string;
+  collection: "boutique";
+  data: InferEntrySchema<"boutique">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"expositions": Record<string, {
+  id: string;
+  body?: string;
+  collection: "expositions";
+  data: InferEntrySchema<"expositions">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"livres-artiste": Record<string, {
+  id: string;
+  body?: string;
+  collection: "livres-artiste";
+  data: InferEntrySchema<"livres-artiste">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"mediations": Record<string, {
+  id: string;
+  body?: string;
+  collection: "mediations";
+  data: InferEntrySchema<"mediations">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"presse": Record<string, {
+  id: string;
+  body?: string;
+  collection: "presse";
+  data: InferEntrySchema<"presse">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"projets": Record<string, {
+  id: string;
+  body?: string;
+  collection: "projets";
+  data: InferEntrySchema<"projets">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"publications": Record<string, {
+  id: string;
+  body?: string;
+  collection: "publications";
+  data: InferEntrySchema<"publications">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+
 	};
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	export type ContentConfig = typeof import("../src/content.config.mjs");
+	export type ContentConfig = typeof import("../src/content.config.js");
 }

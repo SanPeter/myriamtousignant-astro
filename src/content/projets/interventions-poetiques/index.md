@@ -4,7 +4,7 @@ title: "Interventions poétiques- Pour beaucoup d'obscurité quelques éclats"
 description: ''
 date: 2023-01-28T07:00:00-05:00
 draft: false
-featured: falsew
+featured: false
 weight: 2
 summaryImage: 'images/intervention-poetique-01-couverture.jpg'
 listImage: 'images/intervention-poetique-01-couverture.jpg'
