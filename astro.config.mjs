@@ -9,4 +9,8 @@ export default defineConfig({
         plugins: [tailwindcss()],
     },
     integrations: [react()],
+    content: {
+        // Configuration des collections
+        assets: 'src/content'
+    }
 });
