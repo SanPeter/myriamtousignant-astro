@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Récupération de toutes les œuvres d'art public
+const artPublicEntries = await getCollection('art-public');
+
+// Tri par date (du plus récent au plus ancien)
+const sortedArtPublic = artPublicEntries
+  .filter(entry => !entry.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    if (!a.data.date || !b.data.date) return 0;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
+---
+
+<BaseLayout title="Art Public">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8">Art Public</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedArtPublic.map(artwork => (
+        <a href={`/art-public/${artwork.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
+          {artwork.data.summaryImage && (
+            <img 
+              src={artwork.data.summaryImage} 
+              alt={artwork.data.title} 
+              class="w-full h-48 object-cover"
+            />
+          )}
+          <div class="p-4">
+            <h2 class="text-xl font-semibold">{artwork.data.title}</h2>
+            {artwork.data.date && (
+              <p class="text-sm text-gray-600 mt-1">
+                {artwork.data.date.toLocaleDateString('fr-CA')}
+              </p>
+            )}
+            {artwork.data.description && (
+              <p class="mt-2 text-gray-700 line-clamp-3">{artwork.data.description}</p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

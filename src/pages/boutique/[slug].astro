@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ImageGallery from '../../components/ImageGallery.astro';
+
+export async function getStaticPaths() {
+  const boutiqueEntries = await getCollection('boutique');
+  
+  return boutiqueEntries
+    .filter(entry => !entry.data.draft) // Filtre les brouillons
+    .map(entry => ({
+      params: { slug: entry.id.replace(/\.md$/, '') },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+---
+
+<BaseLayout title={entry.data.title}>
+  <div class="max-w-4xl mx-auto">
+    <a href="/boutique" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+      </svg>
+      Retour à la boutique
+    </a>
+    
+    <article class="bg-white p-6 rounded-lg shadow-md">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          {entry.data.summaryImage && (
+            <img 
+              src={entry.data.summaryImage} 
+              alt={entry.data.title} 
+              class="w-full max-h-96 object-contain mb-4 rounded-md"
+            />
+          )}
+          
+          {entry.data.projectImages && entry.data.projectImages.length > 0 && (
+            <div class="grid grid-cols-4 gap-2 mt-2">
+              {entry.data.projectImages.slice(0, 4).map((image: string) => (
+                <img 
+                  src={image} 
+                  alt={`Thumbnail de ${entry.data.title}`} 
+                  class="w-full h-20 object-cover rounded cursor-pointer"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div>
+          <h1 class="text-3xl font-bold mb-2">{entry.data.title}</h1>
+          
+          <div class="mb-4">
+            {entry.data.price && (
+              <p class="text-2xl font-bold text-blue-600">
+                {entry.data.price.toFixed(2)} $
+              </p>
+            )}
+            
+            {entry.data.available === false && (
+              <p class="text-red-600 font-semibold mt-2">Épuisé</p>
+            )}
+          </div>
+          
+          {entry.data.description && (
+            <div class="mb-6">
+              <p class="text-gray-700">{entry.data.description}</p>
+            </div>
+          )}
+          
+          {entry.data.available !== false && (
+            <div class="mt-6">
+              <button class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors text-lg font-semibold">
+                Demande d'informations
+              </button>
+              <p class="text-sm text-gray-500 mt-2 text-center">Pour commander, contactez directement l'artiste</p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div class="mt-10">
+        <h2 class="text-xl font-semibold mb-4">Détails</h2>
+        <div class="prose max-w-none">
+          {entry.body && <div set:html={entry.body} />}
+        </div>
+      </div>
+      
+      {entry.data.projectImages && entry.data.projectImages.length > 0 && (
+        <ImageGallery images={entry.data.projectImages} title={entry.data.title} />
+      )}
+    </article>
+  </div>
+</BaseLayout>

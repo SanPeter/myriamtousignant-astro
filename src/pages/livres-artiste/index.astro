@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Récupération de tous les livres d'artiste
+const livresArtisteEntries = await getCollection('livres-artiste');
+
+// Tri par poids et date
+const sortedLivresArtiste = livresArtisteEntries
+  .filter(entry => !entry.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    // D'abord par poids si disponible
+    if (a.data.weight && b.data.weight) {
+      return a.data.weight - b.data.weight;
+    }
+    // Sinon par date (du plus récent au plus ancien)
+    if (a.data.date && b.data.date) {
+      return b.data.date.valueOf() - a.data.date.valueOf();
+    }
+    return 0;
+  });
+---
+
+<BaseLayout title="Livres d'artiste">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8">Livres d'artiste</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedLivresArtiste.map(livre => (
+        <a href={`/livres-artiste/${livre.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
+          {livre.data.summaryImage && (
+            <img 
+              src={livre.data.summaryImage} 
+              alt={livre.data.title} 
+              class="w-full h-48 object-cover"
+            />
+          )}
+          <div class="p-4">
+            <h2 class="text-xl font-semibold">{livre.data.title}</h2>
+            {livre.data.date && (
+              <p class="text-sm text-gray-600 mt-1">
+                {livre.data.date.toLocaleDateString('fr-CA')}
+              </p>
+            )}
+            {livre.data.description && (
+              <p class="mt-2 text-gray-700 line-clamp-3">{livre.data.description}</p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

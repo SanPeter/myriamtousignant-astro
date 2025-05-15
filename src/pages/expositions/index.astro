@@ -1,0 +1,50 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Récupération de toutes les expositions
+const expositions = await getCollection('expositions');
+
+// Tri par date de début (du plus récent au plus ancien)
+const sortedExpositions = expositions
+  .filter(expo => !expo.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    if (!a.data.startDate || !b.data.startDate) return 0;
+    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+  });
+---
+
+<BaseLayout title="Expositions">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8">Expositions</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedExpositions.map(exposition => (
+        <a href={`/expositions/${exposition.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
+          {exposition.data.summaryImage && (
+            <img 
+              src={exposition.data.summaryImage} 
+              alt={exposition.data.title} 
+              class="w-full h-48 object-cover"
+            />
+          )}
+          <div class="p-4">
+            <h2 class="text-xl font-semibold">{exposition.data.title}</h2>
+            {exposition.data.startDate && (
+              <p class="text-sm text-gray-600 mt-1">
+                {exposition.data.startDate.toLocaleDateString('fr-CA')}
+                {exposition.data.endDate && ` au ${exposition.data.endDate.toLocaleDateString('fr-CA')}`}
+              </p>
+            )}
+            {exposition.data.location && (
+              <p class="text-sm text-gray-600">{exposition.data.location}</p>
+            )}
+            {exposition.data.description && (
+              <p class="mt-2 text-gray-700 line-clamp-3">{exposition.data.description}</p>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

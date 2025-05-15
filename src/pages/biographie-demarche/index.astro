@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Récupération de la biographie
+const biographieEntries = await getCollection('biographie-demarche');
+const biographie = biographieEntries.find(entry => entry.id === '_index.md') || biographieEntries[0];
+---
+
+<BaseLayout title="Biographie & Démarche">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold mb-8">{biographie?.data.title || "Biographie & Démarche"}</h1>
+    
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      {biographie?.data.heroImage && (
+        <img 
+          src={biographie.data.heroImage} 
+          alt={biographie.data.title || "Myriam Tousignant"} 
+          class="w-full max-h-96 object-contain mb-6"
+        />
+      )}
+      
+      {biographie?.data.description && (
+        <div class="mt-4 mb-6">
+          <p class="text-lg text-gray-700 italic">{biographie.data.description}</p>
+        </div>
+      )}
+      
+      <div class="prose max-w-none">
+        {biographie?.body && <div set:html={biographie.body} />}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

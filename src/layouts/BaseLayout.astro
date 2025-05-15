@@ -1,0 +1,89 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Site artistique de Myriam Tousignant" } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | Myriam Tousignant</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="bg-white shadow">
+      <div class="container mx-auto p-4">
+        <nav class="flex justify-between items-center">
+          <a href="/" class="text-2xl font-bold">Myriam Tousignant</a>
+          <div class="hidden md:flex space-x-6">
+            <a href="/projets" class="hover:underline">Projets</a>
+            <a href="/expositions" class="hover:underline">Expositions</a>
+            <a href="/art-public" class="hover:underline">Art Public</a>
+            <a href="/livres-artiste" class="hover:underline">Livres d'artiste</a>
+            <a href="/mediations" class="hover:underline">Médiations</a>
+            <a href="/biographie-demarche" class="hover:underline">Biographie & Démarche</a>
+            <a href="/boutique" class="hover:underline">Boutique</a>
+          </div>
+          <button id="mobile-menu-button" class="md:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden mt-4">
+          <div class="flex flex-col space-y-3">
+            <a href="/projets" class="hover:underline">Projets</a>
+            <a href="/expositions" class="hover:underline">Expositions</a>
+            <a href="/art-public" class="hover:underline">Art Public</a>
+            <a href="/livres-artiste" class="hover:underline">Livres d'artiste</a>
+            <a href="/mediations" class="hover:underline">Médiations</a>
+            <a href="/biographie-demarche" class="hover:underline">Biographie & Démarche</a>
+            <a href="/boutique" class="hover:underline">Boutique</a>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <main class="container mx-auto p-4 flex-grow">
+      <slot />
+    </main>
+    
+    <footer class="bg-gray-100 mt-8">
+      <div class="container mx-auto p-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <p>&copy; {new Date().getFullYear()} Myriam Tousignant. Tous droits réservés.</p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-600">
+              <span class="sr-only">Instagram</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" d="M12 2.25c-2.71 0-3.05.01-4.12.06-1.07.05-1.8.22-2.43.46-.66.26-1.21.6-1.77 1.16-.56.56-.9 1.11-1.16 1.77-.24.64-.41 1.36-.46 2.43-.05 1.07-.06 1.41-.06 4.12s.01 3.05.06 4.12c.05 1.07.22 1.8.46 2.43.26.66.6 1.21 1.16 1.77.56.56 1.11.9 1.77 1.16.64.24 1.36.41 2.43.46 1.07.05 1.41.06 4.12.06s3.05-.01 4.12-.06c1.07-.05 1.8-.22 2.43-.46.66-.26 1.21-.6 1.77-1.16.56-.56.9-1.11 1.16-1.77.24-.64.41-1.36.46-2.43.05-1.07.06-1.41.06-4.12s-.01-3.05-.06-4.12c-.05-1.07-.22-1.8-.46-2.43-.26-.66-.6-1.21-1.16-1.77-.56-.56-1.11-.9-1.77-1.16-.64-.24-1.36-.41-2.43-.46-1.07-.05-1.41-.06-4.12-.06zm0 1.8c2.67 0 2.99.01 4.04.06.98.04 1.5.21 1.86.35.46.18.8.4 1.15.75.35.35.57.69.75 1.15.14.36.31.88.35 1.86.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.98-.21 1.5-.35 1.86-.18.46-.4.8-.75 1.15-.35.35-.69.57-1.15.75-.36.14-.88.31-1.86.35-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.98-.04-1.5-.21-1.86-.35-.46-.18-.8-.4-1.15-.75-.35-.35-.57-.69-.75-1.15-.14-.36-.31-.88-.35-1.86-.05-1.05-.06-1.37-.06-4.04s.01-2.99.06-4.04c.04-.98.21-1.5.35-1.86.18-.46.4-.8.75-1.15.35-.35.69-.57 1.15-.75.36-.14.88-.31 1.86-.35 1.05-.05 1.37-.06 4.04-.06z" clip-rule="evenodd" />
+              </svg>
+            </a>
+            <a href="mailto:contact@myriamtousignant.com" class="hover:text-gray-600">
+              <span class="sr-only">Email</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Simple mobile menu toggle
+      document.getElementById('mobile-menu-button')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu')?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>
