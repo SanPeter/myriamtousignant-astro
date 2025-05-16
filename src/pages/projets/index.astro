@@ -14,12 +14,19 @@ const sortedProjets = projets
   });
 
 // Pour le composant GridProjets
-const projectsData = sortedProjets.map(projet => ({
-  url: `/projets/${projet.id.replace(/\.md$/, '')}`,
-  title: projet.data.title,
-  thumbnail: projet.data.summaryImage,
-  description: projet.data.description
-}));
+const projectsData = sortedProjets.map(projet => {
+  // Extraire le slug du projet à partir de l'ID
+  const slug = projet.id.includes('/') 
+    ? projet.id.split('/')[0]
+    : projet.id.replace(/\.md$/, '');
+    
+  return {
+    url: `/projets/${slug}`,
+    title: projet.data.title,
+    thumbnail: projet.data.summaryImage,
+    description: projet.data.description
+  };
+});
 ---
 
 <SectionLayout

@@ -1,0 +1,155 @@
+---
+import { Image } from 'astro:assets';
+
+// Définition des types pour les projets
+interface Project {
+  url: string;
+  title: string;
+  thumbnail?: string;
+  description?: string;
+  dateInfo?: string;
+  location?: string;
+  imageData?: any; // Pour stocker les données d'image optimisées
+}
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+
+// Importer toutes les images des projets de manière dynamique
+// Cette approche utilise un glob pour trouver toutes les images sans connaître les chemins exacts
+// Importation dynamique de toutes les images dans les collections de contenu
+// Cette technique permet à Astro de connaître les images à l'avance et de les optimiser
+const projectImages = import.meta.glob([
+  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/art-public/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/livres-artiste/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/mediations/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Enregistrer les chemins d'images pour le débogage
+console.log("Images disponibles:", Object.keys(projectImages).length);
+
+// Fonction pour résoudre le chemin de l'image relative à un contenu
+// Retourne soit un objet d'image importé soit une chaîne d'URL
+async function resolveContentImage(projet: Project): Promise<any | string> {
+  if (!projet.thumbnail) return "";
+
+  // Si le chemin commence par / ou http, on le retourne tel quel
+  if (projet.thumbnail.startsWith('/') || projet.thumbnail.startsWith('http')) {
+    return projet.thumbnail; // Pour les URLs externes
+  }
+
+  try {
+    // Extraire le slug du projet à partir de l'URL
+    const urlParts = projet.url.split('/');
+    const collectionName = urlParts[1]; // ex: "projets"
+    const slug = urlParts[2]; // ex: "maskipeche"
+    
+    // Construire différentes variations potentielles du chemin de l'image
+    const possiblePaths = [
+      `../content/${collectionName}/${slug}/${projet.thumbnail}`,
+      `../content/${collectionName}/${slug}/images/${projet.thumbnail.split('/').pop() || ''}`,
+    ];
+    
+    // Rechercher l'image dans les chemins possibles
+    for (const path of possiblePaths) {
+      if (path in projectImages) {
+        // Charger l'image dynamiquement
+        const imageModule: any = await projectImages[path]();
+        if (imageModule && imageModule.default) {
+          return imageModule.default;
+        }
+      }
+    }
+    
+    // Si nous n'avons pas trouvé l'image, utiliser le chemin original
+    console.warn(`Image non trouvée: ${projet.thumbnail} pour ${projet.title}`);
+    return projet.thumbnail;
+  } catch (error) {
+    console.error(`Erreur lors du chargement de l'image ${projet.thumbnail}:`, error);
+    return projet.thumbnail;
+  }
+}
+
+// Tenter de résoudre les images pour chaque projet
+const projectsWithImages = await Promise.all(
+  projects.map(async (project) => {
+    try {
+      const imageSrc = await resolveContentImage(project);
+      
+      // Vérifier le type de résultat retourné
+      const isString = typeof imageSrc === 'string';
+      
+      return {
+        ...project,
+        imageData: isString ? undefined : imageSrc,
+        imageUrl: isString ? imageSrc : undefined
+      };
+    } catch (error) {
+      console.error(`Erreur lors du traitement de l'image pour ${project.title}:`, error);
+      return {
+        ...project,
+        imageData: undefined,
+        imageUrl: project.thumbnail
+      };
+    }
+  })
+);
+---
+
+<div class="grid-projets">
+  <ul class="row flex-container list-unstyled">
+    {projectsWithImages.map((project) => (
+      <li class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <a href={project.url} class="stretched-link">
+            {project.imageData ? (
+              <Image 
+                src={project.imageData} 
+                alt={project.title}
+                width={400}
+                height={300}
+                class="card-img-top"
+                loading="lazy"
+              />
+            ) : project.imageUrl ? (
+              <img
+                src={project.imageUrl}
+                alt={project.title}
+                width={400}
+                height={300}
+                class="card-img-top"
+              />
+            ) : project.thumbnail ? (
+              <img
+                src={project.thumbnail}
+                alt={project.title}
+                class="card-img-top"
+              />
+            ) : null}
+            <div class="card-body">
+              <h5 class="card-title">{project.title}</h5>
+              {project.dateInfo && (
+                <p class="card-text text-sm text-gray-600 mt-1">
+                  {project.dateInfo}
+                </p>
+              )}
+              {project.location && (
+                <p class="card-text text-sm text-gray-600">
+                  {project.location}
+                </p>
+              )}
+              {project.description && (
+                <p class="card-text">{project.description}</p>
+              )}
+            </div>
+          </a>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>

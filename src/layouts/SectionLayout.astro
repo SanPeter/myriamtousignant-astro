@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Jumbotron from '../components/Jumbotron';
-import GridProjets from '../components/GridProjets';
+import GridProjets from '../components/GridProjets.astro';
 
 interface Props {
   title: string;
@@ -20,7 +20,7 @@ const projects = projectsData;
   <div class="container">
     <Jumbotron title={title} description={description} />
     
-    {projects.length > 0 && <GridProjets projects={projects} client:load />}
+    {projects.length > 0 && <GridProjets projects={projects} />}
     
     <slot />
   </div>

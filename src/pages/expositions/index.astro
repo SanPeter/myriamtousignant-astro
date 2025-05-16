@@ -14,16 +14,23 @@ const sortedExpositions = expositions
   });
 
 // Pour le composant GridProjets
-const expositionsData = sortedExpositions.map(expo => ({
-  url: `/expositions/${expo.id.replace(/\.md$/, '')}`,
-  title: expo.data.title,
-  thumbnail: expo.data.summaryImage,
-  description: expo.data.description,
-  // Ajout d'informations supplémentaires pour l'affichage personnalisé
-  dateInfo: expo.data.startDate ? 
-    `${expo.data.startDate.toLocaleDateString('fr-CA')}${expo.data.endDate ? ` au ${expo.data.endDate.toLocaleDateString('fr-CA')}` : ''}` : undefined,
-  location: expo.data.location
-}));
+const expositionsData = sortedExpositions.map(expo => {
+  // Extraire le slug de l'exposition à partir de l'ID
+  const slug = expo.id.includes('/') 
+    ? expo.id.split('/')[0] 
+    : expo.id.replace(/\.md$/, '');
+  
+  return {
+    url: `/expositions/${slug}`,
+    title: expo.data.title,
+    thumbnail: expo.data.summaryImage,
+    description: expo.data.description,
+    // Ajout d'informations supplémentaires pour l'affichage personnalisé
+    dateInfo: expo.data.startDate ? 
+      `${expo.data.startDate.toLocaleDateString('fr-CA')}${expo.data.endDate ? ` au ${expo.data.endDate.toLocaleDateString('fr-CA')}` : ''}` : undefined,
+    location: expo.data.location
+  };
+});
 ---
 
 <SectionLayout

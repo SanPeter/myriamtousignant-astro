@@ -12,5 +12,14 @@ export default defineConfig({
     content: {
         // Configuration des collections
         assets: 'src/content'
+    },
+    image: {
+        // Activation du service d'optimisation d'images
+        service: {
+            entrypoint: 'astro/assets/services/sharp'
+        },
+        // Configuration des dimensions par défaut
+        remotePatterns: [{ protocol: "https" }],
+        domains: [],
     }
 });

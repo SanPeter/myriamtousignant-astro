@@ -14,13 +14,20 @@ const sortedMediations = mediationsEntries
   });
 
 // Pour le composant GridProjets
-const mediationsData = sortedMediations.map(mediation => ({
-  url: `/mediations/${mediation.id.replace(/\.md$/, '')}`,
-  title: mediation.data.title,
-  thumbnail: mediation.data.summaryImage,
-  description: mediation.data.description,
-  dateInfo: mediation.data.date ? mediation.data.date.toLocaleDateString('fr-CA') : undefined
-}));
+const mediationsData = sortedMediations.map(mediation => {
+  // Extraire le slug de la médiation à partir de l'ID
+  const slug = mediation.id.includes('/') 
+    ? mediation.id.split('/')[0] 
+    : mediation.id.replace(/\.md$/, '');
+    
+  return {
+    url: `/mediations/${slug}`,
+    title: mediation.data.title,
+    thumbnail: mediation.data.summaryImage,
+    description: mediation.data.description,
+    dateInfo: mediation.data.date ? mediation.data.date.toLocaleDateString('fr-CA') : undefined
+  };
+});
 ---
 
 <SectionLayout

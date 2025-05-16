@@ -21,13 +21,20 @@ const sortedLivresArtiste = livresArtisteEntries
   });
   
 // Pour le composant GridProjets
-const livresArtisteData = sortedLivresArtiste.map(livre => ({
-  url: `/livres-artiste/${livre.id.replace(/\.md$/, '')}`,
-  title: livre.data.title,
-  thumbnail: livre.data.summaryImage,
-  description: livre.data.description,
-  dateInfo: livre.data.date ? livre.data.date.toLocaleDateString('fr-CA') : undefined
-}));
+const livresArtisteData = sortedLivresArtiste.map(livre => {
+  // Extraire le slug du livre à partir de l'ID
+  const slug = livre.id.includes('/') 
+    ? livre.id.split('/')[0] 
+    : livre.id.replace(/\.md$/, '');
+    
+  return {
+    url: `/livres-artiste/${slug}`,
+    title: livre.data.title,
+    thumbnail: livre.data.summaryImage,
+    description: livre.data.description,
+    dateInfo: livre.data.date ? livre.data.date.toLocaleDateString('fr-CA') : undefined
+  };
+});
 ---
 
 <SectionLayout
