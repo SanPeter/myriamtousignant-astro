@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
 
 export async function getStaticPaths() {
   const publicationsEntries = await getCollection('publications');
@@ -14,37 +14,37 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const description = entry.data.summary || entry.data.description;
 ---
 
-<BaseLayout title={entry.data.title}>
-  <div class="max-w-4xl mx-auto">
-    <a href="/publications" class="inline-flex items-center text-blue-600 hover:underline mb-4">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-      </svg>
-      Retour aux publications
-    </a>
-    
-    <article class="bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
-      
-      <div class="mb-6">
-        {entry.data.publicationDate && (
-          <p class="text-gray-700">
-            <span class="font-semibold">Date de publication:</span> {entry.data.publicationDate}
-          </p>
-        )}
-      </div>
-      
-      {entry.data.summary && (
-        <div class="mb-6 bg-gray-50 p-4 rounded-lg">
-          <p class="text-gray-700 italic">{entry.data.summary}</p>
-        </div>
+<ProjectLayout
+  title={entry.data.title}
+  description={description}
+>
+  <a href="/publications" class="inline-flex items-center text-blue-600 hover:underline mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+    </svg>
+    Retour aux publications
+  </a>
+  
+  <article class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6">
+      {entry.data.publicationDate && (
+        <p class="text-gray-700">
+          <span class="font-semibold">Date de publication:</span> {entry.data.publicationDate}
+        </p>
       )}
-      
-      <div class="prose max-w-none">
-        {entry.body && <div set:html={entry.body} />}
+    </div>
+    
+    {entry.data.summary && (
+      <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+        <p class="text-gray-700 italic">{entry.data.summary}</p>
       </div>
-    </article>
-  </div>
-</BaseLayout>
+    )}
+    
+    <div class="prose max-w-none">
+      {entry.body && <div set:html={entry.body} />}
+    </div>
+  </article>
+</ProjectLayout>

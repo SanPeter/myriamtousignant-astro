@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionLayout from '../../layouts/SectionLayout.astro';
 
 // Récupération de tous les livres d'artiste
 const livresArtisteEntries = await getCollection('livres-artiste');
@@ -19,35 +19,24 @@ const sortedLivresArtiste = livresArtisteEntries
     }
     return 0;
   });
+  
+// Pour le composant GridProjets
+const livresArtisteData = sortedLivresArtiste.map(livre => ({
+  url: `/livres-artiste/${livre.id.replace(/\.md$/, '')}`,
+  title: livre.data.title,
+  thumbnail: livre.data.summaryImage,
+  description: livre.data.description,
+  dateInfo: livre.data.date ? livre.data.date.toLocaleDateString('fr-CA') : undefined
+}));
 ---
 
-<BaseLayout title="Livres d'artiste">
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-4xl font-bold mb-8">Livres d'artiste</h1>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sortedLivresArtiste.map(livre => (
-        <a href={`/livres-artiste/${livre.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
-          {livre.data.summaryImage && (
-            <img 
-              src={livre.data.summaryImage} 
-              alt={livre.data.title} 
-              class="w-full h-48 object-cover"
-            />
-          )}
-          <div class="p-4">
-            <h2 class="text-xl font-semibold">{livre.data.title}</h2>
-            {livre.data.date && (
-              <p class="text-sm text-gray-600 mt-1">
-                {livre.data.date.toLocaleDateString('fr-CA')}
-              </p>
-            )}
-            {livre.data.description && (
-              <p class="mt-2 text-gray-700 line-clamp-3">{livre.data.description}</p>
-            )}
-          </div>
-        </a>
-      ))}
-    </div>
-  </div>
-</BaseLayout>
+<SectionLayout
+  title="Livres d'artiste"
+  description="Découvrez mes livres et publications d'artiste"
+  sectionType="livres-artiste"
+  projectsData={livresArtisteData}
+>
+  <p class="my-4">
+    Explorez mes livres d'artiste, fanzines et autres publications artistiques.
+  </p>
+</SectionLayout>

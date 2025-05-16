@@ -27,32 +27,17 @@ const { entry } = Astro.props;
     </a>
     
     <article class="bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
+      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          {entry.data.summaryImage && (
-            <img 
-              src={entry.data.summaryImage} 
-              alt={entry.data.title} 
-              class="w-full max-h-96 object-contain mb-4 rounded-md"
-            />
-          )}
-          
-          {entry.data.projectImages && entry.data.projectImages.length > 0 && (
-            <div class="grid grid-cols-4 gap-2 mt-2">
-              {entry.data.projectImages.slice(0, 4).map((image: string) => (
-                <img 
-                  src={image} 
-                  alt={`Thumbnail de ${entry.data.title}`} 
-                  class="w-full h-20 object-cover rounded cursor-pointer"
-                />
-              ))}
-            </div>
-          )}
+          {/* Placeholder pour future image principale */}
+          <div class="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+            <span class="text-gray-500">Image du produit</span>
+          </div>
         </div>
         
         <div>
-          <h1 class="text-3xl font-bold mb-2">{entry.data.title}</h1>
-          
           <div class="mb-4">
             {entry.data.price && (
               <p class="text-2xl font-bold text-blue-600">
@@ -88,10 +73,6 @@ const { entry } = Astro.props;
           {entry.body && <div set:html={entry.body} />}
         </div>
       </div>
-      
-      {entry.data.projectImages && entry.data.projectImages.length > 0 && (
-        <ImageGallery images={entry.data.projectImages} title={entry.data.title} />
-      )}
     </article>
   </div>
 </BaseLayout>

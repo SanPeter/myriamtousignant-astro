@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionLayout from '../../layouts/SectionLayout.astro';
 
 // Récupération de toutes les œuvres d'art public
 const artPublicEntries = await getCollection('art-public');
@@ -12,35 +12,24 @@ const sortedArtPublic = artPublicEntries
     if (!a.data.date || !b.data.date) return 0;
     return b.data.date.valueOf() - a.data.date.valueOf();
   });
+
+// Pour le composant GridProjets
+const artPublicData = sortedArtPublic.map(artwork => ({
+  url: `/art-public/${artwork.id.replace(/\.md$/, '')}`,
+  title: artwork.data.title,
+  thumbnail: artwork.data.summaryImage,
+  description: artwork.data.description,
+  dateInfo: artwork.data.date ? artwork.data.date.toLocaleDateString('fr-CA') : undefined
+}));
 ---
 
-<BaseLayout title="Art Public">
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-4xl font-bold mb-8">Art Public</h1>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sortedArtPublic.map(artwork => (
-        <a href={`/art-public/${artwork.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
-          {artwork.data.summaryImage && (
-            <img 
-              src={artwork.data.summaryImage} 
-              alt={artwork.data.title} 
-              class="w-full h-48 object-cover"
-            />
-          )}
-          <div class="p-4">
-            <h2 class="text-xl font-semibold">{artwork.data.title}</h2>
-            {artwork.data.date && (
-              <p class="text-sm text-gray-600 mt-1">
-                {artwork.data.date.toLocaleDateString('fr-CA')}
-              </p>
-            )}
-            {artwork.data.description && (
-              <p class="mt-2 text-gray-700 line-clamp-3">{artwork.data.description}</p>
-            )}
-          </div>
-        </a>
-      ))}
-    </div>
-  </div>
-</BaseLayout>
+<SectionLayout
+  title="Art Public"
+  description="Découvrez mes projets d'art public"
+  sectionType="art-public"
+  projectsData={artPublicData}
+>
+  <p class="my-4">
+    Voici mes projets d'art public réalisés au fil des années.
+  </p>
+</SectionLayout>
