@@ -1,6 +1,6 @@
 ---
+import SectionLayout from '../../layouts/SectionLayout.astro';
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Récupération de tous les projets
 const projets = await getCollection('projets');
@@ -12,40 +12,24 @@ const sortedProjets = projets
     if (!a.data.date || !b.data.date) return 0;
     return b.data.date.valueOf() - a.data.date.valueOf();
   });
+
+// Pour le composant GridProjets
+const projectsData = sortedProjets.map(projet => ({
+  url: `/projets/${projet.id.replace(/\.md$/, '')}`,
+  title: projet.data.title,
+  thumbnail: projet.data.summaryImage,
+  description: projet.data.description
+}));
 ---
 
-<BaseLayout title="Projets">
-  <div class="max-w-7xl mx-auto">
-    <h1 class="text-4xl font-bold mb-8">Projets</h1>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {sortedProjets.map(projet => (
-        <a href={`/projets/${projet.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
-          {projet.data.summaryImage && (
-            <img 
-              src={projet.data.summaryImage} 
-              alt={projet.data.title} 
-              class="w-full h-48 object-cover"
-            />
-          )}
-          <div class="p-4">
-            <h2 class="text-xl font-semibold">{projet.data.title}</h2>
-            {projet.data.date && (
-              <p class="text-sm text-gray-600 mt-1">
-                {projet.data.date.toLocaleDateString('fr-CA')}
-              </p>
-            )}
-            {projet.data.description && (
-              <p class="mt-2 text-gray-700 line-clamp-3">{projet.data.description}</p>
-            )}
-            {projet.data.featured && (
-              <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-2">
-                En vedette
-              </span>
-            )}
-          </div>
-        </a>
-      ))}
-    </div>
-  </div>
-</BaseLayout>
+<SectionLayout
+  title="Projets"
+  description="Découvrez mes différents projets artistiques"
+  sectionType="projets"
+  projectsData={projectsData}
+>
+  <p class="my-4">
+    Voici une sélection de mes projets artistiques réalisés au cours des dernières années.
+    Cliquez sur un projet pour en savoir plus.
+  </p>
+</SectionLayout>

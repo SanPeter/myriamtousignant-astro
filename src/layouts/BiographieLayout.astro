@@ -1,0 +1,21 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Jumbotron from '../components/Jumbotron';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container">
+    <Jumbotron title={title} description={description} />
+    
+    <div class="content">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>

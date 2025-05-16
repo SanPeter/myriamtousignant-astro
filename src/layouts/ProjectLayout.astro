@@ -1,0 +1,27 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Jumbotron from '../components/Jumbotron';
+import Carousel from '../components/Carousel';
+
+interface Props {
+  title: string;
+  description?: string;
+  images?: string[];
+}
+
+const { title, description, images = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container">
+    <Jumbotron title={title} description={description} />
+    
+    {images.length > 0 && (
+      <Carousel images={images} altText={title} client:load />
+    )}
+    
+    <div class="content">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
