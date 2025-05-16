@@ -11,7 +11,7 @@ describe('HeaderNav Component', () => {
     expect(screen.getByText('Expositions')).toBeDefined();
     expect(screen.getByText('Art Public')).toBeDefined();
     expect(screen.getByText('Livres d\'artiste')).toBeDefined();
-    expect(screen.getByText('Biographie')).toBeDefined();
+    expect(screen.getByText('Biographie & Démarche')).toBeDefined();
   });
 
   it('should include the artist name', () => {

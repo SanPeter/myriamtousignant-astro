@@ -26,7 +26,15 @@ const Carousel: React.FC<CarouselProps> = ({ images, altText }) => {
     setActiveIndex(index);
   };
 
-  if (!isClient || images.length === 0) return null;
+  if (!isClient) return null;
+  
+  if (images.length === 0) {
+    return (
+      <div className="alert alert-info" role="alert">
+        Aucune image disponible
+      </div>
+    );
+  }
 
   return (
     <div id="carouselControls" className="carousel carousel-dark slide mx-auto mb-5">
