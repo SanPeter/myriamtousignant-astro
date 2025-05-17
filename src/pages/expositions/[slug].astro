@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ImageGallery from '../../components/ImageGallery.astro';
 import { Image } from 'astro:assets';
@@ -17,6 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
 
 // Extraire le dossier de l'exposition à partir de l'ID
 const expositionFolder = entry.id.includes('/') 
@@ -83,7 +84,7 @@ const galleryImages = entry.data.projectImages && entry.data.projectImages.lengt
       )}
       
       <div class="prose max-w-none">
-        {entry.body && <div set:html={entry.body} />}
+        <Content />
       </div>
       
       {galleryImages && galleryImages.length > 0 && (

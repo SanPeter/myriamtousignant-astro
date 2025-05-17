@@ -1,10 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BiographieLayout from '../../layouts/BiographieLayout.astro';
 
 // Récupération de la biographie
 const biographieEntries = await getCollection('biographie-demarche');
 const biographie = biographieEntries.find(entry => entry.id === '_index.md') || biographieEntries[0];
+const { Content, headings } = await render(biographie);
 ---
 
 <BiographieLayout 
@@ -27,7 +28,7 @@ const biographie = biographieEntries.find(entry => entry.id === '_index.md') || 
       )}
       
       <div class="prose max-w-none">
-        {biographie?.body && <div set:html={biographie.body} />}
+        <Content />
       </div>
   </div>
 </BiographieLayout>

@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
 import { Image } from 'astro:assets';
 import { getImagesBySlug, getImageBySummaryPath } from '../../utils/contentImages';
@@ -16,6 +16,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
 
 // Extraire le slug à partir de l'ID
 const slug = entry.id.includes('/') 
@@ -53,7 +54,7 @@ const images = entry.data.projectImages ?
     )}
     
     <div class="prose max-w-none">
-      {entry.body && <div set:html={entry.body} />}
+      <Content />
     </div>
   </article>
 </ProjectLayout>
