@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { getDocument } from './utils';
+import { getDocument } from './utils.ts'
 
 // Mock des assets pour les tests
 vi.mock('astro:assets');
@@ -7,7 +7,7 @@ vi.mock('astro:assets');
 describe('ImageGrid component', () => {
   it('should render an empty state when no images match', async () => {
     const component = await import('../src/components/ImageGrid.astro');
-    const html = await component.default.render({
+    const { html } = await component.default({
       match: 'nonexistent/*.jpg',
     });
 
@@ -20,7 +20,7 @@ describe('ImageGrid component', () => {
 
   it('should render lightbox with proper attributes', async () => {
     const component = await import('../src/components/ImageGrid.astro');
-    const html = await component.default.render({
+    const { html } = await component.default({
       match: 'images/*.jpg',
     });
 

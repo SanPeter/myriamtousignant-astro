@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
 import { JSDOM } from 'jsdom';
 
 // Note: Ce test est plus conceptuel que fonctionnel car il est difficile de tester

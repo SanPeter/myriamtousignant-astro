@@ -1,5 +1,4 @@
 import { JSDOM } from 'jsdom';
-import type { RenderResult } from '@testing-library/svelte';
 
 /**
  * Crée un objet DOM à partir d'une chaîne HTML pour les tests
