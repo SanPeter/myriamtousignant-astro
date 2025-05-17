@@ -27,11 +27,7 @@ const slug = entry.id.includes('/')
 const projectImages = await getImagesBySlug('mediations', slug);
 
 // Préparer les images pour le carousel
-const images = entry.data.projectImages ? 
-  await Promise.all(entry.data.projectImages.map(async (path: string) => {
-    return await getImageBySummaryPath('mediations', slug, path);
-  })) : 
-  projectImages;
+const images = entry.data.projectImages || [];
 ---
 
 <ProjectLayout

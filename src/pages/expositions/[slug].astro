@@ -31,11 +31,7 @@ if (entry.data.summaryImage) {
 }
 
 // Récupérer les images du projet pour la galerie si elles existent
-const galleryImages = entry.data.projectImages && entry.data.projectImages.length > 0
-  ? await Promise.all(entry.data.projectImages.map(async (imagePath: string) => {
-      return await getImageBySummaryPath('expositions', expositionFolder, imagePath);
-    }))
-  : [];
+const galleryImages = entry.data.projectImages || [];
 ---
 
 <BaseLayout title={entry.data.title}>
