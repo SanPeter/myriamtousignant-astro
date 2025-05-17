@@ -20,6 +20,8 @@ const projectSchema = baseSchema.extend({
 
 // Schéma spécifique pour la biographie
 const biographieSchema = baseSchema.extend({
+  title: z.string(),
+  description: z.string().optional(),
   heroImage: z.string().optional()
 });
 
@@ -74,13 +76,7 @@ const mediations = defineCollection({
   })
 });
 
-const biographieDemarche = defineCollection({
-  schema: biographieSchema,
-  loader: glob({
-    pattern: '**/*.{md,mdx}',
-    base: 'src/content/biographie-demarche'
-  })
-});
+
 
 const boutique = defineCollection({
   schema: baseSchema.extend({
@@ -108,6 +104,15 @@ const publications = defineCollection({
     base: 'src/content/publications'
   })
 });
+
+const biographieDemarche = defineCollection({
+  schema: biographieSchema,
+   loader: glob({
+    pattern: '**/*.{md,mdx}',
+    base: 'src/content/biographie-demarche'
+  }) 
+});
+
 
 // Exporter toutes les collections
 export const collections = {
