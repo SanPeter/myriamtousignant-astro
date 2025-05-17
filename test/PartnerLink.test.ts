@@ -6,9 +6,14 @@ vi.mock('../src/components/PartnerLink.astro', () => {
   return {
     default: vi.fn().mockImplementation((props) => {
       const { href, src, alt, maxWidth = "200px" } = props;
-      const imgHtml = typeof src === 'string' 
-        ? `<img src="${src}" alt="${alt}" style="max-width: ${maxWidth};">` 
-        : `<img src="${src.src || '/mock-image.jpg'}" alt="${alt}" width="200" height="200" style="max-width: ${maxWidth}; height: auto;">`;
+      let imgHtml;
+      
+      if (typeof src === 'string') {
+        imgHtml = `<img src="${src}" alt="${alt}" style="max-width: ${maxWidth};">`;
+      } else {
+        // Gestion correcte de l'objet ImageMetadata
+        imgHtml = `<img src="${src.src || '/mock-image.jpg'}" alt="${alt}" width="200" height="200" style="max-width: ${maxWidth}; height: auto;">`;
+      }
       
       return {
         html: `<a href="${href}">${imgHtml}</a>`,
@@ -58,16 +63,21 @@ describe('PartnerLink component', () => {
   
   it('should handle ImageMetadata objects correctly', async () => {
     const component = await import('../src/components/PartnerLink.astro');
+    // Définition de mockImageMetadata compatible avec le type ImageMetadata
     const mockImageMetadata = {
       src: '/mock-image.jpg',
       width: 800,
       height: 600,
-      format: 'jpg'
+      format: 'jpg' as const, // Utiliser as const pour indiquer que c'est un literal type spécifique
+      // Propriétés additionnelles requises par le type ImageMetadata
+      orientation: 1, // La propriété orientation doit être un nombre, pas une chaîne
+      baseUrl: 'https://example.com', 
+      aspectRatio: 800/600
     };
     
     const { html } = await component.default({
       href: 'https://example.com',
-      src: mockImageMetadata,
+      src: mockImageMetadata, // Passer l'objet complet pour qu'il soit traité comme un ImageMetadata
       alt: 'Example Logo'
     });
 
