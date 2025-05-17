@@ -11,10 +11,10 @@ const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="container">
+  <div class="max-w-6xl mx-auto px-4">
     <Jumbotron title={title} description={description} />
     
-    <div class="content">
+    <div class="prose prose-lg max-w-none">
       <slot />
     </div>
   </div>

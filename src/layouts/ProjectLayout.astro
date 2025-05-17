@@ -13,14 +13,14 @@ const { title, description, images = [] } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="container">
+  <div class="max-w-6xl mx-auto px-4">
     <Jumbotron title={title} description={description} />
     
     {images.length > 0 && (
       <Carousel images={images} altText={title} />
     )}
     
-    <div class="content">
+    <div class="prose prose-lg max-w-none">
       <slot />
     </div>
   </div>

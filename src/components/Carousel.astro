@@ -96,13 +96,13 @@ const initialActiveIndex = 0;
 ---
 
 {resolvedImages.length > 0 && (
-  <div id="carouselControls" class="carousel carousel-dark slide mx-auto mb-5">
+  <div id="carouselControls" class="relative w-full max-w-4xl mx-auto mb-5">
     {/* Indicators */}
-    <div class="carousel-indicators">
+    <div class="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2">
       {resolvedImages.map((_, index) => (
         <button
           type="button"
-          class={index === initialActiveIndex ? "active" : ""}
+          class={`w-3 h-3 rounded-full ${index === initialActiveIndex ? "bg-gray-800" : "bg-gray-300"}`}
           aria-current={index === initialActiveIndex ? "true" : "false"}
           aria-label={`Image ${index + 1}`}
           data-carousel-slide={index}
@@ -111,26 +111,26 @@ const initialActiveIndex = 0;
     </div>
 
     {/* Carousel items */}
-    <div class="carousel-inner">
+    <div class="relative overflow-hidden">
       {resolvedImages.map((image, index) => (
         <div
-          class={`carousel-item ${index === initialActiveIndex ? "active" : ""}`}
+          class={`transition-opacity duration-300 ${index === initialActiveIndex ? "block" : "hidden"}`}
           data-carousel-index={index}
         >
-          <div class="d-flex justify-content-center">
+          <div class="flex justify-center">
             {image.type === 'module' ? (
               <Image 
                 src={image.module} 
                 alt={`${altText} - ${index + 1}`} 
                 width={800}
                 height={600}
-                class="img-fluid mb-1"
+                class="max-w-full h-auto mb-1"
               />
             ) : (
               <img 
                 src={image.src} 
                 alt={`${altText} - ${index + 1}`} 
-                class="img-fluid mb-1" 
+                class="max-w-full h-auto mb-1" 
               />
             )}
           </div>
@@ -140,20 +140,28 @@ const initialActiveIndex = 0;
 
     {/* Prev / Next buttons */}
     <button 
-      class="carousel-control-prev" 
+      class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none z-10"
       type="button"
       data-carousel-prev
     >
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Précédent</span>
+      <span class="flex items-center justify-center" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </span>
+      <span class="sr-only">Précédent</span>
     </button>
     <button 
-      class="carousel-control-next"
+      class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none z-10"
       type="button"
       data-carousel-next
     >
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Suivant</span>
+      <span class="flex items-center justify-center" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </span>
+      <span class="sr-only">Suivant</span>
     </button>
   </div>
 )}
@@ -166,30 +174,33 @@ const initialActiveIndex = 0;
     
     if (!carousel) return;
     
-    const items = carousel.querySelectorAll('.carousel-item');
-    const indicators = carousel.querySelectorAll('.carousel-indicators button');
+    const items = carousel.querySelectorAll('[data-carousel-index]');
+    const indicators = carousel.querySelectorAll('[data-carousel-slide]');
     const prevButton = carousel.querySelector('[data-carousel-prev]');
     const nextButton = carousel.querySelector('[data-carousel-next]');
-    const slideButtons = carousel.querySelectorAll('[data-carousel-slide]');
     
     // Fonction pour mettre à jour l'affichage actif
     function updateActiveSlide() {
       // Mettre à jour les éléments de carrousel
       items.forEach((item, index) => {
         if (index === activeIndex) {
-          item.classList.add('active');
+          item.classList.remove('hidden');
+          item.classList.add('block');
         } else {
-          item.classList.remove('active');
+          item.classList.remove('block');
+          item.classList.add('hidden');
         }
       });
       
       // Mettre à jour les indicateurs
       indicators.forEach((indicator, index) => {
         if (index === activeIndex) {
-          indicator.classList.add('active');
+          indicator.classList.remove('bg-gray-300');
+          indicator.classList.add('bg-gray-800');
           indicator.setAttribute('aria-current', 'true');
         } else {
-          indicator.classList.remove('active');
+          indicator.classList.remove('bg-gray-800');
+          indicator.classList.add('bg-gray-300');
           indicator.setAttribute('aria-current', 'false');
         }
       });
@@ -208,10 +219,9 @@ const initialActiveIndex = 0;
     });
     
     // Gestionnaires pour les boutons d'indicateurs
-    slideButtons.forEach((button) => {
+    indicators.forEach((button, index) => {
       button.addEventListener('click', () => {
-        const slideIndex = parseInt(button.getAttribute('data-carousel-slide') || '0');
-        activeIndex = slideIndex;
+        activeIndex = index;
         updateActiveSlide();
       });
     });

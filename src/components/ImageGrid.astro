@@ -81,21 +81,21 @@ const gridGap = `${margins}px`;
 const gridAutoRows = `${rowHeight}px`;
 ---
 
-<div class="image-grid-container">
+<div class="w-full overflow-hidden">
   {images.length === 0 ? (
-    <div class="no-images-message">
+    <div class="p-5 text-center text-gray-500">
       Aucune image ne correspond au pattern "{match}"
     </div>
   ) : (
-    <div class="image-grid" style={`grid-gap: ${gridGap}; grid-auto-rows: ${gridAutoRows};`}>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[--grid-gap]" style={`--grid-gap: ${gridGap};`}>
       {images.map((image, index) => (
         <div 
-          class="image-item"
-          style={`margin-bottom: ${margins}px;`}
+          class="overflow-hidden relative cursor-pointer mb-[--margins]"
+          style={`--margins: ${margins}px;`}
         >
           <a 
             href="#" 
-            class="lightbox-trigger"
+            class="block"
             data-index={index}
           >
             <Image
@@ -103,10 +103,13 @@ const gridAutoRows = `${rowHeight}px`;
               alt={`Image ${index + 1}`}
               width={300}
               height={rowHeight}
-              class={`img-grid-thumbnail ${thumbnailHoverEffect !== 'none' ? `hover-effect-${thumbnailHoverEffect}` : ''}`}
+              class={`w-full h-full object-cover transition-transform duration-300 ${
+                thumbnailHoverEffect === 'zoom' ? 'hover:scale-105' : 
+                thumbnailHoverEffect === 'brighten' ? 'hover:brightness-125' : ''
+              }`}
             />
             {showExif && (
-              <div class="image-exif">
+              <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-xs">
                 {/* Exif info would go here if available */}
               </div>
             )}
@@ -117,118 +120,23 @@ const gridAutoRows = `${rowHeight}px`;
   )}
   
   {/* Lightbox component for image preview */}
-  <div id="lightbox" class="lightbox">
-    <div class="lightbox-content">
-      <span class="lightbox-close">&times;</span>
-      <div class="lightbox-image-container">
-        <img id="lightbox-image" />
+  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90">
+    <div class="relative w-full h-full flex justify-center items-center">
+      <button class="absolute top-4 right-4 text-white text-3xl cursor-pointer z-10 hover:text-gray-300 lightbox-close">
+        &times;
+      </button>
+      <div class="max-w-[90%] max-h-[90%]">
+        <img id="lightbox-image" class="max-w-full max-h-[90vh] object-contain" />
       </div>
-      <button class="lightbox-prev">&lt;</button>
-      <button class="lightbox-next">&gt;</button>
+      <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 text-white border-none text-2xl p-3 cursor-pointer hover:bg-black/70 rounded lightbox-prev">
+        &lt;
+      </button>
+      <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 text-white border-none text-2xl p-3 cursor-pointer hover:bg-black/70 rounded lightbox-next">
+        &gt;
+      </button>
     </div>
   </div>
 </div>
-
-<style define:vars={{ rowHeight: `${rowHeight}px` }}>
-  .image-grid-container {
-    width: 100%;
-    overflow: hidden;
-  }
-  
-  .image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-auto-flow: dense;
-  }
-  
-  .image-item {
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-  }
-  
-  .img-grid-thumbnail {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .hover-effect-zoom:hover {
-    transform: scale(1.05);
-  }
-  
-  .hover-effect-brighten:hover {
-    filter: brightness(1.2);
-  }
-  
-  /* Lightbox styles */
-  .lightbox {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-  }
-  
-  .lightbox-content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .lightbox-image-container {
-    max-width: 90%;
-    max-height: 90%;
-  }
-  
-  #lightbox-image {
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
-  }
-  
-  .lightbox-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-  }
-  
-  .lightbox-prev, .lightbox-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 24px;
-    padding: 10px 15px;
-    cursor: pointer;
-  }
-  
-  .lightbox-prev {
-    left: 10px;
-  }
-  
-  .lightbox-next {
-    right: 10px;
-  }
-  
-  .no-images-message {
-    padding: 20px;
-    text-align: center;
-    color: #666;
-  }
-</style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -237,7 +145,7 @@ const gridAutoRows = `${rowHeight}px`;
     const lightboxClose = document.querySelector('.lightbox-close');
     const lightboxPrev = document.querySelector('.lightbox-prev');
     const lightboxNext = document.querySelector('.lightbox-next');
-    const triggers = document.querySelectorAll('.lightbox-trigger');
+    const triggers = document.querySelectorAll('a[data-index]');
     
     if (!lightbox || !lightboxImage) return;
     
@@ -253,7 +161,7 @@ const gridAutoRows = `${rowHeight}px`;
       
       if (imgSrc) {
         lightboxImage.setAttribute('src', imgSrc);
-        lightbox.style.display = 'block';
+        lightbox.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
       }
     }
@@ -261,7 +169,7 @@ const gridAutoRows = `${rowHeight}px`;
     // Fonction pour fermer le lightbox
     function closeLightbox() {
       if (!lightbox) return;
-      lightbox.style.display = 'none';
+      lightbox.classList.add('hidden');
       document.body.style.overflow = '';
     }
     
@@ -298,7 +206,7 @@ const gridAutoRows = `${rowHeight}px`;
     
     // Prise en charge du clavier
     document.addEventListener('keydown', (e) => {
-      if (lightbox?.style.display !== 'block') return;
+      if (lightbox?.classList.contains('hidden')) return;
       
       switch (e.key) {
         case 'Escape':
