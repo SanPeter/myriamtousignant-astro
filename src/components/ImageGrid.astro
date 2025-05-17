@@ -14,6 +14,8 @@ interface Props {
   thumbnailHoverEffect?: string;
   collectionName?: string;
   slug?: string;
+  lightboxWidth?: number;
+  lightboxHeight?: number;
 }
 
 const {
@@ -28,6 +30,8 @@ const {
   thumbnailHoverEffect = 'none',
   collectionName,
   slug,
+  lightboxWidth = 1200,
+  lightboxHeight = 800,
 } = Astro.props;
 
 // Déterminer le chemin de collection et le slug à partir de l'URL si non fournis
@@ -97,6 +101,9 @@ const gridGap = margins; // Utiliser la valeur des marges pour l'espacement
             href="#" 
             class="block w-full h-full"
             data-index={index}
+            data-original-width={image.width}
+            data-original-height={image.height}
+            data-original-src={image.src}
           >
             <Image
               src={image}
@@ -117,13 +124,16 @@ const gridGap = margins; // Utiliser la valeur des marges pour l'espacement
   )}
   
   {/* Lightbox component for image preview */}
-  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90">
+  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 transition-opacity duration-300">
     <div class="relative w-full h-full flex justify-center items-center">
       <button class="absolute top-4 right-4 text-white text-3xl cursor-pointer z-10 hover:text-gray-300 lightbox-close">
         &times;
       </button>
-      <div class="max-w-[90%] max-h-[90%]">
-        <img id="lightbox-image" class="max-w-full max-h-[90vh] object-contain" />
+      <div class="max-w-[95%] max-h-[95%]">
+        <div id="lightbox-loader" class="hidden absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div class="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        <img id="lightbox-image" class="max-w-full max-h-[95vh] object-contain transition-opacity duration-300" />
       </div>
       <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 text-white border-none text-2xl p-3 cursor-pointer hover:bg-black/70 rounded lightbox-prev">
         &lt;
@@ -138,7 +148,8 @@ const gridGap = margins; // Utiliser la valeur des marges pour l'espacement
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const lightbox = document.getElementById('lightbox');
-    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxImage = document.getElementById('lightbox-image') as HTMLImageElement;
+    const lightboxLoader = document.getElementById('lightbox-loader');
     const lightboxClose = document.querySelector('.lightbox-close');
     const lightboxPrev = document.querySelector('.lightbox-prev');
     const lightboxNext = document.querySelector('.lightbox-next');
@@ -151,13 +162,30 @@ const gridGap = margins; // Utiliser la valeur des marges pour l'espacement
     
     // Fonction pour ouvrir le lightbox
     function openLightbox(index: number) {
-      if (!lightbox || !lightboxImage) return;
+      if (!lightbox || !lightboxImage || !lightboxLoader) return;
       
       currentIndex = index;
-      const imgSrc = triggers[index]?.querySelector('img')?.getAttribute('src');
+      const trigger = triggers[index];
+      const originalSrc = trigger?.getAttribute('data-original-src') || trigger?.querySelector('img')?.getAttribute('src');
       
-      if (imgSrc) {
-        lightboxImage.setAttribute('src', imgSrc);
+      if (originalSrc) {
+        // Afficher le loader pendant le chargement
+        lightboxLoader.classList.remove('hidden');
+        lightboxImage.style.opacity = '0';
+        
+        // Précharger l'image pour avoir la transition fluide
+        lightboxImage.onload = () => {
+          lightboxLoader.classList.add('hidden');
+          lightboxImage.style.opacity = '1';
+        };
+        
+        lightboxImage.onerror = () => {
+          lightboxLoader.classList.add('hidden');
+          lightboxImage.style.opacity = '1';
+        };
+        
+        // Définir la source de l'image
+        lightboxImage.setAttribute('src', originalSrc);
         lightbox.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
       }
