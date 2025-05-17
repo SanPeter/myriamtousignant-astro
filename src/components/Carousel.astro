@@ -38,7 +38,8 @@ async function resolveContentImages(images: string[], collectionPath: string, sl
   const resolvedImages: ResolvedImage[] = [];
   
   for (const image of images) {
-    if (!image) continue;
+    // Vérifier que image est défini et est une chaîne de caractères
+    if (!image || typeof image !== 'string') continue;
     
     // Si l'image est une URL absolue, l'utiliser directement
     if (image.startsWith('/') || image.startsWith('http')) {
@@ -94,11 +95,7 @@ const resolvedImages = await resolveContentImages(images, collectionPath, slug);
 const initialActiveIndex = 0;
 ---
 
-{images.length === 0 ? (
-  <div class="alert alert-info" role="alert">
-    Aucune image disponible
-  </div>
-) : (
+{resolvedImages.length > 0 && (
   <div id="carouselControls" class="carousel carousel-dark slide mx-auto mb-5">
     {/* Indicators */}
     <div class="carousel-indicators">
