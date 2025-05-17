@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ImageGallery from '../../components/ImageGallery.astro';
+import { Image } from 'astro:assets';
+import { getImageBySummaryPath } from '../../utils/contentImages';
 
 export async function getStaticPaths() {
   const expositionsEntries = await getCollection('expositions');
@@ -9,13 +11,30 @@ export async function getStaticPaths() {
   return expositionsEntries
     .filter(entry => !entry.data.draft) // Filtre les brouillons
     .map(entry => ({
-      params: { slug: entry.id.replace(/\.md$/, '') },
+      params: { slug: entry.id.replace(/\.md$/, '').split('/')[0] }, // Extraire le slug correctement
       props: { entry },
     }));
 }
 
 const { entry } = Astro.props;
----
+
+// Extraire le dossier de l'exposition à partir de l'ID
+const expositionFolder = entry.id.includes('/') 
+  ? entry.id.split('/')[0] 
+  : entry.id.replace(/\.md$/, '');
+
+// Récupérer l'image de résumé si elle existe
+let summaryImage;
+if (entry.data.summaryImage) {
+  summaryImage = await getImageBySummaryPath('expositions', expositionFolder, entry.data.summaryImage);
+}
+
+// Récupérer les images du projet pour la galerie si elles existent
+const galleryImages = entry.data.projectImages && entry.data.projectImages.length > 0
+  ? await Promise.all(entry.data.projectImages.map(async (imagePath: string) => {
+      return await getImageBySummaryPath('expositions', expositionFolder, imagePath);
+    }))
+  : [];
 ---
 
 <BaseLayout title={entry.data.title}>
@@ -30,11 +49,15 @@ const { entry } = Astro.props;
     <article class="bg-white p-6 rounded-lg shadow-md">
       <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
       
-      {entry.data.summaryImage && (
-        <img 
-          src={entry.data.summaryImage} 
+      {summaryImage && (
+        <Image 
+          src={summaryImage} 
           alt={entry.data.title} 
           class="w-full max-h-96 object-contain mb-6"
+          width={1200}
+          height={800}
+          format="webp"
+          quality={85}
         />
       )}
       
@@ -63,8 +86,8 @@ const { entry } = Astro.props;
         {entry.body && <div set:html={entry.body} />}
       </div>
       
-      {entry.data.projectImages && entry.data.projectImages.length > 0 && (
-        <ImageGallery images={entry.data.projectImages} title={entry.data.title} />
+      {galleryImages && galleryImages.length > 0 && (
+        <ImageGallery images={galleryImages} title={entry.data.title} />
       )}
     </article>
   </div>

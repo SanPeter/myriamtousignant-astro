@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Jumbotron from '../components/Jumbotron';
-import Carousel from '../components/Carousel';
+import Carousel from '../components/Carousel.astro';
 
 interface Props {
   title: string;
@@ -17,7 +17,7 @@ const { title, description, images = [] } = Astro.props;
     <Jumbotron title={title} description={description} />
     
     {images.length > 0 && (
-      <Carousel images={images} altText={title} client:load />
+      <Carousel images={images} altText={title} />
     )}
     
     <div class="content">

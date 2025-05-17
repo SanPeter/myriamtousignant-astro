@@ -1,0 +1,222 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: string[];
+  altText: string;
+}
+
+// Types pour les images résolues
+type ResolvedImageUrl = {
+  type: 'url';
+  src: string;
+}
+
+type ResolvedImageModule = {
+  type: 'module';
+  module: ImageMetadata;
+  src: string;
+}
+
+type ResolvedImage = ResolvedImageUrl | ResolvedImageModule;
+
+const { images, altText } = Astro.props;
+
+// Importer toutes les images des projets de manière dynamique
+// Cette approche utilise un glob pour trouver toutes les images
+const projectImages = import.meta.glob<{ default: ImageMetadata }>([
+  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/art-public/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/livres-artiste/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/mediations/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Fonction pour résoudre les chemins d'images
+async function resolveContentImages(images: string[], collectionPath: string, slug: string): Promise<ResolvedImage[]> {
+  const resolvedImages: ResolvedImage[] = [];
+  
+  for (const image of images) {
+    if (!image) continue;
+    
+    // Si l'image est une URL absolue, l'utiliser directement
+    if (image.startsWith('/') || image.startsWith('http')) {
+      resolvedImages.push({ type: 'url', src: image });
+      continue;
+    }
+    
+    try {
+      // Construire différentes variations du chemin pour trouver l'image
+      const possiblePaths = [
+        `../content/${collectionPath}/${slug}/${image}`,
+        `../content/${collectionPath}/${slug}/images/${image.split('/').pop() || ''}`
+      ];
+      
+      let foundImage = false;
+      
+      for (const path of possiblePaths) {
+        if (path in projectImages) {
+          const imageModule = await projectImages[path]();
+          resolvedImages.push({ 
+            type: 'module', 
+            module: imageModule.default,
+            src: path
+          });
+          foundImage = true;
+          break;
+        }
+      }
+      
+      if (!foundImage) {
+        console.warn(`Image non trouvée: ${image}`);
+        resolvedImages.push({ type: 'url', src: image });
+      }
+    } catch (error) {
+      console.error(`Erreur lors du chargement de l'image ${image}:`, error);
+      resolvedImages.push({ type: 'url', src: image });
+    }
+  }
+  
+  return resolvedImages;
+}
+
+// Déterminer le chemin de collection à partir de l'URL
+const pathname = Astro.url.pathname;
+const parts = pathname.split('/').filter(Boolean);
+const collectionPath = parts[0] || 'projets'; // par défaut, utiliser 'projets'
+const slug = parts[1] || '';
+
+// Résoudre les images
+const resolvedImages = await resolveContentImages(images, collectionPath, slug);
+
+// État initial pour le carrousel côté client
+const initialActiveIndex = 0;
+---
+
+{images.length === 0 ? (
+  <div class="alert alert-info" role="alert">
+    Aucune image disponible
+  </div>
+) : (
+  <div id="carouselControls" class="carousel carousel-dark slide mx-auto mb-5">
+    {/* Indicators */}
+    <div class="carousel-indicators">
+      {resolvedImages.map((_, index) => (
+        <button
+          type="button"
+          class={index === initialActiveIndex ? "active" : ""}
+          aria-current={index === initialActiveIndex ? "true" : "false"}
+          aria-label={`Image ${index + 1}`}
+          data-carousel-slide={index}
+        ></button>
+      ))}
+    </div>
+
+    {/* Carousel items */}
+    <div class="carousel-inner">
+      {resolvedImages.map((image, index) => (
+        <div
+          class={`carousel-item ${index === initialActiveIndex ? "active" : ""}`}
+          data-carousel-index={index}
+        >
+          <div class="d-flex justify-content-center">
+            {image.type === 'module' ? (
+              <Image 
+                src={image.module} 
+                alt={`${altText} - ${index + 1}`} 
+                width={800}
+                height={600}
+                class="img-fluid mb-1"
+              />
+            ) : (
+              <img 
+                src={image.src} 
+                alt={`${altText} - ${index + 1}`} 
+                class="img-fluid mb-1" 
+              />
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Prev / Next buttons */}
+    <button 
+      class="carousel-control-prev" 
+      type="button"
+      data-carousel-prev
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Précédent</span>
+    </button>
+    <button 
+      class="carousel-control-next"
+      type="button"
+      data-carousel-next
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Suivant</span>
+    </button>
+  </div>
+)}
+
+<script>
+  // Code JavaScript côté client pour contrôler le carrousel
+  document.addEventListener('DOMContentLoaded', () => {
+    let activeIndex = 0;
+    const carousel = document.querySelector('#carouselControls');
+    
+    if (!carousel) return;
+    
+    const items = carousel.querySelectorAll('.carousel-item');
+    const indicators = carousel.querySelectorAll('.carousel-indicators button');
+    const prevButton = carousel.querySelector('[data-carousel-prev]');
+    const nextButton = carousel.querySelector('[data-carousel-next]');
+    const slideButtons = carousel.querySelectorAll('[data-carousel-slide]');
+    
+    // Fonction pour mettre à jour l'affichage actif
+    function updateActiveSlide() {
+      // Mettre à jour les éléments de carrousel
+      items.forEach((item, index) => {
+        if (index === activeIndex) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+      
+      // Mettre à jour les indicateurs
+      indicators.forEach((indicator, index) => {
+        if (index === activeIndex) {
+          indicator.classList.add('active');
+          indicator.setAttribute('aria-current', 'true');
+        } else {
+          indicator.classList.remove('active');
+          indicator.setAttribute('aria-current', 'false');
+        }
+      });
+    }
+    
+    // Gestionnaire pour le bouton précédent
+    prevButton?.addEventListener('click', () => {
+      activeIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
+      updateActiveSlide();
+    });
+    
+    // Gestionnaire pour le bouton suivant
+    nextButton?.addEventListener('click', () => {
+      activeIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
+      updateActiveSlide();
+    });
+    
+    // Gestionnaires pour les boutons d'indicateurs
+    slideButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const slideIndex = parseInt(button.getAttribute('data-carousel-slide') || '0');
+        activeIndex = slideIndex;
+        updateActiveSlide();
+      });
+    });
+  });
+</script>

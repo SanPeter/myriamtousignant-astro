@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import { Image } from 'astro:assets';
+import { getImagesBySlug, getImageBySummaryPath } from '../../utils/contentImages';
 
 export async function getStaticPaths() {
   const artPublicEntries = await getCollection('art-public');
@@ -8,15 +10,27 @@ export async function getStaticPaths() {
   return artPublicEntries
     .filter(entry => !entry.data.draft) // Filtre les brouillons
     .map(entry => ({
-      params: { slug: entry.id.replace(/\.md$/, '') },
+      params: { slug: entry.id.replace(/\.md$/, '').split('/')[0] }, // Extraire le slug correctement
       props: { entry },
     }));
 }
 
 const { entry } = Astro.props;
 
+// Extraire le slug à partir de l'ID
+const slug = entry.id.includes('/') 
+  ? entry.id.split('/')[0] 
+  : entry.id.replace(/\.md$/, '');
+
+// Récupérer toutes les images liées à ce contenu
+const projectImages = await getImagesBySlug('art-public', slug);
+
 // Préparer les images pour le carousel
-const images = entry.data.projectImages || [];
+const images = entry.data.projectImages ? 
+  await Promise.all(entry.data.projectImages.map(async (path: string) => {
+    return await getImageBySummaryPath('art-public', slug, path);
+  })) : 
+  projectImages;
 ---
 
 <ProjectLayout 

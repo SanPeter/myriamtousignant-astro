@@ -1,23 +1,122 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   images: string[];
   title: string;
+  collectionName?: string;
+  slug?: string;
 }
 
-const { images, title } = Astro.props;
+// Types pour les images résolues
+type ResolvedImageUrl = {
+  type: 'url';
+  src: string;
+}
+
+type ResolvedImageModule = {
+  type: 'module';
+  module: { default: ImageMetadata };
+  src: string;
+}
+
+type ResolvedImage = ResolvedImageUrl | ResolvedImageModule;
+
+const { images, title, collectionName = '', slug = '' } = Astro.props;
+
+// Importer toutes les images des projets de manière dynamique
+const contentImages = import.meta.glob<{ default: ImageMetadata }>([
+  '../content/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Fonction pour résoudre les chemins d'images
+async function resolveContentImages(images: string[], collectionPath: string, slug: string): Promise<ResolvedImage[]> {
+  const resolvedImages: ResolvedImage[] = [];
+  
+  for (const image of images) {
+    if (!image) continue;
+    
+    // Si l'image est une URL absolue, l'utiliser directement
+    if (image.startsWith('/') || image.startsWith('http')) {
+      resolvedImages.push({ type: 'url', src: image });
+      continue;
+    }
+    
+    try {
+      // Construire différentes variations du chemin pour trouver l'image
+      const possiblePaths = [
+        `../content/${collectionPath}/${slug}/${image}`,
+        `../content/${collectionPath}/${slug}/images/${image.split('/').pop() || ''}`
+      ];
+      
+      let foundImage = false;
+      
+      for (const path of possiblePaths) {
+        if (path in contentImages) {
+          const imageModule = await contentImages[path]();
+          resolvedImages.push({ 
+            type: 'module', 
+            module: imageModule,
+            src: path
+          });
+          foundImage = true;
+          break;
+        }
+      }
+      
+      if (!foundImage) {
+        console.warn(`Image non trouvée dans la galerie: ${image}`);
+        resolvedImages.push({ type: 'url', src: image });
+      }
+    } catch (error) {
+      console.error(`Erreur lors du chargement de l'image ${image}:`, error);
+      resolvedImages.push({ type: 'url', src: image });
+    }
+  }
+  
+  return resolvedImages;
+}
+
+// Détermine le chemin de collection à partir de l'URL si non fourni
+const actualCollectionName = collectionName || (() => {
+  const pathname = Astro.url.pathname;
+  const parts = pathname.split('/').filter(Boolean);
+  return parts[0] || 'projets'; // Par défaut, utiliser 'projets'
+})();
+
+const actualSlug = slug || (() => {
+  const pathname = Astro.url.pathname;
+  const parts = pathname.split('/').filter(Boolean);
+  return parts[1] || '';
+})();
+
+// Résoudre les images
+const resolvedImages = await resolveContentImages(images, actualCollectionName, actualSlug);
 ---
 
 <div class="mt-8">
   <h2 class="text-xl font-semibold mb-4">Galerie</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {images.map((image: string) => (
+    {resolvedImages.map((image, index) => (
       <div class="overflow-hidden rounded-lg">
-        <img 
-          src={image} 
-          alt={`Image de ${title}`} 
-          class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
+        {image.type === 'module' ? (
+          <Image 
+            src={image.module.default} 
+            alt={`Image ${index + 1} de ${title}`}
+            width={800}
+            height={600}
+            class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : (
+          <img 
+            src={image.src} 
+            alt={`Image ${index + 1} de ${title}`} 
+            class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        )}
       </div>
     ))}
   </div>

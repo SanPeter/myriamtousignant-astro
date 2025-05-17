@@ -2,6 +2,11 @@
  * Utilitaire pour gérer les chemins d'images dans les collections de contenu Astro
  */
 
+// Importer toutes les images des collections
+const projectImages = import.meta.glob([
+  '../content/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
 /**
  * Fonction pour construire le chemin de l'image relative à un contenu
  * @param collectionName Nom de la collection (projets, expositions, etc.)
@@ -47,6 +52,63 @@ export async function loadContentImages(collectionName: string, entryId: string,
       }
     } catch (error) {
       console.error(`Erreur lors du chargement de l'image ${path}:`, error);
+    }
+  }
+  
+  return images;
+}
+
+/**
+ * Retourne l'image correspondante à un chemin spécifié dans une collection
+ * @param collectionName Nom de la collection (projets, expositions, etc.)
+ * @param slug Slug de l'entrée
+ * @param imagePath Chemin relatif de l'image
+ * @returns L'image importée ou undefined si non trouvée
+ */
+export async function getImageBySummaryPath(collectionName: string, slug: string, imagePath: string): Promise<any> {
+  if (!imagePath) return undefined;
+
+  // Si le chemin commence par / ou http, il s'agit d'une URL externe
+  if (imagePath.startsWith('/') || imagePath.startsWith('http')) {
+    return { src: imagePath };
+  }
+
+  try {
+    // Construire le chemin complet pour l'importation
+    const fullPath = `../content/${collectionName}/${slug}/${imagePath}`;
+    
+    // Trouver l'image correspondante dans les fichiers importés
+    for (const [path, importFunc] of Object.entries(projectImages)) {
+      if (path.includes(fullPath) || path.endsWith(imagePath)) {
+        const importedImage = await importFunc() as { default: any };
+        return importedImage.default;
+      }
+    }
+  } catch (error) {
+    console.error(`Erreur lors du chargement de l'image ${imagePath}:`, error);
+  }
+
+  return undefined;
+}
+
+/**
+ * Récupère toutes les images correspondant à un slug spécifique
+ * @param collectionName Nom de la collection (projets, expositions, etc.)
+ * @param slug Slug de l'entrée
+ * @returns Tableau de chemins d'images
+ */
+export async function getImagesBySlug(collectionName: string, slug: string): Promise<any[]> {
+  const images = [];
+  const pattern = new RegExp(`${collectionName}/${slug}/`);
+  
+  for (const [path, importFunc] of Object.entries(projectImages)) {
+    if (pattern.test(path)) {
+      try {
+        const importedImage = await importFunc() as { default: any };
+        images.push(importedImage.default);
+      } catch (error) {
+        console.error(`Erreur lors du chargement de l'image ${path}:`, error);
+      }
     }
   }
   

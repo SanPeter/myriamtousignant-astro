@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   return projetsEntries
     .filter(entry => !entry.data.draft) // Filtre les brouillons
     .map(entry => ({
-      params: { slug: entry.id.replace(/\.md$/, '') },
+      params: { slug: entry.id.replace(/\.md$/, '').split('/')[0] }, // Extraire le slug correctement
       props: { entry },
     }));
 }
@@ -17,6 +17,11 @@ const { entry } = Astro.props;
 
 // Préparer les images pour le carousel
 const images = entry.data.projectImages || [];
+
+// Extraire le dossier du projet à partir de l'ID (pour les chemins d'images)
+const projectFolder = entry.id.includes('/') 
+  ? entry.id.split('/')[0] 
+  : entry.id.replace(/\.md$/, '');
 ---
 
 <ProjectLayout 
