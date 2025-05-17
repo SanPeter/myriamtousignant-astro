@@ -1,0 +1,36 @@
+---
+// InstagramPosts.astro - Un composant pour afficher des publications Instagram spécifiques à la résidence Culture Montérégie
+
+import InstagramGrid from './InstagramGrid.astro';
+
+const posts = [
+  {
+    url: "https://www.instagram.com/p/CW2-DupLFmb/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CW8WQnoAFjy/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CW_OjzaLdlR/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXBeTLILPkb/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXEkERWloax/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXG14C9LmTz/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  }
+];
+---
+
+<div class="my-8">
+  <InstagramGrid posts={posts} columns={3} columnsTablet={2} columnsMobile={1} />
+</div>
