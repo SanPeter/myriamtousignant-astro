@@ -7,11 +7,12 @@ describe('HeaderNav Component', () => {
     render(<HeaderNav />);
     
     // Vérifie que les liens principaux sont présents
-    expect(screen.getByText('Projets')).toBeDefined();
-    expect(screen.getByText('Expositions')).toBeDefined();
-    expect(screen.getByText('Art Public')).toBeDefined();
-    expect(screen.getByText('Livres d\'artiste')).toBeDefined();
-    expect(screen.getByText('Biographie & Démarche')).toBeDefined();
+    // Utilise getAllByText pour gérer les doublons dans le menu desktop et mobile
+    expect(screen.getAllByText('Projets')[0]).toBeDefined();
+    expect(screen.getAllByText('Expositions')[0]).toBeDefined();
+    expect(screen.getAllByText('Art Public')[0]).toBeDefined();
+    expect(screen.getAllByText('Livres d\'artiste')[0]).toBeDefined();
+    expect(screen.getAllByText('Biographie & Démarche')[0]).toBeDefined();
   });
 
   it('should include the artist name', () => {

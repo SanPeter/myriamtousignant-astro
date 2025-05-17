@@ -37,9 +37,11 @@ describe('Jumbotron Component', () => {
       />
     );
     
-    // Recherche l'élément racine du jumbotron qui devrait avoir la classe jumbotron
+    // Recherche l'élément racine du jumbotron avec les classes Tailwind actuelles
     const jumbotronElement = container.firstChild;
-    expect(jumbotronElement).toHaveClass('jumbotron');
-    expect(jumbotronElement).toHaveClass('jumbotron-fluid');
+    expect(jumbotronElement).toHaveClass('py-8');
+    expect(jumbotronElement).toHaveClass('mb-10');
+    expect(jumbotronElement).toHaveClass('border-b');
+    expect(jumbotronElement).toHaveClass('border-gray-200');
   });
 });

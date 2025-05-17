@@ -1,8 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { getDocument } from './utils.ts'
 
-// Mock des assets pour les tests
-vi.mock('astro:assets');
+// Les mocks sont maintenant définis dans setup.ts
 
 describe('ImageGrid component', () => {
   it('should render an empty state when no images match', async () => {
