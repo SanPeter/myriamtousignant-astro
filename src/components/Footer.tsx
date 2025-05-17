@@ -4,19 +4,19 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="footer mt-auto py-3 bg-light">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 mb-3 mb-md-0">
+    <footer className="mt-auto py-3 bg-gray-100">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex flex-col md:flex-row md:justify-between">
+          <div className="mb-3 md:mb-0">
             <p>&copy; {currentYear} Myriam Tousignant. Tous droits réservés.</p>
           </div>
-          <div className="col-md-6 d-flex justify-content-md-end">
+          <div className="flex">
             <div className="social-links">
               <a 
                 href="https://www.instagram.com/myriamtousignant" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="me-3"
+                className="mr-3 text-gray-700 hover:text-gray-900"
                 aria-label="Instagram"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,8 @@ const Footer: React.FC = () => {
                 </svg>
               </a>
               <a 
-                href="mailto:contact@myriamtousignant.com" 
+                href="mailto:contact@myriamtousignant.com"
+                className="text-gray-700 hover:text-gray-900"
                 aria-label="Courriel"
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

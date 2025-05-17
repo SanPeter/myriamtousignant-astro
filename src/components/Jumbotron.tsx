@@ -7,9 +7,9 @@ interface JumbotronProps {
 
 const Jumbotron: React.FC<JumbotronProps> = ({ title, description }) => {
   return (
-    <div className="jumbotron jumbotron-fluid mb-5">
-      {title && <h1 className="display-4">{title}</h1>}
-      {description && <p className="lead">{description}</p>}
+    <div className="py-8 mb-10 border-b border-gray-200">
+      {title && <h1 className="text-4xl font-bold mb-3">{title}</h1>}
+      {description && <p className="text-xl text-gray-600">{description}</p>}
     </div>
   );
 };
