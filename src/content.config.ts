@@ -33,7 +33,7 @@ const publicationSchema = baseSchema.extend({
 const projets = defineCollection({
   schema: projectSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/projets'
   })
 });
@@ -41,7 +41,7 @@ const projets = defineCollection({
 const artPublic = defineCollection({
   schema: projectSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/art-public'
   })
 });
@@ -53,7 +53,7 @@ const expositions = defineCollection({
     endDate: z.coerce.date().optional(),
   }),
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/expositions'
   })
 });
@@ -61,7 +61,7 @@ const expositions = defineCollection({
 const livresArtiste = defineCollection({
   schema: projectSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/livres-artiste'
   })
 });
@@ -69,7 +69,7 @@ const livresArtiste = defineCollection({
 const mediations = defineCollection({
   schema: projectSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/mediations'
   })
 });
@@ -77,7 +77,7 @@ const mediations = defineCollection({
 const biographieDemarche = defineCollection({
   schema: biographieSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/biographie-demarche'
   })
 });
@@ -88,7 +88,7 @@ const boutique = defineCollection({
     available: z.boolean().optional().default(true),
   }),
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/boutique'
   })
 });
@@ -96,7 +96,7 @@ const boutique = defineCollection({
 const presse = defineCollection({
   schema: baseSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/presse'
   })
 });
@@ -104,7 +104,7 @@ const presse = defineCollection({
 const publications = defineCollection({
   schema: publicationSchema,
   loader: glob({
-    pattern: '**/*.md',
+    pattern: '**/*.{md,mdx}',
     base: 'src/content/publications'
   })
 });

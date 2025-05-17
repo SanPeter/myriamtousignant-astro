@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/SanPeter/myriamtousignant-astro#readme",
   "dependencies": {
+    "@astrojs/mdx": "^4.2.6",
     "@astrojs/react": "^4.2.7",
     "@tailwindcss/vite": "^4.0.14",
     "astro": "^5.5.2",
