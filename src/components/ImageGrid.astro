@@ -76,9 +76,10 @@ async function findMatchingImages(): Promise<ImageMetadata[]> {
 // Récupérer les images
 const images = await findMatchingImages();
 
-// Calculer le style CSS de la grille
-const gridGap = `${margins}px`;
-const gridAutoRows = `${rowHeight}px`;
+// Définir des dimensions standards pour toutes les images
+const standardHeight = rowHeight; // Utiliser la hauteur de ligne comme hauteur standard
+const standardWidth = 300; // Largeur fixe pour toutes les images
+const gridGap = margins; // Utiliser la valeur des marges pour l'espacement
 ---
 
 <div class="w-full overflow-hidden">
@@ -87,26 +88,22 @@ const gridAutoRows = `${rowHeight}px`;
       Aucune image ne correspond au pattern "{match}"
     </div>
   ) : (
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[--grid-gap]" style={`--grid-gap: ${gridGap};`}>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" style={`gap: ${gridGap}px;`}>
       {images.map((image, index) => (
         <div 
-          class="overflow-hidden relative cursor-pointer mb-[--margins]"
-          style={`--margins: ${margins}px;`}
+          class="aspect-w-3 aspect-h-2 overflow-hidden rounded-md shadow-sm"
         >
           <a 
             href="#" 
-            class="block"
+            class="block w-full h-full"
             data-index={index}
           >
             <Image
               src={image}
               alt={`Image ${index + 1}`}
-              width={300}
-              height={rowHeight}
-              class={`w-full h-full object-cover transition-transform duration-300 ${
-                thumbnailHoverEffect === 'zoom' ? 'hover:scale-105' : 
-                thumbnailHoverEffect === 'brighten' ? 'hover:brightness-125' : ''
-              }`}
+              width={standardWidth}
+              height={standardHeight}
+              class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
             {showExif && (
               <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-xs">
