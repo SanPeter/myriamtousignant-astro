@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+/* Styles pour le contenu Markdown */
+.prose p {
+  margin-bottom: 1.5em;
+}
+
+/* Assurer que le dernier paragraphe n'a pas de marge en bas */
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Styles pour listes dans le contenu Markdown */
+.prose ul, .prose ol {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* Style pour les titres dans le contenu Markdown */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  margin-top: 1.5em;
+  margin-bottom: 1em;
+}
+
+/* Style pour les citations */
+.prose blockquote {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+/* Style pour les liens dans le contenu Markdown */
+.prose a {
+  color: #2563eb; /* blue-600 */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #1d4ed8; /* blue-700 */
+}
