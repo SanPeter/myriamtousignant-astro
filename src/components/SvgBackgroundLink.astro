@@ -46,6 +46,8 @@ const {
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
+        padding: 1rem;
+        margin: 0.5rem 0;
       }
     </style>
   ) : (
@@ -65,6 +67,8 @@ const {
       }
       .svg-background-link {
         display: block;
+        padding: 1rem;
+        margin: 0.5rem 0;
       }
       .sr-only {
         position: absolute;
@@ -81,12 +85,3 @@ const {
   )}
 </a>
 
-<a 
-  class="svg-background-link" 
-  href={href} 
-  target={target}
-  rel={rel}
-  aria-label={alt}
->
-  {alt}
-</a>
