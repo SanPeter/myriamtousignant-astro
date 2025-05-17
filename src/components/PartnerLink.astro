@@ -1,0 +1,14 @@
+---
+interface Props {
+  href: string;
+  src: string;
+  alt: string;
+  maxWidth?: string;
+}
+
+const { href, src, alt, maxWidth = "200px" } = Astro.props;
+---
+
+<a href={href}>
+  <img src={src} alt={alt} style={`max-width: ${maxWidth};`}>
+</a>
