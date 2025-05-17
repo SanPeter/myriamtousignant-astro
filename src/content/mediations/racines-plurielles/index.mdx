@@ -10,6 +10,9 @@ summaryImage: 'images/racines_plurielles-01.jpg'
 listImage: 'images/racines_plurielles-01.jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logoLongueuil from './images/logo_longueuil.jpg';
+import logoRacinesPlurielles from './images/Racines_Plurielles.png';
 
 <ImageGrid 
   match="images/racines_plurielles-*" 
@@ -38,13 +41,5 @@ Bonne découverte.
 
 Racines plurielles est une initiative de Culture pour tous, rendue possible grâce à la participation financière du ministère de l'Immigration, de la Francisation et de l'Intégration. Fièrement appuyé par l'Association des bibliothèques publiques du Québec, le projet compte également sur la précieuse contribution d'Artenso. 
 
-<div>
-  <a href="https://longueuil.quebec/fr">
-    <img src="images/logo_longueuil.jpg" alt="Longueuil" />
-  </a>
-</div>
-<div>
-  <a href="https://www.culturepourtous.ca/professionnels-de-la-culture/racines-plurielles/longueuil/">
-    <img src="images/Racines_Plurielles.png" alt="Racines Plurielles" />
-  </a>
-</div>
+<PartnerLink src={logoLongueuil} href='https://longueuil.quebec/fr' alt='Ville de Longueuil' />
+<PartnerLink src={logoRacinesPlurielles} href='https://www.culturepourtous.ca/professionnels-de-la-culture/racines-plurielles/longueuil/' alt='Racines plurielles' /> 

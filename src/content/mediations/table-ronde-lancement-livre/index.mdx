@@ -26,10 +26,14 @@ projectImages:
   - 'images/LongueuilTableRondeMyriamTousignantHiRes (16 of 17).jpg'
   - 'images/LongueuilTableRondeMyriamTousignantHiRes (17 of 17).jpg'
 ---
+import PartnerLink from '../../../components/PartnerLink.astro';
+import {Image} from 'astro:assets';
+import logoMam from './images/logo-mam.png';
+import logoDeveloppementCulturel from './images/entente-development-culturel.jpg';
 
 _Édifice Marcel-Robidas- Longueuil  
-Crédit photo : Jean-Michael Seminaro  
-Animation : Émilie de la Durantaye_
+Crédit photo: Jean-Michael Seminaro  
+Animation: Émilie de la Durantaye_
 
 Soirée de clôture organisée dans le cadre du projet de médiation culturelle Pour beaucoup d’obscurité, quelque éclat mené au printemps passé en collaboration avec l’organisme MAM, autour de la maternité.  
 
@@ -45,5 +49,10 @@ Annie Ève Gratton de BedonZen
 
 Ce projet bénéficie du soutien financier découlant de l’entente de développement culturel conclue entre la Ville de Longueuil et le gouvernement du Québec. Un remerciement chaleureux à Stéphanie Laquerre, responsable des projets de médiation culturelle au Bureau de la culture et des bibliothèques de Longueuil, pour l’accompagnement, les conseils et la confiance. Ce projet n’aurait pas pu se concrétiser sans cette précieuse collaboration.  
 
-{{<partnerlink src="images/logo-mam.png" href="https://www.mam.qc.ca" alt="MAM">}}
-![Développement culturel](images/entente-development-culturel.jpg)
+<PartnerLink src={logoMam} href='https://www.mam.qc.ca' alt='MAM' />
+<Image 
+  src={logoDeveloppementCulturel} 
+  alt='Entente de développement culturel' 
+  width={200} 
+  height={200} 
+  class="mt-4 mb-4"/>

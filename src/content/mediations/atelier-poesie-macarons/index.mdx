@@ -14,6 +14,8 @@ projectImages:
   - images/atelier-poesie-macarons-3.jpg
   - images/atelier-poesie-macarons-4.jpg
 ---
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logo from './images/logo_ville_MTL.jfif';
 
 Atelier de poésie par collage et création d’épinglettes 
 
@@ -28,4 +30,4 @@ En plus d'être bien ancrée dans l’ADN d’Hochelaga-Maisonneuve, la lutte es
  
 Au cœur du projet de la bibliothèque Maisonneuve, la lutte se décline de plusieurs façons, notamment : lutter pour préserver le patrimoine (les éléments patrimoniaux de l'édifice d'origine ont été conservés et restaurés), lutter pour la transition écologique (le bâtiment est durable et zéro carbone opérationnel).  
 
-{{<partnerlink src="images/logo_ville_MTL.jfif" href="https://montreal.ca/" alt="ville de Montréal">}}
+<PartnerLink src={logo} href='https://montreal.ca/' alt='ville de Montréal' />

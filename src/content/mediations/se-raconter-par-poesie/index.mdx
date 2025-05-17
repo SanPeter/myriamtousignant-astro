@@ -10,6 +10,8 @@ summaryImage: 'images/raconter_poesie-13.jpg'
 listImage: 'images/raconter_poesie-13.jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logoLongueuil from './images/logo_longueuil.png';
 
 <ImageGrid 
   match="images/raconter_poesie-*" 
@@ -40,3 +42,5 @@ Avec la participation de :
 Gabrielle Carrière, Amélie Desbiens, Éric Demers, Oliver Émond, Marie-Ève Lachapelle, Marie-Chantal Legros-Potvin, Adeline Louis, Nathalie Prévost, Saleha Najafi, Jimmy Normand, Louise Rondeau, Benjamin Simard, Maryse Tremblay, Martine Trudel  
 
 Ce projet a eu lieu grâce au soutien du Bureau de la culture et des bibliothèques de Longueuil.
+
+<PartnerLink src={logoLongueuil} href='https://longueuil.quebec/fr' alt='Ville de Longueuil' />

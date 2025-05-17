@@ -24,9 +24,14 @@ projectImages:
   - images/mediation-beaucoup-obscurite-13.jpg
   - images/mediation-beaucoup-obscurite-14.jpg
 ---
+import PartnerLink from '../../../components/PartnerLink.astro';
+import { Image } from 'astro:assets';
+import DevelopmentCulturel from './images/entente-development-culturel.jpg';
+import LogoMam from './images/logo-mam.png';
+
 
 _2022  
-Crédit photo : Jean-Michael Seminaro et Éric St-Pierre_
+Crédit photo: Jean-Michael Seminaro et Éric St-Pierre_
 
 Le projet de médiation culturelle Pour beaucoup d’obscurité, quelques éclats a été mené au printemps 2022 par l’artiste multidisciplinaire Myriam Tousignant sur le territoire longueuillois. Ces ateliers s’adressaient aux parents ayant vécu un deuil périnatal. Lors de ces rencontres, les participant·e·s ont été convié·e·s à s’exprimer sur leurs expériences personnelles de cette épreuve par le biais du dessin, de l’écriture et de la poésie visuelle. Voici un survol en images de ce projet novateur. 
 
@@ -34,5 +39,12 @@ Ce projet bénéficie par ailleurs d’un soutien financier découlant de l’en
 
 Merci à l’équipe du MAM, autour de la maternité pour le partenariat et l’appui dans le cadre de ce projet de médiation culturelle.  
 
-{{<partnerlink src="images/logo-mam.png" href="https://www.mam.qc.ca" alt="MAM">}}
-![Développement culturel](images/entente-development-culturel.jpg)
+<PartnerLink src={LogoMam} href='https://www.mam.qc.ca' alt='MAM' />
+
+<Image 
+  src={DevelopmentCulturel} 
+  alt={'Développement culturel'} 
+  width={200} 
+  height={200}
+  style={`height: auto;`}
+/>

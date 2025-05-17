@@ -10,6 +10,10 @@ summaryImage: 'images/MyriamTousignantBook (1 of 9).jpg'
 listImage: 'images/MyriamTousignantBook (1 of 9).jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import { Image } from 'astro:assets';
+import DevelopmentCulturel from './images/entente-development-culturel.jpg';
+import LogoMam from './images/logo-mam.png';
 
 _2022  
 Crédit photo : Jean-Michael Seminaro 
@@ -41,3 +45,16 @@ Conception graphique Studio Gabarit
 Révision linguistique Galadriel Avon  
 
 Photographies et documentation visuelle Jean-Michael Seminaro et Éric St-Pierre
+
+Ce livre d’artiste a été imprimé à 75 exemplaires en risographie sur les presses de l’Atelier Universel à l’automne 2022 à Montréal. La couverture a été estampée à chaud et imprimée en sérigraphie à L’imprimerie sur du papier Mohawk noir. 
+
+
+<PartnerLink src={LogoMam} href='https://www.mam.qc.ca' alt='MAM' />
+
+<Image 
+  src={DevelopmentCulturel} 
+  alt={'Développement culturel'} 
+  width={200} 
+  height={200}
+  style={`height: auto;`}
+/>

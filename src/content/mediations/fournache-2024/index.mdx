@@ -10,6 +10,11 @@ summaryImage: 'images/fournache_1.JPG'
 listImage: 'images/fournache_1.JPG'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logoImprimerie from './images/logotype_limprimerie.png';
+import logoMtl from './images/Montreal_MHM_Noir_rosace rouge.png'
+import { Image } from 'astro:assets';
+import logoFousFr from './images/Logo-fous-francais-source.png';
 
 <ImageGrid 
   match="images/fournache_*" 
@@ -40,3 +45,15 @@ L'objectif de ce projet étant de renouveler notre regard sur la présence de la
 Pour la réalisation de ce projet, l'aide financière Fous du français a été accordée par l'Union des municipalités du Québec et le gouvernement du Québec. 
 
 *Fournache. n. f. Agric. Tas d'herbes, de racines et de feuilles mortes qu'on brûle dans les champs pour en faire de l'engrais (Dictionnaire des mots rares et précieux).
+
+
+<PartnerLink src={logoImprimerie} href='https://limprimerie.art/' alt="L'imprimerie centre d'artistes" />
+
+<Image 
+  src={logoFousFr} 
+  alt='Fous du français' 
+  width={200} 
+  height={200} 
+  class="mt-4 mb-4"/>
+
+<PartnerLink src={logoMtl} href='https://montreal.ca/mercier-hochelaga-maisonneuve' alt='Ville de Montréal - Arrondissement Mercier-Hochelaga-Maisonneuve' />

@@ -10,6 +10,8 @@ summaryImage: 'images/intervention-poetique-01-couverture.jpg'
 listImage: 'images/intervention-poetique-01-couverture.jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logoLanguesPendues from './images/langues_pendues_logo_couleur-1170x658.webp';
 
 <ImageGrid 
   match="images/intervention-poetique-*" 
@@ -33,11 +35,6 @@ Son écriture prend forme grâce à la technique du collage et se révèle, ici,
 Crédits photos:
 Marie-Claude De Souza, Éric St-Pierre, Myriam Tousignant 
 
-{/* {{< partnerlink src="images/langues_pendues_logo_couleur-1170x658.webp" href="https://languespendues.com/" >}} */}
-<div>
-  <a href="https://languespendues.com/">
-    <img src="images/langues_pendues_logo_couleur-1170x658.webp" alt="Langues pendues" />
-  </a>
-</div>
+<PartnerLink src={logoLanguesPendues} href='https://languespendues.com/' alt='Langues pendues' />
 
 [Interventions poétiques : dévoilement des projets retenus (mailchi.mp)](https://mailchi.mp/de81c161f2da/interventions?fbclid=IwAR0t6fB0P__kn-sHfgCHplTOVOnx1YAAa4OVKsRVvkSBJDhimwvazKNhcl4)
