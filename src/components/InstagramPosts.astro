@@ -27,10 +27,88 @@ const posts = [
   {
     url: "https://www.instagram.com/p/CXG14C9LmTz/",
     caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXJg_PVrANR/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXMYhOdLYUf/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/reel/CXRRYY1MVdt/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXUTcoELdsC/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXWX9U7rAsu/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/tv/CXY-sltrsAS/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXd9TWqLbod/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXg5wDWFNpE/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXjQkejLiRP/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXoJYOOLrgK/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXrXP9-Fm6X/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CXt-JA9lVBk/",
+    caption: "Résidence Instagram - Culture Montérégie"
   }
 ];
+
+const morePosts = [
+  {
+    url: "https://www.instagram.com/tv/CXzDRWOBvei/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/tv/CX1c49lBFtU/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/tv/CX818nNB0yz/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CX_WEGrL51o/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/reel/CX_Wp8Rhlso/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  },
+  {
+    url: "https://www.instagram.com/p/CYB_rNmLQpE/",
+    caption: "Résidence Instagram - Culture Montérégie"
+  }
+];
+
+// Combiner tous les posts pour la grille
+const allPosts = [...posts, ...morePosts];
 ---
 
 <div class="my-8">
-  <InstagramGrid posts={posts} columns={3} columnsTablet={2} columnsMobile={1} />
+  <InstagramGrid posts={allPosts} columns={3} columnsTablet={2} columnsMobile={1} />
 </div>
