@@ -35,6 +35,8 @@ projectImages:
   - images/mediation-ccgv-24.jpg
   - images/mediation-ccgv-25.jpg
 ---
+import PartnerLink from '../../../components/PartnerLink.astro';
+import ccgvLogo from './images/logo_CCGV.jpg';
 
 _Atelier de poésie visuelle et création d’un fanzine  
 Animatrice : Myriam Tousignant  
@@ -55,10 +57,8 @@ Ces rencontres ont été l’occasion unique de découvrir différentes stratég
 
 Un lancement au printemps 2022 est prévu, comprenant les fanzines des deux cohortes de l’année au CCGV.
 
-{{<rawhtml>}}
-<p>
-  <a href="https://www.ccgv.ca/">
-    <img src="images/logo_CCGV.jpg" alt="CCGV" style="max-width: 200px;">
-  </a>
-</p>
-{{</rawhtml>}}
+<PartnerLink 
+  href="https://www.ccgv.ca/"
+  src={ccgvLogo}
+  alt="CCGV"
+/>

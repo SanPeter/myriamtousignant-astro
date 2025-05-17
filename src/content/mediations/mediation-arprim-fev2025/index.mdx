@@ -10,6 +10,8 @@ summaryImage: 'images/ArprimAtelierFevrier2025_0.jpg'
 listImage: 'images/ArprimAtelierFevrier2025_0.jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import arprimLogo from './images/logo_signature_arprim.jpg';
 
 <ImageGrid 
   match="images/ArprimAtelier*" 
@@ -36,11 +38,11 @@ Dans le cadre de l'exposition Chorégraphies pour mains mouillées de Sarah-Jean
 L'atelier consiste à inviter les participant.e.s à réactiver et vivre autrement les actions performatives de Sarah-Jeanne.
 Une visite de l'exposition commentée ouvrira les ateliers suivis d'un échange informel pour expliquer ce que nous vivrons ensemble.  
 
-<div>
-  <a href="https://arprim.org">
-    <img src="images/logo_signature_arprim.jpg" alt="arprim" style={{maxWidth: "200px"}} />
-  </a>
-</div>
+<PartnerLink 
+  href="https://arprim.org"
+  src={arprimLogo}
+  alt="arprim"
+/>
 
 [Évènement Facebook](https://www.facebook.com/events/1131597488665600)
 

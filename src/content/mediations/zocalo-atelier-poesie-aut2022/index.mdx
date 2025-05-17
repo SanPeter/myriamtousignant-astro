@@ -10,6 +10,8 @@ summaryImage: 'images/zocalo-atelier-poesie-aut20221-1.jpg'
 listImage: 'images/zocalo-atelier-poesie-aut20221-1.jpg'             
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import logoZocalo from './images/logo-zocalo.png';
 
 _Atelier de découverte / Poésie visuelle  
 23 octobre 2022  
@@ -32,8 +34,8 @@ Cet atelier offert à l'automne 2022 au centre d'artistes Zocalo situé à Longu
 
 [Poésie visuelle - Zocalo (zocaloweb.org)](https://zocaloweb.org/produit/poesie-visuelle/)
 
-<div>
-  <a href="https://zocaloweb.org/atelier-de-fanzines-faimtl-2019/">
-    <img src="images/logo-zocalo.png" alt="Atelier de fanzines - Zocalo" style={{maxWidth: "200px"}} />
-  </a>
-</div>
+<PartnerLink 
+  href="https://zocaloweb.org/atelier-de-fanzines-faimtl-2019/"
+  src={logoZocalo}
+  alt="Atelier de fanzines - Zocalo"
+/>

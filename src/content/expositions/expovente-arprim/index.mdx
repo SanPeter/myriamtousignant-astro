@@ -10,6 +10,9 @@ summaryImage: 'images/expovente-arprim-03.jpg'
 listImage: 'images/expovente-arprim-03.jpg'
 ---
 import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import arprimLogo from './images/logo_signature_arprim.jpg';
+import languesPenduesLogo from './images/lp-logo_couleur_800px-300x300.jpg';
 
 <ImageGrid 
   match="images/expovente*" 
@@ -40,3 +43,17 @@ Ce corpus multidisciplinaire a été réalisé dans le cadre du Projet Intervent
 Book launch "Et si je me permettais de briser ces silences" ("What if I allowed myself to break these silences")
 
 The artist's book "Et si je me permettais de briser ces silences" ("What if I allowed myself to break these silences") is an invitation to a poetic and artistic encounter aiming to lift the taboo surrounding perinatal bereavement. Crying out to anyone who will listen, its poems tackle the immutable and universal topic of death.
+
+[Myriam Tousignant (arprim.org)](https://arprim.org/le-magasin/2023-2024/460-myriam-tousignant.html)
+<PartnerLink 
+  href="https://arprim.org"
+  src={arprimLogo}
+  alt="Arprim"
+/>
+
+[Dévoilement d'un livre d'artiste | Productions Langues Pendues](https://languespendues.com/a-la-une/devoilement-livre-artiste/)
+<PartnerLink 
+  href="https://languespendues.com/"
+  src={languesPenduesLogo}
+  alt="Langues Pendues"
+/>
