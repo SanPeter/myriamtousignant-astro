@@ -1,11 +1,90 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 
-// Récupération des contenus mis en avant
-const projets = await getCollection('projets', entry => entry.data.featured && !entry.data.draft);
-const expositions = await getCollection('expositions', entry => entry.data.featured && !entry.data.draft);
-const artPublic = await getCollection('art-public', entry => entry.data.featured && !entry.data.draft);
+// Importer les collections
+const projets = await getCollection('projets', ({ data }) => {
+  return !data.draft && data.featured;
+});
+
+const expositions = await getCollection('expositions', ({ data }) => {
+  return !data.draft;
+});
+
+const artPublic = await getCollection('art-public', ({ data }) => {
+  return !data.draft;
+});
+
+// Importer toutes les images des collections dynamiquement
+const contentImages = import.meta.glob([
+  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/art-public/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Fonction pour résoudre le chemin de l'image
+async function resolveContentImage(collection: string, slug: string, imagePath: string) {
+  if (!imagePath) return null;
+
+  // Si le chemin commence par / ou http, on le retourne tel quel (pour les URLs externes)
+  if (imagePath.startsWith('/') || imagePath.startsWith('http')) {
+    return { type: 'url', value: imagePath };
+  }
+
+  try {
+    // Construire différentes variations potentielles du chemin de l'image
+    const possiblePaths = [
+      `../content/${collection}/${slug}/${imagePath}`,
+      `../content/${collection}/${slug}/images/${imagePath.split('/').pop() || ''}`,
+    ];
+    
+    // Rechercher l'image dans les chemins possibles
+    for (const path of possiblePaths) {
+      if (path in contentImages) {
+        // Charger l'image dynamiquement
+        const imageModule = await contentImages[path]();
+        if (imageModule && (imageModule as { default: string }).default) {
+          return { type: 'import', value: (imageModule as { default: string }).default };
+        }
+      }
+    }
+    
+    console.warn(`Image non trouvée: ${imagePath} pour ${collection}/${slug}`);
+    return { type: 'url', value: imagePath };
+  } catch (error) {
+    console.error(`Erreur lors du chargement de l'image ${imagePath}:`, error);
+    return { type: 'url', value: imagePath };
+  }
+}
+
+// Préparer les données avec les images résolues
+const projetsWithImages = await Promise.all(
+  projets.slice(0, 3).map(async (projet) => {
+    const image = projet.data.summaryImage 
+      ? await resolveContentImage('projets', projet.id.replace(/\.md$/, ''), projet.data.summaryImage)
+      : null;
+    return { ...projet, resolvedImage: image };
+  })
+);
+
+const expositionsWithImages = await Promise.all(
+  expositions.slice(0, 3).map(async (expo) => {
+    const image = expo.data.summaryImage 
+      ? await resolveContentImage('expositions', expo.id.replace(/\.md$/, ''), expo.data.summaryImage)
+      : null;
+    return { ...expo, resolvedImage: image };
+  })
+);
+
+const artPublicWithImages = await Promise.all(
+  artPublic.slice(0, 2).map(async (art) => {
+    const image = art.data.summaryImage 
+      ? await resolveContentImage('art-public', art.id.replace(/\.md$/, ''), art.data.summaryImage)
+      : null;
+    return { ...art, resolvedImage: image };
+  })
+);
 ---
 
 <BaseLayout title="Accueil">
@@ -42,14 +121,28 @@ const artPublic = await getCollection('art-public', entry => entry.data.featured
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projets.slice(0, 3).map(projet => (
+        {projetsWithImages.map(projet => (
           <a href={`/projets/${projet.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 overflow-hidden">
-            {projet.data.summaryImage && (
-              <img 
-                src={projet.data.summaryImage} 
-                alt={projet.data.title} 
-                class="w-full h-48 object-cover"
-              />
+            {projet.resolvedImage && (
+              <div class="w-full h-48 overflow-hidden">
+                {projet.resolvedImage.type === 'import' ? (
+                  <Image 
+                    src={projet.resolvedImage.value} 
+                    alt={projet.data.title} 
+                    width={400}
+                    height={300}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img 
+                    src={projet.resolvedImage.value} 
+                    alt={projet.data.title} 
+                    width="400"
+                    height="300"
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
             )}
             <div class="p-4">
               <h3 class="text-xl font-semibold">{projet.data.title}</h3>
@@ -77,14 +170,28 @@ const artPublic = await getCollection('art-public', entry => entry.data.featured
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {expositions.slice(0, 3).map(expo => (
+        {expositionsWithImages.map(expo => (
           <a href={`/expositions/${expo.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors duration-200 overflow-hidden">
-            {expo.data.summaryImage && (
-              <img 
-                src={expo.data.summaryImage} 
-                alt={expo.data.title} 
-                class="w-full h-48 object-cover"
-              />
+            {expo.resolvedImage && (
+              <div class="w-full h-48 overflow-hidden">
+                {expo.resolvedImage.type === 'import' ? (
+                  <Image 
+                    src={expo.resolvedImage.value} 
+                    alt={expo.data.title} 
+                    width={400}
+                    height={300}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img 
+                    src={expo.resolvedImage.value} 
+                    alt={expo.data.title} 
+                    width="400"
+                    height="300"
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
             )}
             <div class="p-4">
               <h3 class="text-xl font-semibold">{expo.data.title}</h3>
@@ -105,7 +212,7 @@ const artPublic = await getCollection('art-public', entry => entry.data.featured
   </section>
   
   <!-- Art Public -->
-  {artPublic.length > 0 && (
+  {artPublicWithImages.length > 0 && (
     <section class="py-12 bg-gray-50">
       <div class="container mx-auto px-6">
         <div class="flex justify-between items-center mb-8">
@@ -119,16 +226,28 @@ const artPublic = await getCollection('art-public', entry => entry.data.featured
         </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {artPublic.slice(0, 2).map(art => (
+          {artPublicWithImages.map(art => (
             <a href={`/art-public/${art.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
               <div class="flex flex-col md:flex-row">
-                {art.data.summaryImage && (
+                {art.resolvedImage && (
                   <div class="md:w-2/5">
-                    <img 
-                      src={art.data.summaryImage} 
-                      alt={art.data.title} 
-                      class="w-full h-full object-cover"
-                    />
+                    {art.resolvedImage.type === 'import' ? (
+                      <Image 
+                        src={art.resolvedImage.value} 
+                        alt={art.data.title} 
+                        width={400}
+                        height={300}
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img 
+                        src={art.resolvedImage.value} 
+                        alt={art.data.title} 
+                        width="400"
+                        height="300"
+                        class="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
                 )}
                 <div class="p-6 md:w-3/5">
@@ -161,7 +280,7 @@ const artPublic = await getCollection('art-public', entry => entry.data.featured
         Contactez-moi pour discuter de collaborations, acquisitions ou médiations culturelles.
       </p>
       <a 
-        href="mailto:contact@myriamtousignant.com" 
+        href="https://www.instagram.com/myriamtousignant_art/" 
         class="bg-white text-blue-600 hover:bg-gray-100 py-3 px-8 rounded-md font-semibold text-lg inline-block transition-colors"
       >
         Écrivez-moi
