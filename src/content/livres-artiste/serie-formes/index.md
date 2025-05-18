@@ -5,7 +5,7 @@ date: 2021-08-24T11:46:51-04:00
 draft: false
 weight: 10
 featured: false
-summaryImage: ''
+summaryImage: 'images/livrets-arprim-8.jpg'
 listImage: 'images/livrets-arprim-8.jpg'
 projectImages:
   - images/livrets-arprim-8.jpg
