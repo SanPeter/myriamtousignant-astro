@@ -33,26 +33,9 @@ projectImages:
   - images/Image.jpg
   - images/photo_studio.jpg
 ---
-
-<style>
-.logo--studioephemere {
-  display: block;
-  text-indent: -9999px;
-  width: 100px;
-  height: 82px;
-  background: url(images/studios_ephemeres_logo.svg);
-  background-size: 100px 82px;
-}
-
-.logo--cal {
-  display: block;
-  text-indent: -9999px;
-  width: 200px;
-  height: 64px;
-  background: url(images/cal_logo.svg);
-  background-size: 200px 64px;
-}
-</style>
+import SvgBackgroundLink from '../../../components/SvgBackgroundLink.astro';
+import logoStudioEphemeres from './images/studios_ephemeres_logo.svg';
+import logoCal from './images/cal_logo.svg';
 
 [Studios de création éphémères pour artistes - Studios Éphémères](https://studiosephemeres.com/?fbclid=IwAR2RKjjgVDVYF8LqA5aT_MVGTZgB53QbzgNkORqPZCClHq9kMizv46tCTIw)
 
@@ -62,5 +45,18 @@ Voici la documentation visuelle de ma résidence d’artiste (janvier-mars 2019)
 
 Cette installation entend associer les images fixes, la vidéo et des représentations tridimensionnelles pour proposer une expérience immersive qui explore l’idée de chantier, de coulisse, en lien avec la cabane de pêche et ses constructions précaires dans le paysage québécois.
 
-<a class="logo--studioephemere" href="http://studiosephemeres.com/" target="blank">studiosephemeres.com</a>
-<a class="logo--cal" href="https://www.conseildesartsdelongueuil.ca/" target="blank">Conseil des Arts de Longueuil</a>
+<SvgBackgroundLink
+href='http://studiosephemeres.com/'
+alt='Studios Éphémères'
+src={logoStudioEphemeres}
+height='82px'
+width='100px'
+/>
+
+<SvgBackgroundLink
+href='https://www.conseildesartsdelongueuil.ca/'
+alt='Conseil des Arts de Longueuil'
+src={logoCal}
+height='64px'
+width='200px'
+/>
