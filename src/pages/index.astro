@@ -6,15 +6,29 @@ import { getCollection } from 'astro:content';
 // Importer les collections
 const projets = await getCollection('projets', ({ data }) => {
   return !data.draft && data.featured;
-});
+}).then(items => items.sort((a, b) => {
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
 
 const expositions = await getCollection('expositions', ({ data }) => {
   return !data.draft;
-});
+}).then(items => items.sort((a, b) => {
+  // Si startDate est disponible, l'utiliser (spécifique aux expositions)
+  if (a.data.startDate && b.data.startDate) {
+    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+  }
+  // Sinon utiliser date normale
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
 
 const artPublic = await getCollection('art-public', ({ data }) => {
   return !data.draft;
-});
+}).then(items => items.sort((a, b) => {
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
 
 // Importer toutes les images des collections dynamiquement
 const contentImages = import.meta.glob([
@@ -280,7 +294,7 @@ const artPublicWithImages = await Promise.all(
         Contactez-moi pour discuter de collaborations, acquisitions ou médiations culturelles.
       </p>
       <a 
-        href="https://www.instagram.com/myriamtousignant_art/" 
+        href="mailto:contact@myriamtousignant.com" 
         class="bg-white text-blue-600 hover:bg-gray-100 py-3 px-8 rounded-md font-semibold text-lg inline-block transition-colors"
       >
         Écrivez-moi
