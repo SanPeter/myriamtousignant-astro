@@ -1,12 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import BiographieLayout from '../../layouts/BiographieLayout.astro';
 
 // Récupération de la biographie
 const biographieEntries = await getCollection('biographie-demarche');
-const biographie = biographieEntries.find(entry => entry.id === '_index.md') || biographieEntries[0];
+const biographie = biographieEntries.find(entry => entry.id === 'index.md') || biographieEntries[0];
 const { Content, headings } = await render(biographie);
+
 ---
 
 <BiographieLayout 
@@ -14,18 +15,7 @@ const { Content, headings } = await render(biographie);
   description={biographie?.data.description}
 >
   <div class="bg-white p-6 rounded-lg shadow-md">
-    {biographie?.data.heroImage && (
-      <Image 
-        src={biographie.data.heroImage} 
-        alt={biographie.data.title || "Myriam Tousignant"} 
-        class="w-full mb-6"
-        width={800}
-        height={600}
-        quality={80}
-        format="webp"
-        loading="eager"
-      />
-    )}
+
       
     <div class="prose max-w-none">
       <Content />

@@ -1,8 +1,21 @@
 ---
 title: "Biographie & Démarche"
 description: "À propos de Myriam Tousignant et sa démarche artistique"
-heroImage: "../../assets/images/bio_demarche_2021.jpg"
+heroImage: "images/bio_demarche_2021.jpg"
 ---
+import { Image } from "astro:assets";
+import heroImage from "./images/bio_demarche_2021.jpg";
+
+  <Image 
+    src={heroImage} 
+    alt={"Myriam Tousignant"} 
+    class="w-full mb-6"
+    width={800}
+    height={600}
+    quality={80}
+    format="webp"
+    loading="eager"
+  />
 
 ## Biographie
 
