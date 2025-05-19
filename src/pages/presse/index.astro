@@ -1,62 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import { getCollection, render } from 'astro:content';
+import PresseLayout from '../../layouts/PresseLayout.astro';
 
-// Récupération des articles de presse
+// Récupération du contenu de la presse
 const presseEntries = await getCollection('presse');
-
-// Tri par date (du plus récent au plus ancien)
-const sortedPresse = presseEntries
-  .filter(entry => !entry.data.draft) // Filtre les brouillons
-  .sort((a, b) => {
-    if (!a.data.date || !b.data.date) return 0;
-    return b.data.date.valueOf() - a.data.date.valueOf();
-  });
-
-// Pour le composant GridProjets
-const presseData = sortedPresse.map(article => ({
-  url: `/presse/${article.id.replace(/\.md$/, '')}`,
-  title: article.data.title,
-  description: article.data.description,
-  dateInfo: article.data.date ? article.data.date.toLocaleDateString('fr-CA') : undefined
-}));
+const presse = presseEntries.find(entry => entry.id === 'index.mdx') || presseEntries[0];
+const { Content, headings } = await render(presse);
 ---
 
-<SectionLayout
-  title="Presse"
-  description="Articles de presse et mentions médiatiques"
-  sectionType="presse"
-  projectsData={presseData}
+<PresseLayout 
+  title={presse?.data.title || "Presse"}
+    description={presse?.data.description || "Articles de presse et mentions médiatiques"}
 >
   <div class="bg-white p-6 rounded-lg shadow-md">
-    <ul class="divide-y divide-gray-200">
-      {sortedPresse.map(article => (
-        <li class="py-4">
-          <a href={`/presse/${article.id.replace(/\.md$/, '')}`} class="block hover:bg-gray-50 p-2 -m-2 rounded transition-colors">
-            <div class="flex flex-col md:flex-row md:items-center">
-              <div class="flex-grow">
-                <h2 class="text-xl font-semibold text-blue-600">{article.data.title}</h2>
-                {article.data.date && (
-                  <p class="text-sm text-gray-600 mt-1">
-                    {article.data.date.toLocaleDateString('fr-CA')}
-                  </p>
-                )}
-                {article.data.description && (
-                  <p class="mt-2 text-gray-700">{article.data.description}</p>
-                )}
-              </div>
-              <div class="mt-4 md:mt-0 md:ml-4">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                  Lire l'article
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <div class="prose max-w-none">
+      <Content />
+    </div>
   </div>
-</SectionLayout>
+</PresseLayout>
+
