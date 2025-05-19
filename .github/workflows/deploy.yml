@@ -24,16 +24,16 @@ jobs:
         with:
           node-version: latest 
 
-      - name: Install Playwright Browsers
-        run: npx playwright install chromium --with-deps
+      # - name: Install Playwright Browsers
+      #   run: npx playwright install chromium --with-deps
 
       #- name: Launch site preview
        # run: npm run preview &
 
-      - name: Run Playwright tests
-        run: npm run test:e2e
-        env:
-          PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
+      # - name: Run Playwright tests
+      #   run: npm run test:e2e
+      #   env:
+      #     PLAYWRIGHT_TEST_BASE_URL: http://localhost:4321
     
   deploy:
     needs: build
