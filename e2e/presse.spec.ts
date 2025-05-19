@@ -16,5 +16,6 @@ test('La page Presse affiche correctement le contenu Markdown', async ({ page })
   
   // Vérifier la présence des liens
   const links = page.locator('.prose a');
-  await expect(links).toHaveCount({ gte: 10 });
+  const linksCount = await links.count();
+  expect(linksCount).toBeGreaterThanOrEqual(10);
 });
