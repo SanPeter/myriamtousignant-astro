@@ -1,6 +1,7 @@
 ---
 import HeaderNav from '../components/HeaderNav';
 import Footer from '../components/Footer';
+import GoogleAnalytics from '../components/GoogleAnalytics';
 import "../styles/global.css";
 
 interface Props {
@@ -21,6 +22,9 @@ const {
 
 // Construit le titre complet
 const fullTitle = `${title} | Myriam Tousignant`;
+
+// Récupère l'ID Google Analytics depuis les variables d'environnement
+const googleAnalyticsId = import.meta.env.PUBLIC_GA_ID || '';
 ---
 
 <!DOCTYPE html>
@@ -45,6 +49,7 @@ const fullTitle = `${title} | Myriam Tousignant`;
     
     <title>{fullTitle}</title>
     
+    <GoogleAnalytics client:load gaId={googleAnalyticsId} />
   </head>
   <body>
     <div class="flex flex-col justify-between min-h-screen">
