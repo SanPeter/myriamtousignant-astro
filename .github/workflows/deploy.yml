@@ -23,6 +23,8 @@ jobs:
         uses: withastro/action@v3
         with:
           node-version: latest 
+        env:
+          PUBLIC_GA_ID: ${{ secrets.PUBLIC_GA_ID }}
 
       # - name: Install Playwright Browsers
       #   run: npx playwright install chromium --with-deps
