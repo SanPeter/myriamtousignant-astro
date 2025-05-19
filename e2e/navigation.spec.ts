@@ -1,40 +1,103 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Navigation Tests', () => {
-  test('Toutes les pages principales sont accessibles depuis la page d\'accueil', async ({ page }) => {
+  test('Toutes les pages principales sont accessibles depuis la page d\'accueil via le méga-menu', async ({ page }) => {
     await page.goto('http://localhost:4321/');
 
     // Vérifier le titre de la page
     await expect(page).toHaveTitle(/Myriam Tousignant/);
 
-    // Navigation vers la page Projets
+    // Test de la catégorie Œuvres & Créations
+    // =======================================
+    
+    // Ouvrir le méga-menu Œuvres & Créations
+    await page.click('button:has-text("Œuvres & Créations")');
+    
+    // Navigation vers la page Projets depuis le méga-menu
     await page.click('text=Projets');
     await expect(page).toHaveURL(/.*\/projets\/?$/);
     await expect(page.locator('h1')).toContainText('Projets');
 
-    // Navigation vers la page Expositions
+    // Retour à la page d'accueil
     await page.goto('http://localhost:4321/');
-    await page.click('text=Expositions');
-    await expect(page).toHaveURL(/.*\/expositions\/?$/);
-    await expect(page.locator('h1')).toContainText('Expositions');
-
+    await page.click('button:has-text("Œuvres & Créations")');
+    
     // Navigation vers la page Art Public
-    await page.goto('http://localhost:4321/');
     await page.click('text=Art Public');
     await expect(page).toHaveURL(/.*\/art-public\/?$/);
     await expect(page.locator('h1')).toContainText('Art Public');
-
-    // Navigation vers la page Livres d'artiste
+    
+    // Retour à la page d'accueil
     await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("Œuvres & Créations")');
+    
+    // Navigation vers la page Livres d'artiste
     await page.click('text=Livres d\'artiste');
     await expect(page).toHaveURL(/.*\/livres-artiste\/?$/);
     await expect(page.locator('h1')).toContainText('Livres d\'artiste');
 
-    // Navigation vers la page Biographie & Démarche
+    // Test de la catégorie Événements & Activités
+    // ==========================================
+    
+    // Retour à la page d'accueil
     await page.goto('http://localhost:4321/');
-    await page.click('text=Biographie');
+    await page.click('button:has-text("Événements & Activités")');
+    
+    // Navigation vers la page Expositions
+    await page.click('text=Expositions');
+    await expect(page).toHaveURL(/.*\/expositions\/?$/);
+    await expect(page.locator('h1')).toContainText('Expositions');
+    
+    // Retour à la page d'accueil
+    await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("Événements & Activités")');
+    
+    // Navigation vers la page Médiations
+    await page.click('text=Médiations');
+    await expect(page).toHaveURL(/.*\/mediations\/?$/);
+    await expect(page.locator('h1')).toContainText('Médiations');
+
+    // Test de la catégorie Ressources & Médias
+    // ======================================
+    
+    // Retour à la page d'accueil
+    await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("Ressources & Médias")');
+    
+    // Navigation vers la page Publications
+    await page.click('text=Publications');
+    await expect(page).toHaveURL(/.*\/publications\/?$/);
+    await expect(page.locator('h1')).toContainText('Publications');
+    
+    // Retour à la page d'accueil
+    await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("Ressources & Médias")');
+    
+    // Navigation vers la page Presse
+    await page.click('text=Presse');
+    await expect(page).toHaveURL(/.*\/presse\/?$/);
+    await expect(page.locator('h1')).toContainText('Presse');
+
+    // Test de la catégorie À propos
+    // ===========================
+    
+    // Retour à la page d'accueil
+    await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("À propos")');
+    
+    // Navigation vers la page Biographie & Démarche
+    await page.click('text=Biographie & Démarche');
     await expect(page).toHaveURL(/.*\/biographie-demarche\/?$/);
     await expect(page.locator('h1')).toContainText(/Biographie|Démarche/);
+    
+    // Retour à la page d'accueil
+    await page.goto('http://localhost:4321/');
+    await page.click('button:has-text("À propos")');
+    
+    // Navigation vers la page Boutique
+    await page.click('text=Boutique');
+    await expect(page).toHaveURL(/.*\/boutique\/?$/);
+    await expect(page.locator('h1')).toContainText('Boutique');
   });
 
   test('Les grilles de projets affichent des cartes avec images et titres', async ({ page }) => {
