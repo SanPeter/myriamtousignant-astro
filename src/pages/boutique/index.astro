@@ -1,58 +1,20 @@
 ---
-import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import { getCollection, render } from 'astro:content';
+import BoutiqueLayout from '../../layouts/BoutiqueLayout.astro';
 
-// Récupération des produits de la boutique
+// Récupération du contenu de la boutique
 const boutiqueEntries = await getCollection('boutique');
-
-// Filtre par disponibilité et tri par poids/date
-const availableProducts = boutiqueEntries
-  .filter(entry => !entry.data.draft && entry.data.available !== false) // Produits non brouillons et disponibles
-  .sort((a, b) => {
-    // D'abord par poids si disponible
-    if (a.data.weight && b.data.weight) {
-      return a.data.weight - b.data.weight;
-    }
-    // Sinon par date
-    if (a.data.date && b.data.date) {
-      return b.data.date.valueOf() - a.data.date.valueOf();
-    }
-    return 0;
-  });
-
-// Pour le composant GridProjets
-const boutiqueData = availableProducts.map(product => ({
-  url: `/boutique/${product.id.replace(/\.md$/, '')}`,
-  title: product.data.title,
-  description: product.data.description,
-  price: product.data.price ? `${product.data.price.toFixed(2)} $` : undefined
-}));
+const boutique = boutiqueEntries.find(entry => entry.id === 'index.mdx') || boutiqueEntries[0];
+const { Content, headings } = await render(boutique);
 ---
 
-<SectionLayout 
-  title="Boutique"
+<BoutiqueLayout 
+  title={boutique?.data.title || "Boutique"}
   description="Oeuvres et produits disponibles à l'achat"
-  sectionType="boutique"
-  projectsData={boutiqueData}
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {availableProducts.map(product => (
-      <a href={`/boutique/${product.id.replace(/\.md$/, '')}`} class="card hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg overflow-hidden shadow">
-        <div class="p-4">
-          <h2 class="text-xl font-semibold">{product.data.title}</h2>
-          {product.data.price && (
-            <p class="text-lg font-bold text-blue-600 mt-1">
-              {product.data.price.toFixed(2)} $
-            </p>
-          )}
-          {product.data.description && (
-            <p class="mt-2 text-gray-700 line-clamp-3">{product.data.description}</p>
-          )}
-          <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors">
-            Voir les détails
-          </button>
-        </div>
-      </a>
-    ))}
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="prose max-w-none">
+      <Content />
+    </div>
   </div>
-</SectionLayout>
+</BoutiqueLayout>
