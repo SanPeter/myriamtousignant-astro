@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  href: string;
+  src: string | ImageMetadata;
+  alt: string;
+  maxWidth?: string;
+}
+
+const { href, src, alt, maxWidth = "200px" } = Astro.props;
+---
+
+<a href={href}>
+  {typeof src === 'string' ? (
+    <img src={src} alt={alt} style={`max-width: ${maxWidth};`} />
+  ) : (
+    <Image 
+      src={src} 
+      alt={alt} 
+      width={200} 
+      height={200}
+      style={`max-width: ${maxWidth}; height: auto;`}
+    />
+  )}
+</a>

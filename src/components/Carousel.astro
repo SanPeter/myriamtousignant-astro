@@ -1,0 +1,229 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: string[];
+  altText: string;
+}
+
+// Types pour les images résolues
+type ResolvedImageUrl = {
+  type: 'url';
+  src: string;
+}
+
+type ResolvedImageModule = {
+  type: 'module';
+  module: ImageMetadata;
+  src: string;
+}
+
+type ResolvedImage = ResolvedImageUrl | ResolvedImageModule;
+
+const { images, altText } = Astro.props;
+
+// Importer toutes les images des projets de manière dynamique
+// Cette approche utilise un glob pour trouver toutes les images
+const projectImages = import.meta.glob<{ default: ImageMetadata }>([
+  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/art-public/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/livres-artiste/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/mediations/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Fonction pour résoudre les chemins d'images
+async function resolveContentImages(images: string[], collectionPath: string, slug: string): Promise<ResolvedImage[]> {
+  const resolvedImages: ResolvedImage[] = [];
+  
+  for (const image of images) {
+    // Vérifier que image est défini et est une chaîne de caractères
+    if (!image || typeof image !== 'string') continue;
+    
+    // Si l'image est une URL absolue, l'utiliser directement
+    if (image.startsWith('/') || image.startsWith('http')) {
+      resolvedImages.push({ type: 'url', src: image });
+      continue;
+    }
+    
+    try {
+      // Construire différentes variations du chemin pour trouver l'image
+      const possiblePaths = [
+        `../content/${collectionPath}/${slug}/${image}`,
+        `../content/${collectionPath}/${slug}/images/${image.split('/').pop() || ''}`
+      ];
+      
+      let foundImage = false;
+      
+      for (const path of possiblePaths) {
+        if (path in projectImages) {
+          const imageModule = await projectImages[path]();
+          resolvedImages.push({ 
+            type: 'module', 
+            module: imageModule.default,
+            src: path
+          });
+          foundImage = true;
+          break;
+        }
+      }
+      
+      if (!foundImage) {
+        console.warn(`Image non trouvée: ${image}`);
+        resolvedImages.push({ type: 'url', src: image });
+      }
+    } catch (error) {
+      console.error(`Erreur lors du chargement de l'image ${image}:`, error);
+      resolvedImages.push({ type: 'url', src: image });
+    }
+  }
+  
+  return resolvedImages;
+}
+
+// Déterminer le chemin de collection à partir de l'URL
+const pathname = Astro.url.pathname;
+const parts = pathname.split('/').filter(Boolean);
+const collectionPath = parts[0] || 'projets'; // par défaut, utiliser 'projets'
+const slug = parts[1] || '';
+
+// Résoudre les images
+const resolvedImages = await resolveContentImages(images, collectionPath, slug);
+
+// État initial pour le carrousel côté client
+const initialActiveIndex = 0;
+---
+
+{resolvedImages.length > 0 && (
+  <div id="carouselControls" class="relative w-full max-w-4xl mx-auto mb-5">
+    {/* Indicators */}
+    <div class="absolute bottom-4 left-0 right-0 z-10 flex justify-center gap-2">
+      {resolvedImages.map((_, index) => (
+        <button
+          type="button"
+          class={`w-3 h-3 rounded-full ${index === initialActiveIndex ? "bg-gray-800" : "bg-gray-300"}`}
+          aria-current={index === initialActiveIndex ? "true" : "false"}
+          aria-label={`Image ${index + 1}`}
+          data-carousel-slide={index}
+        ></button>
+      ))}
+    </div>
+
+    {/* Carousel items */}
+    <div class="relative overflow-hidden">
+      {resolvedImages.map((image, index) => (
+        <div
+          class={`transition-opacity duration-300 ${index === initialActiveIndex ? "block" : "hidden"}`}
+          data-carousel-index={index}
+        >
+          <div class="flex justify-center">
+            {image.type === 'module' ? (
+              <Image 
+                src={image.module} 
+                alt={`${altText} - ${index + 1}`} 
+                width={800}
+                height={600}
+                class="max-w-full h-auto mb-1"
+              />
+            ) : (
+              <img 
+                src={image.src} 
+                alt={`${altText} - ${index + 1}`} 
+                class="max-w-full h-auto mb-1" 
+              />
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* Prev / Next buttons */}
+    <button 
+      class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none z-10"
+      type="button"
+      data-carousel-prev
+    >
+      <span class="flex items-center justify-center" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </span>
+      <span class="sr-only">Précédent</span>
+    </button>
+    <button 
+      class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 hover:bg-white focus:outline-none z-10"
+      type="button"
+      data-carousel-next
+    >
+      <span class="flex items-center justify-center" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </span>
+      <span class="sr-only">Suivant</span>
+    </button>
+  </div>
+)}
+
+<script>
+  // Code JavaScript côté client pour contrôler le carrousel
+  document.addEventListener('DOMContentLoaded', () => {
+    let activeIndex = 0;
+    const carousel = document.querySelector('#carouselControls');
+    
+    if (!carousel) return;
+    
+    const items = carousel.querySelectorAll('[data-carousel-index]');
+    const indicators = carousel.querySelectorAll('[data-carousel-slide]');
+    const prevButton = carousel.querySelector('[data-carousel-prev]');
+    const nextButton = carousel.querySelector('[data-carousel-next]');
+    
+    // Fonction pour mettre à jour l'affichage actif
+    function updateActiveSlide() {
+      // Mettre à jour les éléments de carrousel
+      items.forEach((item, index) => {
+        if (index === activeIndex) {
+          item.classList.remove('hidden');
+          item.classList.add('block');
+        } else {
+          item.classList.remove('block');
+          item.classList.add('hidden');
+        }
+      });
+      
+      // Mettre à jour les indicateurs
+      indicators.forEach((indicator, index) => {
+        if (index === activeIndex) {
+          indicator.classList.remove('bg-gray-300');
+          indicator.classList.add('bg-gray-800');
+          indicator.setAttribute('aria-current', 'true');
+        } else {
+          indicator.classList.remove('bg-gray-800');
+          indicator.classList.add('bg-gray-300');
+          indicator.setAttribute('aria-current', 'false');
+        }
+      });
+    }
+    
+    // Gestionnaire pour le bouton précédent
+    prevButton?.addEventListener('click', () => {
+      activeIndex = activeIndex === 0 ? items.length - 1 : activeIndex - 1;
+      updateActiveSlide();
+    });
+    
+    // Gestionnaire pour le bouton suivant
+    nextButton?.addEventListener('click', () => {
+      activeIndex = activeIndex === items.length - 1 ? 0 : activeIndex + 1;
+      updateActiveSlide();
+    });
+    
+    // Gestionnaires pour les boutons d'indicateurs
+    indicators.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        activeIndex = index;
+        updateActiveSlide();
+      });
+    });
+  });
+</script>

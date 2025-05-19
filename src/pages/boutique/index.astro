@@ -1,0 +1,20 @@
+---
+import { getCollection, render } from 'astro:content';
+import BoutiqueLayout from '../../layouts/BoutiqueLayout.astro';
+
+// Récupération du contenu de la boutique
+const boutiqueEntries = await getCollection('boutique');
+const boutique = boutiqueEntries.find(entry => entry.id === 'index.mdx') || boutiqueEntries[0];
+const { Content, headings } = await render(boutique);
+---
+
+<BoutiqueLayout 
+  title={boutique?.data.title || "Boutique"}
+  description="Oeuvres et produits disponibles à l'achat"
+>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+  </div>
+</BoutiqueLayout>

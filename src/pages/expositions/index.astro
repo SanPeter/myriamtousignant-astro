@@ -1,0 +1,45 @@
+---
+import { getCollection } from 'astro:content';
+import SectionLayout from '../../layouts/SectionLayout.astro';
+
+// Récupération de toutes les expositions
+const expositions = await getCollection('expositions');
+
+// Tri par date de début (du plus récent au plus ancien)
+const sortedExpositions = expositions
+  .filter(expo => !expo.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    if (!a.data.startDate || !b.data.startDate) return 0;
+    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+  });
+
+// Pour le composant GridProjets
+const expositionsData = sortedExpositions.map(expo => {
+  // Extraire le slug de l'exposition à partir de l'ID
+  const slug = expo.id.includes('/') 
+    ? expo.id.split('/')[0] 
+    : expo.id.replace(/\.md$/, '');
+  
+  return {
+    url: `/expositions/${slug}`,
+    title: expo.data.title,
+    thumbnail: expo.data.summaryImage,
+    description: expo.data.description,
+    // Ajout d'informations supplémentaires pour l'affichage personnalisé
+    dateInfo: expo.data.startDate ? 
+      `${expo.data.startDate.toLocaleDateString('fr-CA')}${expo.data.endDate ? ` au ${expo.data.endDate.toLocaleDateString('fr-CA')}` : ''}` : undefined,
+    location: expo.data.location
+  };
+});
+---
+
+<SectionLayout
+  title="Expositions"
+  description="Découvrez mes expositions passées et à venir"
+  sectionType="expositions"
+  projectsData={expositionsData}
+>
+  <p class="my-4">
+    Voici mes expositions, classées de la plus récente à la plus ancienne.
+  </p>
+</SectionLayout>

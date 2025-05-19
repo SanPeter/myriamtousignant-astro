@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import SectionLayout from '../../layouts/SectionLayout.astro';
+
+// Récupération de toutes les œuvres d'art public
+const artPublicEntries = await getCollection('art-public');
+
+// Tri par date (du plus récent au plus ancien)
+const sortedArtPublic = artPublicEntries
+  .filter(entry => !entry.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    if (!a.data.date || !b.data.date) return 0;
+    return b.data.date.valueOf() - a.data.date.valueOf();
+  });
+
+// Pour le composant GridProjets
+const artPublicData = sortedArtPublic.map(artwork => {
+  // Extraire le slug de l'œuvre à partir de l'ID
+  const slug = artwork.id.includes('/') 
+    ? artwork.id.split('/')[0] 
+    : artwork.id.replace(/\.md$/, '');
+    
+  return {
+    url: `/art-public/${slug}`,
+    title: artwork.data.title,
+    thumbnail: artwork.data.summaryImage,
+    description: artwork.data.description,
+    dateInfo: artwork.data.date ? artwork.data.date.toLocaleDateString('fr-CA') : undefined
+  };
+});
+---
+
+<SectionLayout
+  title="Art Public"
+  description="Découvrez mes projets d'art public"
+  sectionType="art-public"
+  projectsData={artPublicData}
+>
+  <p class="my-4 text-gray-700">
+    Voici mes projets d'art public réalisés au fil des années.
+  </p>
+</SectionLayout>

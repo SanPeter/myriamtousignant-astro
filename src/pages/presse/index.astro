@@ -1,0 +1,21 @@
+---
+import { getCollection, render } from 'astro:content';
+import PresseLayout from '../../layouts/PresseLayout.astro';
+
+// Récupération du contenu de la presse
+const presseEntries = await getCollection('presse');
+const presse = presseEntries.find(entry => entry.id === 'index.mdx') || presseEntries[0];
+const { Content, headings } = await render(presse);
+---
+
+<PresseLayout 
+  title={presse?.data.title || "Presse"}
+    description={presse?.data.description || "Articles de presse et mentions médiatiques"}
+>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+  </div>
+</PresseLayout>
+

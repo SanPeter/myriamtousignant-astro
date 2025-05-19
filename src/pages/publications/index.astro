@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import SectionLayout from '../../layouts/SectionLayout.astro';
+
+// Récupération des publications
+const publicationsEntries = await getCollection('publications');
+
+// Tri par date de publication (du plus récent au plus ancien)
+const sortedPublications = publicationsEntries
+  .filter(entry => !entry.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    // D'abord par date de publication si disponible
+    if (a.data.publicationDateFormat && b.data.publicationDateFormat) {
+      return b.data.publicationDateFormat.valueOf() - a.data.publicationDateFormat.valueOf();
+    }
+    // Sinon par date normale
+    if (a.data.date && b.data.date) {
+      return b.data.date.valueOf() - a.data.date.valueOf();
+    }
+    return 0;
+  });
+
+// Pour le composant GridProjets
+const publicationsData = sortedPublications.map(publication => ({
+  url: `/publications/${publication.id.replace(/\.md$/, '')}`,
+  title: publication.data.title,
+  description: publication.data.summary || publication.data.description,
+  dateInfo: publication.data.publicationDate || 
+    (publication.data.date ? publication.data.date.toLocaleDateString('fr-CA') : undefined)
+}));
+---
+
+<SectionLayout 
+  title="Publications"
+  description="Articles, textes et autres publications"
+  sectionType="publications"
+  projectsData={publicationsData}
+>
+  <p class="my-4">
+    Découvrez mes publications, articles et contributions théoriques.
+  </p>
+</SectionLayout>

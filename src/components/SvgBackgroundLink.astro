@@ -1,0 +1,87 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  href: string;
+  src: string | ImageMetadata;
+  width?: string;
+  maxWidth?: string;
+  height?: string;
+  alt: string;
+  target?: string;
+  rel?: string;
+}
+
+const { 
+  href, 
+  src, 
+  width = "200px",
+  maxWidth = width,
+  height = "64px",
+  alt,
+  target = "_blank",
+  rel = target === "_blank" ? "noopener noreferrer" : undefined
+} = Astro.props;
+
+// Utiliser directement l'objet imported
+---
+
+<a 
+  href={href} 
+  target={target}
+  rel={rel}
+  aria-label={alt}
+  class="svg-background-link"
+>
+  {typeof src === 'string' ? (
+    <span class="sr-only">{alt}</span>
+    <style define:vars={{ maxWidth, height, imgSrc: src }}>
+      .svg-background-link {
+        display: block;
+        text-indent: -9999px;
+        width: var(--maxWidth);
+        height: var(--height);
+        background: url(var(--imgSrc));
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        padding: 1rem;
+        margin: 0.5rem 0;
+      }
+    </style>
+  ) : (
+    <Image 
+      src={src} 
+      alt={alt}
+      width={200}
+      height={64}
+      class="img-svg"
+    />
+    <style define:vars={{ maxWidth, height }}>
+      .img-svg {
+        max-width: var(--maxWidth);
+        height: var(--height);
+        width: auto;
+        object-fit: contain;
+      }
+      .svg-background-link {
+        display: block;
+        padding: 1rem;
+        margin: 0.5rem 0;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+    </style>
+  )}
+</a>
+

@@ -1,0 +1,24 @@
+---
+import { getCollection, render, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import BiographieLayout from '../../layouts/BiographieLayout.astro';
+
+// Récupération de la biographie
+const biographieEntries = await getCollection('biographie-demarche');
+const biographie = biographieEntries.find(entry => entry.id === 'index.md') || biographieEntries[0];
+const { Content, headings } = await render(biographie);
+
+---
+
+<BiographieLayout 
+  title={biographie?.data.title || "Biographie & Démarche"}
+  description={biographie?.data.description}
+>
+  <div class="bg-white p-6 rounded-lg shadow-md">
+
+      
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+  </div>
+</BiographieLayout>

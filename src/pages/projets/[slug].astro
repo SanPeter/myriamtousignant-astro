@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+
+export async function getStaticPaths() {
+  const projetsEntries = await getCollection('projets');
+  
+  return projetsEntries
+    .filter(entry => !entry.data.draft) // Filtre les brouillons
+    .map(entry => ({
+      params: { slug: entry.id.replace(/\.md$/, '').split('/')[0] }, // Extraire le slug correctement
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+// Préparer les images pour le carousel
+const images = entry.data.projectImages || [];
+
+// Extraire le dossier du projet à partir de l'ID (pour les chemins d'images)
+const projectFolder = entry.id.includes('/') 
+  ? entry.id.split('/')[0] 
+  : entry.id.replace(/\.md$/, '');
+---
+
+<ProjectLayout 
+  title={entry.data.title}
+  description={entry.data.description}
+  images={images}
+>    
+  <article class="bg-white p-6 rounded-lg shadow-md">
+    {entry.data.date && (
+      <p class="text-gray-700 mb-4">
+        <span class="font-semibold">Date:</span> {entry.data.date.toLocaleDateString('fr-CA')}
+      </p>
+    )}
+    
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+  </article>
+</ProjectLayout>

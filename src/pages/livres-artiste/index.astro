@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import SectionLayout from '../../layouts/SectionLayout.astro';
+
+// Récupération de tous les livres d'artiste
+const livresArtisteEntries = await getCollection('livres-artiste');
+
+// Tri par poids et date
+const sortedLivresArtiste = livresArtisteEntries
+  .filter(entry => !entry.data.draft) // Filtre les brouillons
+  .sort((a, b) => {
+    // D'abord par poids si disponible
+    if (a.data.weight && b.data.weight) {
+      return a.data.weight - b.data.weight;
+    }
+    // Sinon par date (du plus récent au plus ancien)
+    if (a.data.date && b.data.date) {
+      return b.data.date.valueOf() - a.data.date.valueOf();
+    }
+    return 0;
+  });
+  
+// Pour le composant GridProjets
+const livresArtisteData = sortedLivresArtiste.map(livre => {
+  // Extraire le slug du livre à partir de l'ID
+  const slug = livre.id.includes('/') 
+    ? livre.id.split('/')[0] 
+    : livre.id.replace(/\.md$/, '');
+    
+  return {
+    url: `/livres-artiste/${slug}`,
+    title: livre.data.title,
+    thumbnail: livre.data.summaryImage,
+    description: livre.data.description,
+    dateInfo: livre.data.date ? livre.data.date.toLocaleDateString('fr-CA') : undefined
+  };
+});
+---
+
+<SectionLayout
+  title="Livres d'artiste"
+  description="Découvrez mes livres et publications d'artiste"
+  sectionType="livres-artiste"
+  projectsData={livresArtisteData}
+>
+  <p class="my-4">
+    Explorez mes livres d'artiste, fanzines et autres publications artistiques.
+  </p>
+</SectionLayout>

@@ -1,102 +1,304 @@
 ---
-import "../styles/global.css";
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+// Importer les collections
+const projets = await getCollection('projets', ({ data }) => {
+  return !data.draft && data.featured;
+}).then(items => items.sort((a, b) => {
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
+
+const expositions = await getCollection('expositions', ({ data }) => {
+  return !data.draft;
+}).then(items => items.sort((a, b) => {
+  // Si startDate est disponible, l'utiliser (spécifique aux expositions)
+  if (a.data.startDate && b.data.startDate) {
+    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+  }
+  // Sinon utiliser date normale
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
+
+const artPublic = await getCollection('art-public', ({ data }) => {
+  return !data.draft;
+}).then(items => items.sort((a, b) => {
+  if (!a.data.date || !b.data.date) return 0;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+}));
+
+// Importer toutes les images des collections dynamiquement
+const contentImages = import.meta.glob([
+  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
+  '../content/art-public/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
+]);
+
+// Fonction pour résoudre le chemin de l'image
+async function resolveContentImage(collection: string, slug: string, imagePath: string) {
+  if (!imagePath) return null;
+
+  // Si le chemin commence par / ou http, on le retourne tel quel (pour les URLs externes)
+  if (imagePath.startsWith('/') || imagePath.startsWith('http')) {
+    return { type: 'url', value: imagePath };
+  }
+
+  try {
+    // Construire différentes variations potentielles du chemin de l'image
+    const possiblePaths = [
+      `../content/${collection}/${slug}/${imagePath}`,
+      `../content/${collection}/${slug}/images/${imagePath.split('/').pop() || ''}`,
+    ];
+    
+    // Rechercher l'image dans les chemins possibles
+    for (const path of possiblePaths) {
+      if (path in contentImages) {
+        // Charger l'image dynamiquement
+        const imageModule = await contentImages[path]();
+        if (imageModule && (imageModule as { default: string }).default) {
+          return { type: 'import', value: (imageModule as { default: string }).default };
+        }
+      }
+    }
+    
+    console.warn(`Image non trouvée: ${imagePath} pour ${collection}/${slug}`);
+    return { type: 'url', value: imagePath };
+  } catch (error) {
+    console.error(`Erreur lors du chargement de l'image ${imagePath}:`, error);
+    return { type: 'url', value: imagePath };
+  }
+}
+
+// Préparer les données avec les images résolues
+const projetsWithImages = await Promise.all(
+  projets.slice(0, 3).map(async (projet) => {
+    const image = projet.data.summaryImage 
+      ? await resolveContentImage('projets', projet.id.replace(/\.md$/, ''), projet.data.summaryImage)
+      : null;
+    return { ...projet, resolvedImage: image };
+  })
+);
+
+const expositionsWithImages = await Promise.all(
+  expositions.slice(0, 3).map(async (expo) => {
+    const image = expo.data.summaryImage 
+      ? await resolveContentImage('expositions', expo.id.replace(/\.md$/, ''), expo.data.summaryImage)
+      : null;
+    return { ...expo, resolvedImage: image };
+  })
+);
+
+const artPublicWithImages = await Promise.all(
+  artPublic.slice(0, 2).map(async (art) => {
+    const image = art.data.summaryImage 
+      ? await resolveContentImage('art-public', art.id.replace(/\.md$/, ''), art.data.summaryImage)
+      : null;
+    return { ...art, resolvedImage: image };
+  })
+);
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myriam Tousignant</title>
 
-    <style>
-        /* Custom styles for the navigation toggle */
-        #menu-toggle:checked + #menu {
-            display: block;
-        }
-
-        /* Hide checkbox */
-        #menu-toggle {
-            display: none;
-        }
-
-        .no-scroll {
-            overflow: hidden;
-        }
-    </style>    
-</head>
-<body>
-
-<!-- Header -->
-<header class="bg-gray-100 p-4 flex justify-between items-center">
-    <div class="text-2xl font-bold uppercase">Brand</div>
-
-    <!-- Mobile Menu Button -->
-    <div class="block md:hidden">
-        <input type="checkbox" id="menu-toggle" class="hidden">
-        <label for="menu-toggle" class="cursor-pointer">
-            <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-            <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </label>
-    </div>
-
-    <!-- Links for Desktop -->
-    <nav class="hidden md:flex space-x-4">
-        <a href="#" class="text-base">Link</a>
-        <a href="#" class="text-base">Link</a>
-        <a href="#" class="text-base">Link</a>
-    </nav>
-</header>
-
-<!-- Mobile Menu -->
-<div id="menu" class="hidden fixed inset-0 bg-gray-100 flex flex-col items-center justify-center space-y-4 md:hidden mt-16">
-    <a href="#" class="text-xl">Link</a>
-    <a href="#" class="text-xl">Link</a>
-    <a href="#" class="text-xl">Link</a>
-</div>
-
-    <!-- Image List -->
-    <main>
-        <div>
-            <div>
-                <img src="https://placehold.co/922x615" alt="Placeholder Image">
-            </div>
-             <div>
-                <img src="https://placehold.co/922x615" alt="Placeholder Image">
-            </div>
+<BaseLayout title="Accueil">
+  <!-- Hero Section -->
+  <section class="relative">
+    <div class="bg-gradient-to-r from-gray-100 to-gray-200 h-96 flex items-center">
+      <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+          Myriam Tousignant
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-700 mt-4 max-w-2xl">
+          Artiste multidisciplinaire | Arts visuels, art public, installations, livres d'artiste et médiations culturelles
+        </p>
+        <div class="mt-8">
+          <a href="/biographie-demarche" class="bg-gray-800 text-white hover:bg-gray-700 py-3 px-6 rounded-md font-semibold transition-colors">
+            Découvrir ma démarche
+          </a>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="flex flex-col md:flex-row">
-    </footer>
-
-
-<script>
-    // JavaScript to toggle between menu and close icons
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuIcon = document.getElementById('menu-icon');
-    const closeIcon = document.getElementById('close-icon');
-    const menu = document.getElementById('menu');
-    const body = document.body;
-
-    menuToggle.addEventListener('change', () => {
-        if (menuToggle.checked) {
-            menuIcon.classList.add('hidden');
-            closeIcon.classList.remove('hidden');
-            menu.classList.remove('hidden');
-            body.classList.add('no-scroll');
-        } else {
-            menuIcon.classList.remove('hidden');
-            closeIcon.classList.add('hidden');
-            menu.classList.add('hidden');
-            body.classList.remove('no-scroll');
-        }
-    });
-</script>
-
-</body>
-</html>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Projets Récents -->
+  <section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-6">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold">Projets en vedette</h2>
+        <a href="/projets" class="text-blue-600 hover:underline inline-flex items-center">
+          Tous les projets
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projetsWithImages.map(projet => (
+          <a href={`/projets/${projet.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 overflow-hidden">
+            {projet.resolvedImage && (
+              <div class="w-full h-48 overflow-hidden">
+                {projet.resolvedImage.type === 'import' ? (
+                  <Image 
+                    src={projet.resolvedImage.value} 
+                    alt={projet.data.title} 
+                    width={400}
+                    height={300}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img 
+                    src={projet.resolvedImage.value} 
+                    alt={projet.data.title} 
+                    width="400"
+                    height="300"
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            )}
+            <div class="p-4">
+              <h3 class="text-xl font-semibold">{projet.data.title}</h3>
+              {projet.data.description && (
+                <p class="mt-2 text-gray-600 line-clamp-2">{projet.data.description}</p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Expositions -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold">Expositions récentes</h2>
+        <a href="/expositions" class="text-blue-600 hover:underline inline-flex items-center">
+          Toutes les expositions
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {expositionsWithImages.map(expo => (
+          <a href={`/expositions/${expo.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors duration-200 overflow-hidden">
+            {expo.resolvedImage && (
+              <div class="w-full h-48 overflow-hidden">
+                {expo.resolvedImage.type === 'import' ? (
+                  <Image 
+                    src={expo.resolvedImage.value} 
+                    alt={expo.data.title} 
+                    width={400}
+                    height={300}
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img 
+                    src={expo.resolvedImage.value} 
+                    alt={expo.data.title} 
+                    width="400"
+                    height="300"
+                    class="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+            )}
+            <div class="p-4">
+              <h3 class="text-xl font-semibold">{expo.data.title}</h3>
+              {expo.data.location && (
+                <p class="text-sm text-gray-600 mt-1">{expo.data.location}</p>
+              )}
+              {expo.data.startDate && (
+                <p class="text-sm text-gray-600">
+                  {expo.data.startDate.toLocaleDateString('fr-CA')}
+                  {expo.data.endDate && ` au ${expo.data.endDate.toLocaleDateString('fr-CA')}`}
+                </p>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Art Public -->
+  {artPublicWithImages.length > 0 && (
+    <section class="py-12 bg-gray-50">
+      <div class="container mx-auto px-6">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-3xl font-bold">Art Public</h2>
+          <a href="/art-public" class="text-blue-600 hover:underline inline-flex items-center">
+            Voir toutes les œuvres
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {artPublicWithImages.map(art => (
+            <a href={`/art-public/${art.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+              <div class="flex flex-col md:flex-row">
+                {art.resolvedImage && (
+                  <div class="md:w-2/5">
+                    {art.resolvedImage.type === 'import' ? (
+                      <Image 
+                        src={art.resolvedImage.value} 
+                        alt={art.data.title} 
+                        width={400}
+                        height={300}
+                        class="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img 
+                        src={art.resolvedImage.value} 
+                        alt={art.data.title} 
+                        width="400"
+                        height="300"
+                        class="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
+                )}
+                <div class="p-6 md:w-3/5">
+                  <h3 class="text-xl font-semibold">{art.data.title}</h3>
+                  {art.data.description && (
+                    <p class="mt-2 text-gray-600">{art.data.description}</p>
+                  )}
+                  <div class="mt-4">
+                    <span class="inline-flex items-center text-blue-600">
+                      En savoir plus
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  
+  <!-- Call to Action -->
+  <section class="py-16 bg-blue-600 text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-4">Vous avez un projet artistique?</h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">
+        Contactez-moi pour discuter de collaborations, acquisitions ou médiations culturelles.
+      </p>
+      <a 
+        href="mailto:contact@myriamtousignant.com" 
+        class="bg-white text-blue-600 hover:bg-gray-100 py-3 px-8 rounded-md font-semibold text-lg inline-block transition-colors"
+      >
+        Écrivez-moi
+      </a>
+    </div>
+  </section>
+</BaseLayout>

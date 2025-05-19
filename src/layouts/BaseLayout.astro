@@ -1,0 +1,62 @@
+---
+import HeaderNav from '../components/HeaderNav';
+import Footer from '../components/Footer';
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  keywords?: string;
+  ogType?: string;
+  ogImage?: string;
+}
+
+const { 
+  title, 
+  description = "Site artistique de Myriam Tousignant", 
+  keywords = "art, artiste, peinture, Myriam Tousignant, arts visuels, Québec",
+  ogType = "website", 
+  ogImage = "/images/og-image.jpg"
+} = Astro.props;
+
+// Construit le titre complet
+const fullTitle = `${title} | Myriam Tousignant`;
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={Astro.url} />
+    
+    <link rel="shortcut icon" href="/images/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{fullTitle}</title>
+    
+  </head>
+  <body>
+    <div class="flex flex-col justify-between min-h-screen">
+      <header>
+        <HeaderNav client:load />
+      </header>
+      
+      <div class="mt-4 w-3/4 mx-auto">
+        <slot />
+      </div>
+      
+      <Footer />
+    </div>
+  </body>
+</html>
