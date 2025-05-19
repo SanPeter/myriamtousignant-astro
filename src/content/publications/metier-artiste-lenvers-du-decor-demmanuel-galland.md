@@ -5,6 +5,7 @@ draft: false
 weight: 6
 summary: "« Un succès, c'est beaucoup de refus. Chaque réussite est beaucoup de travail et le travail ne mène pas nécessairement à un accomplissement. »"
 publicationDate: 'Juillet 2016'
+publicationDateFormat: '2016-07-01'
 ---
 
 [Métier artiste: l'envers du décor d'Emmanuel Galland](http://www.baronmag.com/2016/08/metier-artiste-lenvers-du-decor-emmanuel-galland/)

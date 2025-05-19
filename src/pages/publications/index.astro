@@ -10,9 +10,8 @@ const sortedPublications = publicationsEntries
   .filter(entry => !entry.data.draft) // Filtre les brouillons
   .sort((a, b) => {
     // D'abord par date de publication si disponible
-    if (a.data.publicationDate && b.data.publicationDate) {
-      if (a.data.publicationDate > b.data.publicationDate) return -1;
-      if (a.data.publicationDate < b.data.publicationDate) return 1;
+    if (a.data.publicationDateFormat && b.data.publicationDateFormat) {
+      return b.data.publicationDateFormat.valueOf() - a.data.publicationDateFormat.valueOf();
     }
     // Sinon par date normale
     if (a.data.date && b.data.date) {

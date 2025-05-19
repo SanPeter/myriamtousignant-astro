@@ -5,9 +5,8 @@ draft: false
 weight: 10
 summary: "« Si la valeur du métier est proportionnelle au salaire accordé, on va se le dire tout de suite: être artiste n'est pas vraiment valorisé par la société. »"
 publicationDate: 'Mars 2016'
+publicationDateFormat: '2016-03-01'
 ---
-
-**Mars 2016**
 
 [Métier artiste: l'envers du décor de Stanley Février](http://www.baronmag.com/2016/03/metier-artiste-lenvers-du-decor-de-stanley-fevrier/)
 

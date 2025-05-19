@@ -5,6 +5,7 @@ draft: false
 weight: 7
 summary: "« Les gens ne réalisent pas ce qu'est le travail d'artiste. C'est comme être mère, c'est 24 heures sur 24. »"
 publicationDate: 'Juin 2016'
+publicationDateFormat: '2016-06-01'
 ---
 
 [Métier artiste: l'envers du décor de Patsy Van Roost](http://www.baronmag.com/2016/06/metier-artiste-patsy-van-roost/)

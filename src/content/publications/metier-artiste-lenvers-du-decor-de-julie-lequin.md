@@ -5,6 +5,7 @@ draft: false
 weight: 8
 summary: "« J'ai vu que même si tes oeuvres voyagent beaucoup, tu ne peux pas vraiment vivre de ça. Tu ne peux pas vivre de ta gloire sans un sou. »"
 publicationDate: 'Mai 2016'
+publicationDateFormat: '2016-05-01'
 ---
 
 [Métier artiste: l'envers du décor de Julie Lequin](http://www.baronmag.com/2016/05/metier-artiste-julie-lequin/)

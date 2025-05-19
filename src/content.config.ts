@@ -28,7 +28,8 @@ const biographieSchema = baseSchema.extend({
 // Schéma pour les publications
 const publicationSchema = baseSchema.extend({
   summary: z.string().optional(),
-  publicationDate: z.string().optional()
+  publicationDate: z.string().optional(),
+  publicationDateFormat: z.coerce.date().optional(),
 });
 
 // Définition des collections
