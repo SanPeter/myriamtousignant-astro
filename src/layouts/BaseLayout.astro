@@ -22,9 +22,6 @@ const {
 
 // Construit le titre complet
 const fullTitle = `${title} | Myriam Tousignant`;
-
-// Récupère l'ID Google Analytics depuis les variables d'environnement
-const googleAnalyticsId = import.meta.env.PUBLIC_GA_ID || '';
 ---
 
 <!DOCTYPE html>
@@ -49,7 +46,7 @@ const googleAnalyticsId = import.meta.env.PUBLIC_GA_ID || '';
     
     <title>{fullTitle}</title>
     
-    <GoogleAnalytics client:load gaId={googleAnalyticsId} />
+    <GoogleAnalytics client:load gaId='G-5FWE4D9ED7' />
   </head>
   <body>
     <div class="flex flex-col justify-between min-h-screen">

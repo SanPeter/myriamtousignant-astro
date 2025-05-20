@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { isGoogleAnalyticsEnabled } from '../utils/env-config';
 
 // Déclarations de types pour TypeScript
 declare global {
@@ -22,7 +21,7 @@ interface GoogleAnalyticsProps {
 const GoogleAnalytics: React.FC<GoogleAnalyticsProps> = ({ gaId }) => {
   useEffect(() => {
     // Vérifier que nous sommes côté client et que l'ID est valide
-    if (typeof window === 'undefined' || !gaId || !isGoogleAnalyticsEnabled(gaId)) {
+    if (typeof window === 'undefined' || !gaId) {
       return;
     }
 
