@@ -247,7 +247,7 @@ const mediationsWithImages = await Promise.all(
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {expositionsWithImages.map(expo => (
-          <a href={`/expositions/${expo.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg border border-gray-200 hover:border-blue-500 transition-colors duration-200 overflow-hidden">
+          <a href={`/expositions/${expo.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
             {expo.resolvedImage && (
               <div class="w-full h-48 overflow-hidden">
                 {expo.resolvedImage.type === 'import' ? (
