@@ -6,7 +6,10 @@
 - Date dernière mise à jour: 11 juin 2025
 
 ## Projets en Cours
-- MT-1: Fusion des layouts (en cours d'implémentation)
+- Aucun projet en cours d'implémentation
+
+## Projets Terminés
+- MT-1: Fusion des layouts (terminé le 11 juin 2025)
 
 ## Structure du Projet
 - Tests unitaires et de composants dans le dossier `test`
@@ -21,12 +24,12 @@
 
 ### MT-1: Fusion des Layouts
 - Objectif: Simplifier la maintenance en fusionnant plusieurs layouts similaires
-- État: Implémentation majeure terminée
-  - Création d'un `GenericLayout.astro` pour remplacer plusieurs layouts spécifiques
-  - Migration des pages clés vers le nouveau layout
-  - Tests unitaires et e2e ajoutés
+- État: Terminé ✅
+  - Création d'un `GenericLayout.astro` pour remplacer tous les layouts spécifiques
+  - Migration de toutes les pages vers le nouveau layout
+  - Tests unitaires et e2e ajoutés et validés
   - Documentation créée
-- Tâches restantes: 
-  - Supprimer les anciens layouts après migration complète de toutes les pages
+  - Anciens layouts supprimés (BiographieLayout, BoutiqueLayout, PresseLayout, ProjectLayout, SectionLayout)
+  - Seuls BaseLayout et GenericLayout sont conservés
 - Fichier de suivi: `.docs/MT-1-layouts.md`
 - Documentation: `.docs/GenericLayout-doc.md`

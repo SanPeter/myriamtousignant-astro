@@ -1,3 +1,4 @@
+<!-- Dernière mise à jour: 11 juin 2025 -->
 # Documentation de GenericLayout
 
 Ce document décrit comment utiliser le `GenericLayout` dans le projet myriamtousignant-astro.
