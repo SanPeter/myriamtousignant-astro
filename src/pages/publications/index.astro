@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération des publications
 const publicationsEntries = await getCollection('publications');
@@ -30,11 +30,11 @@ const publicationsData = sortedPublications.map(publication => ({
 }));
 ---
 
-<SectionLayout 
+<GenericLayout 
   title="Publications"
   description="Articles, textes et autres publications"
-  sectionType="publications"
   projectsData={publicationsData}
+  showCarousel={false}
 >
   <p class="my-4">
     Découvrez mes publications, articles et contributions théoriques.

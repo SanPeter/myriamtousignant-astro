@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération de toutes les médiations
 const mediationsEntries = await getCollection('mediations');
@@ -30,11 +30,11 @@ const mediationsData = sortedMediations.map(mediation => {
 });
 ---
 
-<SectionLayout
+<GenericLayout
   title="Médiations"
   description="Découvrez mes projets de médiation culturelle"
-  sectionType="mediations"
   projectsData={mediationsData}
+  showCarousel={false}
 >
   <p class="my-4">
     Explorez mes différents projets de médiation culturelle et artistique.

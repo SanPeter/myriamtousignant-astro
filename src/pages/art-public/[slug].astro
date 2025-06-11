@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 import { Image } from 'astro:assets';
 import { getImagesBySlug, getImageBySummaryPath } from '../../utils/contentImages';
 
@@ -30,10 +30,12 @@ const projectImages = await getImagesBySlug('art-public', slug);
 const images = entry.data.projectImages || [];
 ---
 
-<ProjectLayout 
+<GenericLayout 
   title={entry.data.title}
   description={entry.data.description}
   images={images}
+  showCarousel={images.length > 0}
+  showGridProjets={false}
 >
   <article class="bg-white p-6 rounded-lg shadow-md mb-16">
     {entry.data.date && (
@@ -46,4 +48,4 @@ const images = entry.data.projectImages || [];
       <Content />
     </div>
   </article>
-</ProjectLayout>
+</GenericLayout>
