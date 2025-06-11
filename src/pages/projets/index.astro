@@ -1,5 +1,5 @@
 ---
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 import { getCollection } from 'astro:content';
 
 // Récupération de tous les projets
@@ -29,14 +29,15 @@ const projectsData = sortedProjets.map(projet => {
 });
 ---
 
-<SectionLayout
+<GenericLayout
   title="Projets"
   description="Découvrez mes différents projets artistiques"
-  sectionType="projets"
   projectsData={projectsData}
+  showCarousel={false}
+  showGridProjets={true}
 >
   <p class="my-4">
     Voici une sélection de mes projets artistiques réalisés au cours des dernières années.
     Cliquez sur un projet pour en savoir plus.
   </p>
-</SectionLayout>
+</GenericLayout>

@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 export async function getStaticPaths() {
   const projetsEntries = await getCollection('projets');
@@ -25,10 +25,12 @@ const projectFolder = entry.id.includes('/')
   : entry.id.replace(/\.md$/, '');
 ---
 
-<ProjectLayout 
+<GenericLayout 
   title={entry.data.title}
   description={entry.data.description}
   images={images}
+  showCarousel={images.length > 0}
+  showGridProjets={false}
 >    
   <article class="bg-white p-6 rounded-lg shadow-md mb-16">
     {entry.data.date && (
@@ -41,4 +43,4 @@ const projectFolder = entry.id.includes('/')
       <Content />
     </div>
   </article>
-</ProjectLayout>
+</GenericLayout>

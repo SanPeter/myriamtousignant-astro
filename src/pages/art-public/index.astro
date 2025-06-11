@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération de toutes les œuvres d'art public
 const artPublicEntries = await getCollection('art-public');
@@ -30,11 +30,11 @@ const artPublicData = sortedArtPublic.map(artwork => {
 });
 ---
 
-<SectionLayout
+<GenericLayout
   title="Art Public"
   description="Découvrez mes projets d'art public"
-  sectionType="art-public"
   projectsData={artPublicData}
+  showCarousel={false}
 >
   <p class="my-4 text-gray-700">
     Voici mes projets d'art public réalisés au fil des années.

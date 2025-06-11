@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BoutiqueLayout from '../../layouts/BoutiqueLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération du contenu de la boutique
 const boutiqueEntries = await getCollection('boutique');
@@ -8,13 +8,15 @@ const boutique = boutiqueEntries.find(entry => entry.id === 'index.mdx') || bout
 const { Content, headings } = await render(boutique);
 ---
 
-<BoutiqueLayout 
+<GenericLayout 
   title={boutique?.data.title || "Boutique"}
   description="Oeuvres et produits disponibles à l'achat"
+  showCarousel={false}
+  showGridProjets={false}
 >
   <div class="bg-white p-6 rounded-lg shadow-md">
     <div class="prose max-w-none">
       <Content />
     </div>
   </div>
-</BoutiqueLayout>
+</GenericLayout>

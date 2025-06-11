@@ -1,14 +1,14 @@
 ---
-import { getCollection, render } from 'astro:content';
-import ProjectLayout from '../../layouts/ProjectLayout.astro';
+import { getCollection, render } from "astro:content";
+import GenericLayout from "../../layouts/GenericLayout.astro";
 
 export async function getStaticPaths() {
-  const expositionsEntries = await getCollection('expositions');
+  const expositionsEntries = await getCollection("expositions");
   
   return expositionsEntries
     .filter(entry => !entry.data.draft) // Filtre les brouillons
     .map(entry => ({
-      params: { slug: entry.id.replace(/\.md$/, '').split('/')[0] }, // Extraire le slug correctement
+      params: { slug: entry.id.replace(/\.md$/, "").split("/")[0] }, // Extraire le slug correctement
       props: { entry },
     }));
 }
@@ -20,18 +20,20 @@ const { Content, headings } = await render(entry);
 const images = entry.data.projectImages || [];
 ---
 
-<ProjectLayout
+<GenericLayout
   title={entry.data.title}
   description={entry.data.description}
   images={images}
+  showCarousel={images.length > 0}
+  showGridProjets={false}
 >
   
   <article class="bg-white p-6 rounded-lg shadow-md mb-16">
     <div class="mb-6">
       {entry.data.startDate && (
         <p class="text-gray-700">
-          <span class="font-semibold">Période:</span> {entry.data.startDate.toLocaleDateString('fr-CA')}
-          {entry.data.endDate && ` au ${entry.data.endDate.toLocaleDateString('fr-CA')}`}
+          <span class="font-semibold">Période:</span> {entry.data.startDate.toLocaleDateString("fr-CA")}
+          {entry.data.endDate && ` au ${entry.data.endDate.toLocaleDateString("fr-CA")}`}
         </p>
       )}
       {entry.data.location && (
@@ -45,4 +47,4 @@ const images = entry.data.projectImages || [];
       <Content />
     </div>
   </article>
-</ProjectLayout>
+</GenericLayout>

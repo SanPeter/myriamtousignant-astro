@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération de toutes les expositions
 const expositions = await getCollection('expositions');
@@ -33,13 +33,14 @@ const expositionsData = sortedExpositions.map(expo => {
 });
 ---
 
-<SectionLayout
+<GenericLayout
   title="Expositions"
   description="Découvrez mes expositions passées et à venir"
-  sectionType="expositions"
   projectsData={expositionsData}
+  showCarousel={false}
+  showGridProjets={true}
 >
   <p class="my-4">
     Voici mes expositions, classées de la plus récente à la plus ancienne.
   </p>
-</SectionLayout>
+</GenericLayout>
