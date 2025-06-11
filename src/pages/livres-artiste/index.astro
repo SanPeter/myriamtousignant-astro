@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import SectionLayout from '../../layouts/SectionLayout.astro';
+import GenericLayout from '../../layouts/GenericLayout.astro';
 
 // Récupération de tous les livres d'artiste
 const livresArtisteEntries = await getCollection('livres-artiste');
@@ -37,13 +37,14 @@ const livresArtisteData = sortedLivresArtiste.map(livre => {
 });
 ---
 
-<SectionLayout
+<GenericLayout
   title="Livres d'artiste"
   description="Découvrez mes livres et publications d'artiste"
-  sectionType="livres-artiste"
   projectsData={livresArtisteData}
+  showCarousel={false}
+  showGridProjets={true}
 >
   <p class="my-4">
     Explorez mes livres d'artiste, fanzines et autres publications artistiques.
   </p>
-</SectionLayout>
+</GenericLayout>

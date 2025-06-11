@@ -1,0 +1,46 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Jumbotron from '../components/Jumbotron';
+import Carousel from '../components/Carousel.astro';
+import GridProjets from '../components/GridProjets.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  images?: string[];
+  projectsData?: any[];
+  showCarousel?: boolean;
+  showGridProjets?: boolean;
+  className?: string;
+}
+
+const { 
+  title, 
+  description, 
+  images = [], 
+  projectsData = [],
+  showCarousel = true,
+  showGridProjets = true,
+  className = "max-w-6xl mx-auto px-4 mb-16"
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class={className}>
+    <Jumbotron title={title} description={description} />
+    
+    {/* Affichage conditionnel du carrousel d'images si activé et si des images sont fournies */}
+    {showCarousel && images.length > 0 && (
+      <Carousel images={images} altText={title} />
+    )}
+    
+    {/* Affichage conditionnel de la grille de projets si activée et si des projets sont fournis */}
+    {showGridProjets && projectsData.length > 0 && (
+      <GridProjets projects={projectsData} />
+    )}
+    
+    <div class="prose prose-lg max-w-none">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>
