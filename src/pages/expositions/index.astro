@@ -5,12 +5,12 @@ import GenericLayout from '../../layouts/GenericLayout.astro';
 // Récupération de toutes les expositions
 const expositions = await getCollection('expositions');
 
-// Tri par date de début (du plus récent au plus ancien)
+// Tri par date (du plus récent au plus ancien)
 const sortedExpositions = expositions
   .filter(expo => !expo.data.draft) // Filtre les brouillons
   .sort((a, b) => {
-    if (!a.data.startDate || !b.data.startDate) return 0;
-    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+    if (!a.data.date || !b.data.date) return 0;
+    return b.data.date.valueOf() - a.data.date.valueOf();
   });
 
 // Pour le composant GridProjets
