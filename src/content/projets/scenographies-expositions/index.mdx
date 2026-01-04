@@ -1,0 +1,62 @@
+---
+type: 'projets'
+title: "Scénographie de l’exposition «Chapeau bas… aux cultures» "
+description: ''
+date: 2025-01-04T17:00:00-05:00
+draft: false
+featured: false
+weight: 2
+summaryImage: 'images/emiliepelletier_sossombrero_01.jpg'
+listImage: 'images/emiliepelletier_sossombrero_01.jpg'
+---
+import ImageGrid from '../../../components/ImageGrid.astro';
+import PartnerLink from '../../../components/PartnerLink.astro';
+import SvgBackgroundLink from '../../../components/SvgBackgroundLink.astro';
+
+import logoLongueuil from './images/logo_longueuil.jpg';
+import logoQc from './images/QUEBEC_couleur.svg';
+import logoCulturePourTous from './images/logo-culturepourtous.png';
+
+<ImageGrid 
+  match="images/emiliepelletier_sossombrero_*" 
+  sortOrder="asc" 
+  rowHeight={200} 
+  margins={10} 
+  thumbnailResizeOptions="600x600 q100 Lanczos" 
+  showExif={false} 
+  previewType="blur" 
+  embedPreview={true} 
+  thumbnailHoverEffect="none" 
+/>
+
+Crédit photo: Émilie Pelletier photographe 
+
+_Du 26 septembre au 30 novembre 2025   
+Bibliothèque Georges-Dor, Longueuil_
+
+J’ai été mandatée pour concevoir la scénographie de l’exposition « Chapeau bas… aux cultures » – S.O.S. Sombrero, un projet imaginé par l’autrice Josée Bournival et inspiré de son livre jeunesse portant sur le vivre-ensemble et l’immigration.  
+
+Destinée aux familles, cette exposition vient clore une démarche artistique et humaine menée dans le cadre de l’initiative Racines plurielles de Culture pour tous. J’ai élaboré un parcours scénographique en cinq stations interactives intégrant textes, illustrations, dispositifs participatifs et mobilier sur mesure.  
+
+Mon mandat comprenait la conception du concept scénographique, la mise en espace du contenu narratif, la direction artistique des stations, ainsi que le suivi de fabrication du mobilier réalisé par Yannick Renaud. L’ensemble du projet a été rendu possible grâce au soutien financier du ministère de l’Immigration, de la Francisation et de l’Intégration, du Bureau de la culture et des bibliothèques de la Ville de Longueuil, ainsi que d’une entente territoriale du Conseil des arts et des lettres du Québec avec le MAMH et la Ville de Longueuil. 
+
+Idée originale : Josée Bournival  
+Scénographie : Myriam Tousignant  
+Illustrations : Annie Sechao  
+Photographie : Émilie Pelletier  
+Vidéo : François Brisson 
+Graphisme : Audrey Jadaud  
+
+Fabrication du mobilier: Yannick Renaud 
+
+Avec la participation financière de:
+<SvgBackgroundLink
+href='https://www.quebec.ca/'
+alt='Gouvernement du Québec'
+src={logoQc}
+height='64px'
+width='200px'
+/>
+<PartnerLink src={logoCulturePourTous} href='https://www.culturepourtous.ca/' alt='Culture pour tous!' /> 
+[![CALQ](images/calq_logo.jpg)](https://www.calq.gouv.qc.ca)
+<PartnerLink src={logoLongueuil} href='https://longueuil.quebec/fr' alt='Ville de Longueuil' />
