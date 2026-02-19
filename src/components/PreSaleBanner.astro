@@ -1,0 +1,132 @@
+---
+import { PRE_SALE_CONFIG, isPreSaleVisible } from '../config/preSale';
+
+const defaultContent = PRE_SALE_CONFIG.copy.fr;
+const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
+---
+
+{isVisible && (
+  <section
+    class="rounded-2xl border border-amber-300 bg-amber-50 px-5 py-6 shadow-sm md:px-8 md:py-8"
+    aria-labelledby="pre-sale-title"
+    data-testid="pre-sale-banner"
+    data-pre-sale-banner
+  >
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+      <div class="max-w-3xl">
+        <p
+          class="inline-flex rounded-full bg-amber-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-900"
+          data-pre-sale-field="badge"
+        >
+          {defaultContent.badge}
+        </p>
+        <h2 id="pre-sale-title" class="mt-3 text-2xl font-bold text-amber-950 md:text-3xl" data-pre-sale-field="title">
+          {defaultContent.title}
+        </h2>
+        <p class="mt-3 text-base leading-7 text-amber-900" data-pre-sale-field="description">{defaultContent.description}</p>
+
+        <h3 class="mt-5 text-sm font-semibold uppercase tracking-wide text-amber-950" data-pre-sale-field="termsHeading">
+          {defaultContent.termsHeading}
+        </h3>
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-amber-900" data-pre-sale-field="terms">
+          {defaultContent.terms.map((term) => (
+            <li>{term}</li>
+          ))}
+        </ul>
+
+        <p
+          class="mt-5 text-sm font-semibold uppercase tracking-wide text-amber-950"
+          data-pre-sale-field="limitedEditionHeading"
+        >
+          {defaultContent.limitedEditionHeading}
+        </p>
+        <p class="mt-2 text-sm leading-6 text-amber-900" data-pre-sale-field="limitedEditionDetails">
+          {defaultContent.limitedEditionDetails}
+        </p>
+      </div>
+
+      <div class="w-full shrink-0 lg:w-auto">
+        <a
+          href={PRE_SALE_CONFIG.squareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex w-full items-center justify-center rounded-md bg-amber-900 px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-amber-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900 lg:w-auto"
+          data-pre-sale-field="cta"
+          aria-label={defaultContent.ctaAriaLabel}
+          data-testid="pre-sale-cta"
+        >
+          {defaultContent.ctaLabel}
+        </a>
+      </div>
+    </div>
+  </section>
+)}
+
+<script
+  is:inline
+  define:vars={{ translations: PRE_SALE_CONFIG.copy }}
+>
+  (() => {
+    const banner = document.querySelector('[data-pre-sale-banner]');
+    if (!banner) {
+      return;
+    }
+
+    const getLocaleFromQuery = () => {
+      const langParam = new URLSearchParams(window.location.search).get('lang');
+      if (langParam === 'en' || langParam === 'fr') {
+        return langParam;
+      }
+      return null;
+    };
+
+    const inferLocale = () => {
+      const queryLocale = getLocaleFromQuery();
+      if (queryLocale) {
+        return queryLocale;
+      }
+
+      const htmlLang = document.documentElement.lang || '';
+      if (htmlLang.startsWith('en')) {
+        return 'en';
+      }
+
+      return (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr';
+    };
+
+    const locale = inferLocale();
+    const content = translations[locale] || translations.fr;
+
+    const setText = (field, value) => {
+      const node = banner.querySelector(`[data-pre-sale-field="${field}"]`);
+      if (node) {
+        node.textContent = value;
+      }
+    };
+
+    setText('badge', content.badge);
+    setText('title', content.title);
+    setText('description', content.description);
+    setText('termsHeading', content.termsHeading);
+    setText('limitedEditionHeading', content.limitedEditionHeading);
+    setText('limitedEditionDetails', content.limitedEditionDetails);
+
+    const termsList = banner.querySelector('[data-pre-sale-field="terms"]');
+    if (termsList) {
+      termsList.innerHTML = '';
+      for (const term of content.terms) {
+        const item = document.createElement('li');
+        item.textContent = term;
+        termsList.appendChild(item);
+      }
+    }
+
+    const cta = banner.querySelector('[data-pre-sale-field="cta"]');
+    if (cta) {
+      cta.textContent = content.ctaLabel;
+      cta.setAttribute('aria-label', content.ctaAriaLabel);
+    }
+
+    document.documentElement.lang = locale;
+  })();
+</script>
