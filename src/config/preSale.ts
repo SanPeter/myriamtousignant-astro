@@ -1,56 +1,100 @@
 export type PreSaleLocale = 'fr' | 'en';
 
-interface PreSaleCopy {
-  badge: string;
-  title: string;
-  description: string;
-  termsHeading: string;
-  terms: string[];
-  limitedEditionHeading: string;
-  limitedEditionDetails: string;
-  ctaLabel: string;
-  ctaAriaLabel: string;
-}
-
 interface PreSaleWindow {
   startsAt: string | null;
   endsAt: string | null;
 }
 
+interface PreSaleCard {
+  title: string;
+  lines: string[];
+}
+
+interface PreSaleBottomCtas {
+  primaryLabel: string;
+  primaryAriaLabel: string;
+  secondaryLabel: string;
+  secondaryAriaLabel: string;
+}
+
+interface PreSaleCopy {
+  title: string;
+  subtitle: string;
+  artistLine: string;
+  availabilityLine: string;
+  heroCtaLabel: string;
+  heroCtaAriaLabel: string;
+  detailsLinkLabel: string;
+  editorialParagraphs: string[];
+  limitedEditionCard: PreSaleCard;
+  luxeEditionCard: PreSaleCard;
+  bottomCtas: PreSaleBottomCtas;
+}
+
 const copy: Record<PreSaleLocale, PreSaleCopy> = {
   fr: {
-    badge: 'Prévente',
-    title: 'Récit choral | Option d\'achat',
-    description:
-      'Réservez votre exemplaire de l\'édition limitée et soutenez la production du projet en cours.',
-    termsHeading: 'Modalités clés',
-    terms: [
-      'Prévente en ligne via Square',
-      'Paiement sécurisé, confirmation immédiate',
-      'Expédition ou remise locale selon les options offertes à la commande'
+    title: 'Récit choral',
+    subtitle: 'Édition limitée — 150 exemplaires',
+    artistLine: "Livre d'artiste de Myriam Tousignant",
+    availabilityLine: 'Prévente exclusive — dès le 16 mars',
+    heroCtaLabel: 'Précommander',
+    heroCtaAriaLabel: 'Précommander Récit choral sur Square, ouverture dans un nouvel onglet',
+    detailsLinkLabel: 'En savoir plus',
+    editorialParagraphs: [
+      "Récit choral est un livre d'artiste issu d'une recherche sur la mémoire, la filiation et la transformation des archives familiales en espace de réflexion partagée.",
+      "Le lancement aura lieu en mai, en parallèle d'une exposition éphémère présentée du 6 au 9 mai à l'Atrium du métro de Longueuil."
     ],
-    limitedEditionHeading: 'Édition limitée',
-    limitedEditionDetails:
-      'Tirage limité avec accompagnement éditorial de l\'artiste. Les quantités disponibles sont restreintes.',
-    ctaLabel: 'Acheter sur Square',
-    ctaAriaLabel: 'Ouvrir la page de prévente Square dans un nouvel onglet'
+    limitedEditionCard: {
+      title: 'Édition limitée à 150 exemplaires',
+      lines: [
+        'Dédicace personnalisée',
+        'Récupération du 6 au 9 mai ou soirée de lancement',
+        'Envoi postal disponible (15 $)',
+        'Expéditions la semaine du 11 mai'
+      ]
+    },
+    luxeEditionCard: {
+      title: 'Édition luxe',
+      lines: ['25 exemplaires', 'Numérotés et signés', 'Reproduction incluse']
+    },
+    bottomCtas: {
+      primaryLabel: 'Commander maintenant',
+      primaryAriaLabel: 'Commander maintenant Récit choral sur Square, ouverture dans un nouvel onglet',
+      secondaryLabel: 'Réserver mon exemplaire',
+      secondaryAriaLabel: 'Réserver mon exemplaire sur Square, ouverture dans un nouvel onglet'
+    }
   },
   en: {
-    badge: 'Pre-sale',
-    title: 'Choral narrative | Purchase option',
-    description:
-      'Reserve your limited edition copy and support the ongoing production of the project.',
-    termsHeading: 'Key terms',
-    terms: [
-      'Online pre-sale via Square',
-      'Secure checkout with immediate confirmation',
-      'Shipping or local pickup based on available checkout options'
+    title: 'Choral narrative',
+    subtitle: 'Limited edition — 150 copies',
+    artistLine: "Artist book by Myriam Tousignant",
+    availabilityLine: 'Exclusive pre-sale — starting March 16',
+    heroCtaLabel: 'Pre-order',
+    heroCtaAriaLabel: 'Pre-order Choral narrative on Square, opens in a new tab',
+    detailsLinkLabel: 'Learn more',
+    editorialParagraphs: [
+      'Choral narrative is an artist book born from research on memory, lineage, and the transformation of family archives into a shared reflective space.',
+      'The launch will take place in May, alongside a temporary exhibition presented from May 6 to May 9 at the Atrium du metro de Longueuil.'
     ],
-    limitedEditionHeading: 'Limited edition',
-    limitedEditionDetails:
-      'Limited print run with artist editorial support. Available quantities are restricted.',
-    ctaLabel: 'Buy on Square',
-    ctaAriaLabel: 'Open the Square pre-sale page in a new tab'
+    limitedEditionCard: {
+      title: 'Limited edition of 150 copies',
+      lines: [
+        'Personalized dedication',
+        'Pickup from May 6 to May 9 or at the launch event',
+        'Postal delivery available ($15)',
+        'Shipments during the week of May 11'
+      ]
+    },
+    luxeEditionCard: {
+      title: 'Deluxe edition',
+      lines: ['25 copies', 'Numbered and signed', 'Print reproduction included']
+    },
+    bottomCtas: {
+      primaryLabel: 'Order now',
+      primaryAriaLabel: 'Order now on Square, opens in a new tab',
+      secondaryLabel: 'Reserve my copy',
+      secondaryAriaLabel: 'Reserve my copy on Square, opens in a new tab'
+    }
   }
 };
 
