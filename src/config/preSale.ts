@@ -18,6 +18,8 @@ interface PreSaleBottomCtas {
 }
 
 interface PreSaleCopy {
+  stickyMessage: string;
+  stickyCloseLabel: string;
   title: string;
   subtitle: string;
   artistLine: string;
@@ -33,6 +35,8 @@ interface PreSaleCopy {
 
 const copy: Record<PreSaleLocale, PreSaleCopy> = {
   fr: {
+    stickyMessage: 'Prévente en cours — Récit choral',
+    stickyCloseLabel: 'Fermer le rappel prévente',
     title: 'Récit choral',
     subtitle: 'Édition limitée — 150 exemplaires',
     artistLine: "Livre d'artiste de Myriam Tousignant",
@@ -65,6 +69,8 @@ const copy: Record<PreSaleLocale, PreSaleCopy> = {
     }
   },
   en: {
+    stickyMessage: 'Pre-sale live — Choral narrative',
+    stickyCloseLabel: 'Close pre-sale reminder',
     title: 'Choral narrative',
     subtitle: 'Limited edition — 150 copies',
     artistLine: "Artist book by Myriam Tousignant",

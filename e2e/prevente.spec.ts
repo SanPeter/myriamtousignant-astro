@@ -17,8 +17,7 @@ test.describe('Bloc prévente', () => {
     await expect(heroCta).toHaveAttribute('rel', /noopener/);
     await expect(heroCta).toHaveAttribute('href', /square\.link/);
 
-    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Commander maintenant');
-    await expect(page.getByTestId('pre-sale-bottom-cta-secondary')).toHaveText('Réserver mon exemplaire');
+    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Précommander');
   });
 
   test('s affiche en EN quand lang=en', async ({ page }) => {
@@ -30,8 +29,35 @@ test.describe('Bloc prévente', () => {
     await expect(banner).toContainText('Choral narrative');
     await expect(banner).toContainText('Limited edition — 150 copies');
     await expect(page.getByTestId('pre-sale-cta')).toHaveText('Pre-order');
-    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Order now');
-    await expect(page.getByTestId('pre-sale-bottom-cta-secondary')).toHaveText('Reserve my copy');
+    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Pre-order');
+  });
+
+  test('sticky CTA apparait quand le bloc sort de l ecran', async ({ page }) => {
+    await page.goto('/?lang=fr');
+
+    const sticky = page.getByTestId('pre-sale-sticky');
+    await expect(sticky).toBeHidden();
+
+    await page.evaluate(() => window.scrollTo({ top: 1300, behavior: 'instant' }));
+
+    await expect(sticky).toBeVisible();
+    await expect(sticky).toContainText('Prévente en cours — Récit choral');
+    await expect(sticky.getByRole('link', { name: 'Précommander' })).toBeVisible();
+  });
+
+  test('sticky CTA peut etre ferme', async ({ page }) => {
+    await page.goto('/?lang=fr');
+    await page.evaluate(() => window.scrollTo({ top: 1300, behavior: 'instant' }));
+
+    const sticky = page.getByTestId('pre-sale-sticky');
+    await expect(sticky).toBeVisible();
+
+    await sticky.getByRole('button', { name: 'Fermer le rappel prévente' }).click();
+    await expect(sticky).toBeHidden();
+
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await page.evaluate(() => window.scrollTo({ top: 1300, behavior: 'instant' }));
+    await expect(sticky).toBeHidden();
   });
 
   test('reste utilisable sur mobile, tablette et desktop', async ({ page }) => {

@@ -160,7 +160,6 @@ const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
     setText('limitedCardTitle', content.limitedEditionCard.title);
     setText('luxeCardTitle', content.luxeEditionCard.title);
     setText('bottomPrimaryCta', content.bottomCtas.primaryLabel);
-    setText('bottomSecondaryCta', content.bottomCtas.secondaryLabel);
 
     const editorial = banner.querySelector('[data-pre-sale-field="editorial"]');
     if (editorial) {
@@ -207,11 +206,6 @@ const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
     const bottomPrimary = banner.querySelector('[data-pre-sale-field="bottomPrimaryCta"]');
     if (bottomPrimary) {
       bottomPrimary.setAttribute('aria-label', content.bottomCtas.primaryAriaLabel);
-    }
-
-    const bottomSecondary = banner.querySelector('[data-pre-sale-field="bottomSecondaryCta"]');
-    if (bottomSecondary) {
-      bottomSecondary.setAttribute('aria-label', content.bottomCtas.secondaryAriaLabel);
     }
 
     document.documentElement.lang = locale;
