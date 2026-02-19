@@ -58,8 +58,8 @@ const copy: Record<PreSaleLocale, PreSaleCopy> = {
       lines: ['25 exemplaires', 'Numérotés et signés', 'Reproduction incluse']
     },
     bottomCtas: {
-      primaryLabel: 'Commander maintenant',
-      primaryAriaLabel: 'Commander maintenant Récit choral sur Square, ouverture dans un nouvel onglet',
+      primaryLabel: 'Précommander',
+      primaryAriaLabel: 'Précommander Récit choral sur Square, ouverture dans un nouvel onglet',
       secondaryLabel: 'Réserver mon exemplaire',
       secondaryAriaLabel: 'Réserver mon exemplaire sur Square, ouverture dans un nouvel onglet'
     }
@@ -90,8 +90,8 @@ const copy: Record<PreSaleLocale, PreSaleCopy> = {
       lines: ['25 copies', 'Numbered and signed', 'Print reproduction included']
     },
     bottomCtas: {
-      primaryLabel: 'Order now',
-      primaryAriaLabel: 'Order now on Square, opens in a new tab',
+      primaryLabel: 'Pre-order',
+      primaryAriaLabel: 'Pre-order Choral narrative on Square, opens in a new tab',
       secondaryLabel: 'Reserve my copy',
       secondaryAriaLabel: 'Reserve my copy on Square, opens in a new tab'
     }
@@ -105,6 +105,9 @@ export const PRE_SALE_CONFIG = {
   squareUrl:
     import.meta.env.PUBLIC_PREVENTE_SQUARE_URL ??
     'https://square.link/u/prevente-option-achat',
+  backgroundImageUrl:
+    import.meta.env.PUBLIC_PREVENTE_BG_IMAGE ??
+    '/images/prevente-recitchoral-bg.jpg',
   window: {
     startsAt,
     endsAt
