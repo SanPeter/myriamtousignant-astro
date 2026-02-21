@@ -113,7 +113,7 @@ export const PRE_SALE_CONFIG = {
     'https://square.link/u/prevente-option-achat',
   backgroundImageUrl:
     import.meta.env.PUBLIC_PREVENTE_BG_IMAGE ??
-    '/images/prevente-recitchoral-bg.jpg',
+    '/images/recit-choral-image.png',
   window: {
     startsAt,
     endsAt
