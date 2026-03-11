@@ -10,7 +10,6 @@ interface Props {
   keywords?: string;
   ogType?: string;
   ogImage?: string;
-  lang?: 'fr' | 'en';
 }
 
 const { 
@@ -18,8 +17,7 @@ const {
   description = "Site artistique de Myriam Tousignant", 
   keywords = "art, artiste, peinture, Myriam Tousignant, arts visuels, Québec",
   ogType = "website", 
-  ogImage = "/images/og-image.jpg",
-  lang = "fr"
+  ogImage = "/images/og-image.jpg"
 } = Astro.props;
 
 // Construit le titre complet
@@ -27,7 +25,7 @@ const fullTitle = `${title} | Myriam Tousignant`;
 ---
 
 <!DOCTYPE html>
-<html lang={lang}>
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />

@@ -1,213 +1,130 @@
 ---
-import { PRE_SALE_CONFIG, isPreSaleVisible } from '../config/preSale';
+import { PRE_SALE_CONFIG } from '../config/preSale';
 
-const defaultContent = PRE_SALE_CONFIG.copy.fr;
-const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
+const defaultContent = PRE_SALE_CONFIG.copy;
 ---
 
-{isVisible && (
-  <section
-    class="mb-10 w-full overflow-hidden rounded-lg bg-white px-4 py-8 text-gray-900 shadow md:px-8 md:py-10"
-    aria-labelledby="pre-sale-title"
-    data-testid="pre-sale-banner"
-    data-pre-sale-banner
-  >
-    <div class="w-full">
-      <div class="rounded-md p-4 md:p-6" data-testid="pre-sale-top-background">
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
-          <div>
-            <header class="space-y-2">
-              <h2 id="pre-sale-title" class="text-4xl font-bold text-gray-900 md:text-5xl" data-pre-sale-field="title">
-                {defaultContent.title}
-              </h2>
-              <p class="text-3xl text-gray-900" data-pre-sale-field="subtitle">{defaultContent.subtitle}</p>
-              <p class="text-lg text-gray-700" data-pre-sale-field="artistLine">{defaultContent.artistLine}</p>
-              <p class="text-lg text-gray-700" data-pre-sale-field="availabilityLine">{defaultContent.availabilityLine}</p>
-            </header>
+<section
+  class="mb-10 w-full overflow-hidden rounded-lg bg-white px-4 py-8 text-gray-900 shadow md:px-8 md:py-10"
+  aria-labelledby="pre-sale-title"
+  data-testid="pre-sale-banner"
+  data-pre-sale-banner
+  hidden
+>
+  <div class="w-full">
+    <div class="rounded-md p-4 md:p-6" data-testid="pre-sale-top-background">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
+        <div>
+          <header class="space-y-2">
+            <h2 id="pre-sale-title" class="text-4xl font-bold text-gray-900 md:text-5xl">
+              {defaultContent.title}
+            </h2>
+            <p class="text-3xl text-gray-900">{defaultContent.subtitle}</p>
+            <p class="text-lg text-gray-700">{defaultContent.artistLine}</p>
+            <p class="text-lg text-gray-700">{defaultContent.availabilityLine}</p>
+          </header>
 
-            <div class="mt-6 flex flex-wrap items-center gap-5">
-              <a
-                href={PRE_SALE_CONFIG.squareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center rounded-md bg-gray-800 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800"
-                data-pre-sale-field="heroCta"
-                aria-label={defaultContent.heroCtaAriaLabel}
-                data-testid="pre-sale-cta"
-              >
-                {defaultContent.heroCtaLabel}
-              </a>
+          <div class="mt-6 flex flex-wrap items-center gap-5">
+            <a
+              href={PRE_SALE_CONFIG.squareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-md bg-gray-800 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800"
+              aria-label={defaultContent.heroCtaAriaLabel}
+              data-testid="pre-sale-cta"
+            >
+              {defaultContent.heroCtaLabel}
+            </a>
 
-              <a
-                href="#pre-sale-editorial"
-                class="inline-flex items-center gap-2 text-base text-gray-700 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
-                data-pre-sale-field="detailsLink"
-                data-testid="pre-sale-details-link"
-              >
-                <span aria-hidden="true">›</span>
-                <span>{defaultContent.detailsLinkLabel}</span>
-              </a>
-            </div>
-
-            <div id="pre-sale-editorial" class="mt-10 space-y-4 text-left text-xl leading-relaxed text-gray-700" data-pre-sale-field="editorial">
-              {defaultContent.editorialParagraphs.map((paragraph) => (
-                <p>{paragraph}</p>
-              ))}
-            </div>
+            <a
+              href="#pre-sale-editorial"
+              class="inline-flex items-center gap-2 text-base text-gray-700 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+              data-testid="pre-sale-details-link"
+            >
+              <span aria-hidden="true">›</span>
+              <span>{defaultContent.detailsLinkLabel}</span>
+            </a>
           </div>
 
-          <div
-            class="hidden min-h-[260px] rounded-md bg-contain bg-right bg-no-repeat md:block md:min-h-[420px]"
-            style={`background-image: url('${PRE_SALE_CONFIG.backgroundImageUrl}');`}
-            aria-hidden="true"
-            data-testid="pre-sale-book-image"
-          ></div>
+          <div id="pre-sale-editorial" class="mt-10 space-y-4 text-left text-xl leading-relaxed text-gray-700">
+            {defaultContent.editorialParagraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div class="mt-8 grid grid-cols-1 gap-3 bg-white md:grid-cols-[2fr_1fr]" data-pre-sale-field="cardsWrapper">
-        <article class="rounded-lg bg-slate-50 p-4 shadow" data-pre-sale-field="limitedCard">
-          <h3 class="text-3xl font-semibold leading-snug text-gray-900" data-pre-sale-field="limitedCardTitle">
-            {defaultContent.limitedEditionCard.title}
-          </h3>
-          <ul class="mt-3 space-y-2 text-base text-gray-700" data-pre-sale-field="limitedCardLines">
-            {defaultContent.limitedEditionCard.lines.map((line) => (
-              <li class="flex items-start gap-2">
-                <span aria-hidden="true">✓</span>
-                <span>{line}</span>
-              </li>
-            ))}
-          </ul>
-        </article>
-
-        <article class="rounded-lg bg-slate-50 p-4 shadow" data-pre-sale-field="luxeCard">
-          <h3 class="text-3xl font-semibold leading-snug text-gray-900" data-pre-sale-field="luxeCardTitle">
-            {defaultContent.luxeEditionCard.title}
-          </h3>
-          <ul class="mt-3 space-y-2 text-base text-gray-700" data-pre-sale-field="luxeCardLines">
-            {defaultContent.luxeEditionCard.lines.map((line) => (
-              <li>{line}</li>
-            ))}
-          </ul>
-        </article>
-      </div>
-
-      <div class="mt-6 flex justify-center" data-pre-sale-field="bottomCtas">
-        <a
-          href={PRE_SALE_CONFIG.squareUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center rounded-md bg-gray-800 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800"
-          data-pre-sale-field="bottomPrimaryCta"
-          aria-label={defaultContent.bottomCtas.primaryAriaLabel}
-          data-testid="pre-sale-bottom-cta-primary"
-        >
-          {defaultContent.bottomCtas.primaryLabel}
-        </a>
+        <div
+          class="hidden min-h-[260px] rounded-md bg-contain bg-right bg-no-repeat md:block md:min-h-[420px]"
+          style={`background-image: url('${PRE_SALE_CONFIG.backgroundImageUrl}');`}
+          aria-hidden="true"
+          data-testid="pre-sale-book-image"
+        ></div>
       </div>
     </div>
-  </section>
-)}
 
-<script
-  is:inline
-  define:vars={{ translations: PRE_SALE_CONFIG.copy }}
->
+    <div class="mt-8 grid grid-cols-1 gap-3 bg-white md:grid-cols-[2fr_1fr]">
+      <article class="rounded-lg bg-slate-50 p-4 shadow">
+        <h3 class="text-3xl font-semibold leading-snug text-gray-900">
+          {defaultContent.limitedEditionCard.title}
+        </h3>
+        <ul class="mt-3 space-y-2 text-base text-gray-700">
+          {defaultContent.limitedEditionCard.lines.map((line) => (
+            <li class="flex items-start gap-2">
+              <span aria-hidden="true">✓</span>
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+
+      <article class="rounded-lg bg-slate-50 p-4 shadow">
+        <h3 class="text-3xl font-semibold leading-snug text-gray-900">
+          {defaultContent.luxeEditionCard.title}
+        </h3>
+        <ul class="mt-3 space-y-2 text-base text-gray-700">
+          {defaultContent.luxeEditionCard.lines.map((line) => (
+            <li>{line}</li>
+          ))}
+        </ul>
+      </article>
+    </div>
+
+    <div class="mt-6 flex justify-center">
+      <a
+        href={PRE_SALE_CONFIG.squareUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center rounded-md bg-gray-800 px-6 py-3 text-lg font-semibold text-white transition-colors hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800"
+        aria-label={defaultContent.bottomCtas.primaryAriaLabel}
+        data-testid="pre-sale-bottom-cta-primary"
+      >
+        {defaultContent.bottomCtas.primaryLabel}
+      </a>
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ windowConfig: PRE_SALE_CONFIG.window }}>
   (() => {
     const banner = document.querySelector('[data-pre-sale-banner]');
     if (!banner) {
       return;
     }
 
-    const getLocaleFromQuery = () => {
-      const langParam = new URLSearchParams(window.location.search).get('lang');
-      if (langParam === 'en' || langParam === 'fr') {
-        return langParam;
+    const parseDate = (dateValue) => {
+      if (!dateValue) {
+        return null;
       }
-      return null;
+
+      const parsed = new Date(dateValue);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
     };
 
-    const inferLocale = () => {
-      const queryLocale = getLocaleFromQuery();
-      if (queryLocale) {
-        return queryLocale;
-      }
+    const start = parseDate(windowConfig.startsAt);
+    const end = parseDate(windowConfig.endsAt);
+    const now = new Date();
+    const isVisible = (!start || now >= start) && (!end || now <= end);
 
-      const htmlLang = document.documentElement.lang || '';
-      if (htmlLang.startsWith('en')) {
-        return 'en';
-      }
-
-      return (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr';
-    };
-
-    const locale = inferLocale();
-    const content = translations[locale] || translations.fr;
-
-    const setText = (field, value) => {
-      const node = banner.querySelector(`[data-pre-sale-field="${field}"]`);
-      if (node) {
-        node.textContent = value;
-      }
-    };
-
-    setText('title', content.title);
-    setText('subtitle', content.subtitle);
-    setText('artistLine', content.artistLine);
-    setText('availabilityLine', content.availabilityLine);
-    setText('heroCta', content.heroCtaLabel);
-    setText('detailsLink', content.detailsLinkLabel);
-    setText('limitedCardTitle', content.limitedEditionCard.title);
-    setText('luxeCardTitle', content.luxeEditionCard.title);
-    setText('bottomPrimaryCta', content.bottomCtas.primaryLabel);
-
-    const editorial = banner.querySelector('[data-pre-sale-field="editorial"]');
-    if (editorial) {
-      editorial.innerHTML = '';
-      for (const paragraph of content.editorialParagraphs) {
-        const node = document.createElement('p');
-        node.textContent = paragraph;
-        editorial.appendChild(node);
-      }
-    }
-
-    const replaceLines = (selector, lines, withChecks = false) => {
-      const list = banner.querySelector(selector);
-      if (!list) {
-        return;
-      }
-
-      list.innerHTML = '';
-      for (const line of lines) {
-        const item = document.createElement('li');
-        if (withChecks) {
-          item.className = 'flex items-start gap-2';
-          const icon = document.createElement('span');
-          icon.setAttribute('aria-hidden', 'true');
-          icon.textContent = '✓';
-          const text = document.createElement('span');
-          text.textContent = line;
-          item.append(icon, text);
-        } else {
-          item.textContent = line;
-        }
-        list.appendChild(item);
-      }
-    };
-
-    replaceLines('[data-pre-sale-field="limitedCardLines"]', content.limitedEditionCard.lines, true);
-    replaceLines('[data-pre-sale-field="luxeCardLines"]', content.luxeEditionCard.lines);
-
-    const heroCta = banner.querySelector('[data-pre-sale-field="heroCta"]');
-    if (heroCta) {
-      heroCta.setAttribute('aria-label', content.heroCtaAriaLabel);
-    }
-
-    const bottomPrimary = banner.querySelector('[data-pre-sale-field="bottomPrimaryCta"]');
-    if (bottomPrimary) {
-      bottomPrimary.setAttribute('aria-label', content.bottomCtas.primaryAriaLabel);
-    }
-
-    document.documentElement.lang = locale;
+    banner.hidden = !isVisible;
   })();
 </script>

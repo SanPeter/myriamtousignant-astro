@@ -1,52 +1,66 @@
 ---
-import { PRE_SALE_CONFIG, isPreSaleVisible } from '../config/preSale';
+import { PRE_SALE_CONFIG } from '../config/preSale';
 
-const defaultCopy = PRE_SALE_CONFIG.copy.fr;
-const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
+const defaultCopy = PRE_SALE_CONFIG.copy;
 ---
 
-{isVisible && (
-  <div
-    class="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4"
-    data-testid="pre-sale-sticky"
-    data-pre-sale-sticky
-    hidden
-  >
-    <aside class="pointer-events-auto flex w-full max-w-xl items-center gap-3 rounded-lg bg-gray-900 px-4 py-3 text-white shadow-lg">
-      <p class="min-w-0 flex-1 truncate text-sm md:text-base" data-pre-sale-sticky-field="message">
-        {defaultCopy.title}
-      </p>
-      <a
-        href={PRE_SALE_CONFIG.squareUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex shrink-0 items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100"
-        data-pre-sale-sticky-field="cta"
-        aria-label={defaultCopy.heroCtaAriaLabel}
-      >
-        {defaultCopy.heroCtaLabel}
-      </a>
-      <button
-        type="button"
-        class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-gray-500 text-lg leading-none text-gray-200 transition-colors hover:bg-gray-800"
-        data-pre-sale-sticky-close
-        aria-label={defaultCopy.stickyCloseLabel}
-      >
-        ×
-      </button>
-    </aside>
-  </div>
-)}
+<div
+  class="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex justify-center px-4"
+  data-testid="pre-sale-sticky"
+  data-pre-sale-sticky
+  hidden
+>
+  <aside class="pointer-events-auto flex w-full max-w-xl items-center gap-3 rounded-lg bg-gray-900 px-4 py-3 text-white shadow-lg">
+    <p class="min-w-0 flex-1 truncate text-sm md:text-base">
+      {defaultCopy.stickyMessage}
+    </p>
+    <a
+      href={PRE_SALE_CONFIG.squareUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex shrink-0 items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100"
+      aria-label={defaultCopy.heroCtaAriaLabel}
+    >
+      {defaultCopy.heroCtaLabel}
+    </a>
+    <button
+      type="button"
+      class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-gray-500 text-lg leading-none text-gray-200 transition-colors hover:bg-gray-800"
+      data-pre-sale-sticky-close
+      aria-label={defaultCopy.stickyCloseLabel}
+    >
+      ×
+    </button>
+  </aside>
+</div>
 
-<script is:inline define:vars={{ translations: PRE_SALE_CONFIG.copy }}>
+<script is:inline define:vars={{ windowConfig: PRE_SALE_CONFIG.window }}>
   (() => {
     const sticky = document.querySelector('[data-pre-sale-sticky]');
     if (!sticky) {
       return;
     }
 
+    const parseDate = (dateValue) => {
+      if (!dateValue) {
+        return null;
+      }
+
+      const parsed = new Date(dateValue);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const start = parseDate(windowConfig.startsAt);
+    const end = parseDate(windowConfig.endsAt);
+    const now = new Date();
+    const isVisible = (!start || now >= start) && (!end || now <= end);
+    if (!isVisible) {
+      sticky.hidden = true;
+      return;
+    }
+
     const banner = document.querySelector('[data-pre-sale-banner]');
-    if (!banner) {
+    if (!banner || banner.hidden) {
       sticky.hidden = true;
       return;
     }
@@ -58,45 +72,8 @@ const isVisible = isPreSaleVisible(PRE_SALE_CONFIG.window);
       return;
     }
 
-    const getLocaleFromQuery = () => {
-      const langParam = new URLSearchParams(window.location.search).get('lang');
-      if (langParam === 'en' || langParam === 'fr') {
-        return langParam;
-      }
-      return null;
-    };
-
-    const inferLocale = () => {
-      const queryLocale = getLocaleFromQuery();
-      if (queryLocale) {
-        return queryLocale;
-      }
-
-      const htmlLang = document.documentElement.lang || '';
-      if (htmlLang.startsWith('en')) {
-        return 'en';
-      }
-
-      return (navigator.language || '').toLowerCase().startsWith('en') ? 'en' : 'fr';
-    };
-
-    const locale = inferLocale();
-    const content = translations[locale] || translations.fr;
-
-    const message = sticky.querySelector('[data-pre-sale-sticky-field="message"]');
-    if (message) {
-      message.textContent = content.stickyMessage;
-    }
-
-    const cta = sticky.querySelector('[data-pre-sale-sticky-field="cta"]');
-    if (cta) {
-      cta.textContent = content.heroCtaLabel;
-      cta.setAttribute('aria-label', content.heroCtaAriaLabel);
-    }
-
     const closeButton = sticky.querySelector('[data-pre-sale-sticky-close]');
     if (closeButton) {
-      closeButton.setAttribute('aria-label', content.stickyCloseLabel);
       closeButton.addEventListener('click', () => {
         dismissed = true;
         sessionStorage.setItem(storageKey, '1');

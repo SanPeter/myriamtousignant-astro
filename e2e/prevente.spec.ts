@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Bloc prévente', () => {
   test('s affiche en FR sur la home avec CTA Square en nouvel onglet', async ({ page }) => {
-    await page.goto('/?lang=fr');
+    await page.goto('/');
 
     const banner = page.getByTestId('pre-sale-banner');
     await expect(banner).toBeVisible();
@@ -20,20 +20,8 @@ test.describe('Bloc prévente', () => {
     await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Précommander');
   });
 
-  test('s affiche en EN quand lang=en', async ({ page }) => {
-    await page.goto('/?lang=en');
-
-    const banner = page.getByTestId('pre-sale-banner');
-    await expect(banner).toBeVisible();
-    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-    await expect(banner).toContainText('Choral narrative');
-    await expect(banner).toContainText('Limited edition — 150 copies');
-    await expect(page.getByTestId('pre-sale-cta')).toHaveText('Pre-order');
-    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Pre-order');
-  });
-
   test('sticky CTA apparait quand le bloc sort de l ecran', async ({ page }) => {
-    await page.goto('/?lang=fr');
+    await page.goto('/');
 
     const sticky = page.getByTestId('pre-sale-sticky');
     await expect(sticky).toBeHidden();
@@ -46,7 +34,7 @@ test.describe('Bloc prévente', () => {
   });
 
   test('sticky CTA peut etre ferme', async ({ page }) => {
-    await page.goto('/?lang=fr');
+    await page.goto('/');
     await page.evaluate(() => window.scrollTo({ top: 1300, behavior: 'instant' }));
 
     const sticky = page.getByTestId('pre-sale-sticky');

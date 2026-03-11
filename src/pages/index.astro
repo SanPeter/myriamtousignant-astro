@@ -4,12 +4,6 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import PreSaleBanner from '../components/PreSaleBanner.astro';
 import StickyPreSaleCta from '../components/StickyPreSaleCta.astro';
-import type { PreSaleLocale } from '../config/preSale';
-
-const requestUrl = Astro.request?.url ? new URL(Astro.request.url) : Astro.url;
-const localeParam = requestUrl.searchParams.get('lang');
-const locale: PreSaleLocale = localeParam === 'en' ? 'en' : 'fr';
-const pageTitle = locale === 'en' ? 'Home' : 'Accueil';
 
 // Importer les collections
 const projets = await getCollection('projets', ({ data }) => {
@@ -109,7 +103,7 @@ const mediationsWithImages = await Promise.all(
 );
 ---
 
-<BaseLayout title={pageTitle} lang={locale}>
+<BaseLayout title="Accueil">
   <PreSaleBanner />
   <StickyPreSaleCta />
   <!-- Hero Section -->
