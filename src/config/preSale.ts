@@ -93,15 +93,26 @@ const editions: PreSaleEdition[] = [
     toastMessage: 'Ouverture de Square pour l’édition luxe.',
     card: {
       title: 'Édition luxe',
-      lines: ['25 exemplaires sur le tirage total de 150', 'Numérotés et signés', 'Reproduction incluse']
+      lines: [
+        '25 exemplaires sur le tirage total de 150',
+        'Numérotés et signés',
+        'Reproduction incluse',
+        'Dédicace personnalisée',
+        'Récupération du 6 au 9 mai ou soirée de lancement',
+        'Envoi postal disponible (15 $)',
+        'Expéditions la semaine du 11 mai'
+      ]
     }
   }
 ];
 
 export const PRE_SALE_CONFIG = {
-  backgroundImageUrl:
-    import.meta.env.PUBLIC_PREVENTE_BG_IMAGE ??
-    '/images/recit-choral-image.png',
+  galleryImages: [
+    '/images/prevente-recitchoral_01.jpg',
+    '/images/prevente-recitchoral_02.jpg',
+    '/images/prevente-recitchoral_03.jpg',
+    '/images/prevente-recitchoral_04.jpg'
+  ],
   window: {
     startsAt,
     endsAt
