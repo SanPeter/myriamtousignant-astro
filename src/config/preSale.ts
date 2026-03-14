@@ -36,6 +36,8 @@ interface PreSaleCopy {
   editorialParagraphs: string[];
   sharedDetailsTitle: string;
   sharedDetailsLines: string[];
+  dedicationNoteTitle: string;
+  dedicationNoteBody: string;
 }
 
 const copy: PreSaleCopy = {
@@ -58,7 +60,10 @@ const copy: PreSaleCopy = {
     'Récupération du 6 au 9 mai ou soirée de lancement',
     'Envoi postal disponible (15 $)',
     'Expéditions la semaine du 11 mai'
-  ]
+  ],
+  dedicationNoteTitle: 'Pour votre dédicace',
+  dedicationNoteBody:
+    'Ajoutez le texte souhaité dans le champ « Ajouter une note pour le vendeur » au moment de la commande sur Square.'
 };
 
 const startsAt = import.meta.env.PUBLIC_PREVENTE_START_AT ?? '2026-01-01T00:00:00.000Z';
