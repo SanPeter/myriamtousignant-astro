@@ -50,7 +50,7 @@ const copy: PreSaleCopy = {
   detailsLinkLabel: 'En savoir plus',
   editorialParagraphs: [
     "Récit choral est un livre d'artiste issu d'une recherche sur la mémoire, la filiation et la transformation des archives familiales en espace de réflexion partagée.",
-    "Le lancement aura lieu en mai, en parallèle d'une exposition éphémère présentée du 6 au 9 mai à l'Atrium du métro de Longueuil."
+    "Le lancement aura lieu en mai, en parallèle d'une exposition éphémère, présentée du 6 au 9 mai à l'Atrium du métro de Longueuil."
   ],
   sharedDetailsTitle: 'Informations de précommande',
   sharedDetailsLines: [
@@ -85,17 +85,17 @@ const editions: PreSaleEdition[] = [
   },
   {
     id: 'luxe',
-    name: 'Édition luxe',
+    name: 'Édition collectionneur',
     badge: '25 exemplaires',
     summary: 'Une version de collection en tirage plus restreint, pensée pour les collectionneurs.',
     squareUrl: import.meta.env.PUBLIC_PREVENTE_SQUARE_URL_LUXE ?? defaultSquareUrl,
-    heroCtaLabel: 'Édition luxe',
-    stickyCtaLabel: 'Édition luxe',
-    cardCtaLabel: 'Précommander l’édition luxe',
-    ariaLabel: 'Précommander l’édition luxe de Récit choral sur Square, ouverture dans un nouvel onglet',
-    toastMessage: 'Ouverture de Square pour l’édition luxe.',
+    heroCtaLabel: 'Édition collectionneur',
+    stickyCtaLabel: 'Édition collectionneur',
+    cardCtaLabel: 'Précommander l’édition collectionneur',
+    ariaLabel: 'Précommander l’édition collectionneur de Récit choral sur Square, ouverture dans un nouvel onglet',
+    toastMessage: 'Ouverture de Square pour l’édition collectionneur.',
     card: {
-      title: 'Édition luxe',
+      title: 'Édition collectionneur',
       lines: ['25 exemplaires sur le tirage total de 150', 'Numérotés et signés', 'Reproduction incluse']
     }
   }
