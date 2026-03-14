@@ -1,0 +1,243 @@
+---
+import { PRE_SALE_CONFIG } from '../config/preSale';
+
+const defaultContent = PRE_SALE_CONFIG.copy;
+const editions = PRE_SALE_CONFIG.editions;
+const galleryImages = PRE_SALE_CONFIG.galleryImages;
+---
+
+<section
+  class="mb-10 w-full overflow-hidden rounded-lg bg-white px-4 py-8 text-gray-900 shadow md:px-8 md:py-10"
+  aria-labelledby="pre-sale-title"
+  data-testid="pre-sale-banner"
+  data-pre-sale-banner
+  hidden
+>
+  <div class="w-full">
+    <div class="rounded-md p-4 md:p-6" data-testid="pre-sale-top-background">
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-[1.1fr_0.9fr] md:items-start">
+        <div>
+          <header class="space-y-2">
+            <h2 id="pre-sale-title" class="text-4xl font-bold text-gray-900 md:text-5xl">
+              {defaultContent.title}
+            </h2>
+            <p class="text-3xl text-gray-900">{defaultContent.subtitle}</p>
+            <p class="text-lg text-gray-700">{defaultContent.artistLine}</p>
+            <p class="text-lg text-gray-700">{defaultContent.availabilityLine}</p>
+          </header>
+
+          <div class="mt-6 space-y-4">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+              {defaultContent.heroCtaIntro}
+            </p>
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              {editions.map((edition) => (
+                <a
+                  href={edition.squareUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class:list={[
+                    'inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+                    edition.featured
+                      ? 'bg-gray-900 text-white hover:bg-gray-700 focus-visible:outline-gray-900'
+                      : 'border border-gray-300 bg-white text-gray-900 hover:bg-slate-50 focus-visible:outline-gray-900'
+                  ]}
+                  aria-label={edition.ariaLabel}
+                  data-testid={`pre-sale-cta-${edition.id}`}
+                  data-pre-sale-order-link
+                  data-pre-sale-edition={edition.name}
+                  data-pre-sale-toast-message={edition.toastMessage}
+                >
+                  {edition.heroCtaLabel}
+                </a>
+              ))}
+            </div>
+            <a
+              href="#pre-sale-editorial"
+              class="inline-flex items-center gap-2 text-base text-gray-700 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+              data-testid="pre-sale-details-link"
+            >
+              <span aria-hidden="true">›</span>
+              <span>{defaultContent.detailsLinkLabel}</span>
+            </a>
+          </div>
+
+          <div id="pre-sale-editorial" class="mt-10 space-y-4 text-left text-xl leading-relaxed text-gray-700">
+            {defaultContent.editorialParagraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-2 gap-1.5 md:sticky md:top-6"
+          aria-hidden="true"
+          data-testid="pre-sale-book-image"
+        >
+          {galleryImages.map((imageUrl) => (
+            <div
+              class="aspect-[4/3] overflow-hidden"
+            >
+              <img
+                src={imageUrl}
+                alt=""
+                loading="lazy"
+                class="h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-4 bg-white md:grid-cols-2">
+      {editions.map((edition) => (
+        <article
+          class:list={[
+            'flex h-full flex-col rounded-lg p-5 shadow',
+            edition.featured ? 'border border-gray-900 bg-white' : 'bg-slate-50'
+          ]}
+          data-testid={`pre-sale-card-${edition.id}`}
+        >
+          <div class="flex flex-1 flex-col">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="text-3xl font-semibold leading-snug text-gray-900">
+                  {edition.card.title}
+                </h3>
+                <p class="mt-2 text-base text-gray-600">{edition.summary}</p>
+              </div>
+              {edition.badge && (
+                <span class="rounded-full bg-stone-200 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-gray-700">
+                  {edition.badge}
+                </span>
+              )}
+            </div>
+
+            <ul class="mt-4 space-y-2 text-base text-gray-700">
+              {edition.card.lines.map((line) => (
+                <li class="flex items-start gap-2">
+                  <span aria-hidden="true">✓</span>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="mt-5">
+            <a
+              href={edition.squareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class:list={[
+                'inline-flex w-full items-center justify-center rounded-md px-5 py-3 text-base font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2',
+                edition.featured
+                  ? 'bg-gray-900 text-white hover:bg-gray-700 focus-visible:outline-gray-900'
+                  : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-slate-100 focus-visible:outline-gray-900'
+              ]}
+              aria-label={edition.ariaLabel}
+              data-testid={`pre-sale-bottom-cta-${edition.id}`}
+              data-pre-sale-order-link
+              data-pre-sale-edition={edition.name}
+              data-pre-sale-toast-message={edition.toastMessage}
+            >
+              {edition.cardCtaLabel}
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <article class="mt-4 rounded-lg border border-stone-200 bg-stone-50 p-5 shadow-sm">
+      <h3 class="text-2xl font-semibold text-gray-900">{defaultContent.sharedDetailsTitle}</h3>
+      <ul class="mt-4 grid grid-cols-1 gap-3 text-base text-gray-700 md:grid-cols-2">
+        {defaultContent.sharedDetailsLines.map((line) => (
+          <li class="flex items-start gap-2">
+            <span aria-hidden="true">✓</span>
+            <span>{line}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-gray-900">
+        <p class="text-sm font-semibold uppercase tracking-[0.16em] text-amber-900">
+          {defaultContent.dedicationNoteTitle}
+        </p>
+        <p class="mt-2 text-base leading-relaxed">
+          {defaultContent.dedicationNoteBody}
+        </p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div
+  class="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4"
+  aria-live="polite"
+  aria-atomic="true"
+  data-pre-sale-toast-region
+>
+  <div
+    class="max-w-md rounded-full bg-gray-900 px-4 py-3 text-sm font-medium text-white shadow-lg transition-opacity duration-200"
+    data-pre-sale-toast
+    hidden
+  ></div>
+</div>
+
+<script is:inline define:vars={{ windowConfig: PRE_SALE_CONFIG.window }}>
+  (() => {
+    const banner = document.querySelector('[data-pre-sale-banner]');
+    if (!banner) {
+      return;
+    }
+
+    const parseDate = (dateValue) => {
+      if (!dateValue) {
+        return null;
+      }
+
+      const parsed = new Date(dateValue);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    };
+
+    const start = parseDate(windowConfig.startsAt);
+    const end = parseDate(windowConfig.endsAt);
+    const now = new Date();
+    const isVisible = (!start || now >= start) && (!end || now <= end);
+
+    banner.hidden = !isVisible;
+
+    const toast = document.querySelector('[data-pre-sale-toast]');
+    if (!toast) {
+      return;
+    }
+
+    let toastTimer;
+    const showToast = (message) => {
+      if (!message) {
+        return;
+      }
+
+      toast.textContent = message;
+      toast.hidden = false;
+      toast.style.opacity = '1';
+
+      if (toastTimer) {
+        window.clearTimeout(toastTimer);
+      }
+
+      toastTimer = window.setTimeout(() => {
+        toast.style.opacity = '0';
+        window.setTimeout(() => {
+          toast.hidden = true;
+        }, 180);
+      }, 2800);
+    };
+
+    document.querySelectorAll('[data-pre-sale-order-link]').forEach((link) => {
+      link.addEventListener('click', () => {
+        showToast(link.getAttribute('data-pre-sale-toast-message'));
+      });
+    });
+  })();
+</script>

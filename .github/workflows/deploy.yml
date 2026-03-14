@@ -21,6 +21,11 @@ jobs:
 
       - name: Install, build, and upload your site
         uses: withastro/action@v3
+        env:
+          PUBLIC_PREVENTE_START_AT: ${{ vars.PUBLIC_PREVENTE_START_AT }}
+          PUBLIC_PREVENTE_END_AT: ${{ vars.PUBLIC_PREVENTE_END_AT }}
+          PUBLIC_PREVENTE_SQUARE_URL_LIMITED: ${{ vars.PUBLIC_PREVENTE_SQUARE_URL_LIMITED }}
+          PUBLIC_PREVENTE_SQUARE_URL_LUXE: ${{ vars.PUBLIC_PREVENTE_SQUARE_URL_LUXE }}
         with:
           node-version: latest 
 

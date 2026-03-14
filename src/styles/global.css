@@ -1,6 +1,43 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* Palette inspirée de l'ouvrage "Récit choral" (bordeaux, rose poudré, papier) */
+@theme {
+  --color-gray-50: #f6f1ee;
+  --color-gray-100: #efe5e0;
+  --color-gray-200: #e2d2cb;
+  --color-gray-300: #ccb4aa;
+  --color-gray-400: #b09084;
+  --color-gray-500: #8f7368;
+  --color-gray-600: #73564d;
+  --color-gray-700: #5b433d;
+  --color-gray-800: #462f31;
+  --color-gray-900: #322123;
+
+  --color-slate-50: #f3ecea;
+  --color-slate-100: #ebddda;
+  --color-slate-200: #dac6c0;
+  --color-slate-300: #c2a59e;
+  --color-slate-400: #a98782;
+  --color-slate-500: #8b6966;
+  --color-slate-600: #6d4f4d;
+  --color-slate-700: #563d3d;
+  --color-slate-800: #452f33;
+  --color-slate-900: #2e1f22;
+
+  --color-blue-500: #7d3343;
+  --color-blue-600: #6b2f3a;
+  --color-blue-700: #57242d;
+  --color-blue-800: #451c24;
+}
+
+@layer base {
+  body {
+    background-color: #ffffff;
+    color: #322123;
+  }
+}
+
 /* Styles pour le contenu Markdown */
 .prose p {
   margin-bottom: 1.5em;
@@ -31,12 +68,12 @@
 
 /* Style pour les liens dans le contenu Markdown */
 .prose a {
-  color: #2563eb; /* blue-600 */
+  color: #6b2f3a; /* palette Récit choral */
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color 0.2s ease;
 }
 
 .prose a:hover {
-  color: #1d4ed8; /* blue-700 */
+  color: #57242d;
 }

@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import PreSaleBanner from '../components/PreSaleBanner.astro';
+import StickyPreSaleCta from '../components/StickyPreSaleCta.astro';
 
 // Importer les collections
 const projets = await getCollection('projets', ({ data }) => {
@@ -102,6 +104,8 @@ const mediationsWithImages = await Promise.all(
 ---
 
 <BaseLayout title="Accueil">
+  <PreSaleBanner />
+  <StickyPreSaleCta />
   <!-- Hero Section -->
   <section class="relative">
     <div class="bg-gradient-to-r from-gray-100 to-gray-200 h-96 flex items-center">
