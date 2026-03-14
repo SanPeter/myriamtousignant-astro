@@ -34,6 +34,8 @@ interface PreSaleCopy {
   heroCtaIntro: string;
   detailsLinkLabel: string;
   editorialParagraphs: string[];
+  sharedDetailsTitle: string;
+  sharedDetailsLines: string[];
 }
 
 const copy: PreSaleCopy = {
@@ -44,11 +46,18 @@ const copy: PreSaleCopy = {
   subtitle: 'Tirage total limité à 150 exemplaires',
   artistLine: "Livre d'artiste de Myriam Tousignant",
   availabilityLine: 'Prévente exclusive — dès le 16 mars',
-  heroCtaIntro: 'Choisissez l’édition que vous souhaitez commander.',
+  heroCtaIntro: 'Précommander :',
   detailsLinkLabel: 'En savoir plus',
   editorialParagraphs: [
     "Récit choral est un livre d'artiste issu d'une recherche sur la mémoire, la filiation et la transformation des archives familiales en espace de réflexion partagée.",
     "Le lancement aura lieu en mai, en parallèle d'une exposition éphémère présentée du 6 au 9 mai à l'Atrium du métro de Longueuil."
+  ],
+  sharedDetailsTitle: 'Informations de précommande',
+  sharedDetailsLines: [
+    'Dédicace personnalisée',
+    'Récupération du 6 au 9 mai ou soirée de lancement',
+    'Envoi postal disponible (15 $)',
+    'Expéditions la semaine du 11 mai'
   ]
 };
 
@@ -63,21 +72,15 @@ const editions: PreSaleEdition[] = [
     badge: '125 exemplaires',
     summary: 'Une édition accessible et soignée, pensée pour la prévente et la signature.',
     squareUrl: import.meta.env.PUBLIC_PREVENTE_SQUARE_URL_LIMITED ?? defaultSquareUrl,
-    heroCtaLabel: 'Commander l’édition limitée',
+    heroCtaLabel: 'Édition limitée',
     stickyCtaLabel: 'Édition limitée',
-    cardCtaLabel: 'Commander cette édition',
-    ariaLabel: 'Commander l’édition limitée de Récit choral sur Square, ouverture dans un nouvel onglet',
+    cardCtaLabel: 'Précommander cette édition',
+    ariaLabel: 'Précommander l’édition limitée de Récit choral sur Square, ouverture dans un nouvel onglet',
     toastMessage: 'Ouverture de Square pour l’édition limitée.',
     featured: true,
     card: {
       title: 'Édition limitée',
-      lines: [
-        '125 exemplaires sur le tirage total de 150',
-        'Dédicace personnalisée',
-        'Récupération du 6 au 9 mai ou soirée de lancement',
-        'Envoi postal disponible (15 $)',
-        'Expéditions la semaine du 11 mai'
-      ]
+      lines: ['125 exemplaires sur le tirage total de 150']
     }
   },
   {
@@ -86,22 +89,14 @@ const editions: PreSaleEdition[] = [
     badge: '25 exemplaires',
     summary: 'Une version de collection en tirage plus restreint, pensée pour les collectionneurs.',
     squareUrl: import.meta.env.PUBLIC_PREVENTE_SQUARE_URL_LUXE ?? defaultSquareUrl,
-    heroCtaLabel: 'Commander l’édition luxe',
+    heroCtaLabel: 'Édition luxe',
     stickyCtaLabel: 'Édition luxe',
-    cardCtaLabel: 'Réserver l’édition luxe',
-    ariaLabel: 'Commander l’édition luxe de Récit choral sur Square, ouverture dans un nouvel onglet',
+    cardCtaLabel: 'Précommander l’édition luxe',
+    ariaLabel: 'Précommander l’édition luxe de Récit choral sur Square, ouverture dans un nouvel onglet',
     toastMessage: 'Ouverture de Square pour l’édition luxe.',
     card: {
       title: 'Édition luxe',
-      lines: [
-        '25 exemplaires sur le tirage total de 150',
-        'Numérotés et signés',
-        'Reproduction incluse',
-        'Dédicace personnalisée',
-        'Récupération du 6 au 9 mai ou soirée de lancement',
-        'Envoi postal disponible (15 $)',
-        'Expéditions la semaine du 11 mai'
-      ]
+      lines: ['25 exemplaires sur le tirage total de 150', 'Numérotés et signés', 'Reproduction incluse']
     }
   }
 ];
