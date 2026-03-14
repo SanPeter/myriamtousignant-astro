@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Bloc prévente', () => {
-  test('s affiche en FR sur la home avec CTA Square en nouvel onglet', async ({ page }) => {
+  test('s affiche en FR sur la home avec deux CTA Square en nouvel onglet', async ({ page }) => {
     await page.goto('/');
 
     const banner = page.getByTestId('pre-sale-banner');
@@ -11,13 +11,19 @@ test.describe('Bloc prévente', () => {
     await expect(banner).toContainText('Prévente exclusive — dès le 16 mars');
     await expect(banner).toContainText('Édition luxe');
 
-    const heroCta = page.getByTestId('pre-sale-cta');
-    await expect(heroCta).toHaveText('Précommander');
-    await expect(heroCta).toHaveAttribute('target', '_blank');
-    await expect(heroCta).toHaveAttribute('rel', /noopener/);
-    await expect(heroCta).toHaveAttribute('href', /square\.link/);
+    const limitedHeroCta = page.getByTestId('pre-sale-cta-limited');
+    const luxeHeroCta = page.getByTestId('pre-sale-cta-luxe');
+    await expect(limitedHeroCta).toHaveText('Commander l’édition limitée');
+    await expect(luxeHeroCta).toHaveText('Commander l’édition luxe');
 
-    await expect(page.getByTestId('pre-sale-bottom-cta-primary')).toHaveText('Précommander');
+    for (const cta of [limitedHeroCta, luxeHeroCta]) {
+      await expect(cta).toHaveAttribute('target', '_blank');
+      await expect(cta).toHaveAttribute('rel', /noopener/);
+      await expect(cta).toHaveAttribute('href', /square\.link/);
+    }
+
+    await expect(page.getByTestId('pre-sale-bottom-cta-limited')).toHaveText('Commander cette édition');
+    await expect(page.getByTestId('pre-sale-bottom-cta-luxe')).toHaveText('Réserver l’édition luxe');
   });
 
   test('sticky CTA apparait quand le bloc sort de l ecran', async ({ page }) => {
@@ -29,8 +35,10 @@ test.describe('Bloc prévente', () => {
     await page.evaluate(() => window.scrollTo({ top: 1300, behavior: 'instant' }));
 
     await expect(sticky).toBeVisible();
-    await expect(sticky).toContainText('Prévente en cours — Récit choral');
-    await expect(sticky.getByRole('link', { name: 'Précommander' })).toBeVisible();
+    await expect(sticky).toContainText('Prévente en cours');
+    await expect(sticky).toContainText('Choisissez votre édition sur Square.');
+    await expect(sticky.getByTestId('pre-sale-sticky-cta-limited')).toBeVisible();
+    await expect(sticky.getByTestId('pre-sale-sticky-cta-luxe')).toBeVisible();
   });
 
   test('sticky CTA peut etre ferme', async ({ page }) => {
@@ -58,17 +66,30 @@ test.describe('Bloc prévente', () => {
       await page.goto('/');
 
       const banner = page.getByTestId('pre-sale-banner');
-      const cta = page.getByTestId('pre-sale-cta');
+      const limitedCta = page.getByTestId('pre-sale-cta-limited');
+      const luxeCta = page.getByTestId('pre-sale-cta-luxe');
 
       await expect(banner).toBeVisible();
-      await expect(cta).toBeVisible();
+      await expect(limitedCta).toBeVisible();
+      await expect(luxeCta).toBeVisible();
     }
   });
 
-  test('permet la navigation clavier jusqu au CTA', async ({ page }) => {
+  test('affiche un toast contextuel avant ouverture de Square', async ({ page }) => {
     await page.goto('/');
 
-    const cta = page.getByTestId('pre-sale-cta');
+    const limitedCta = page.getByTestId('pre-sale-cta-limited');
+    await limitedCta.click();
+
+    await expect(page.locator('[data-pre-sale-toast]')).toContainText(
+      'Ouverture de Square pour l’édition limitée.'
+    );
+  });
+
+  test('permet la navigation clavier jusqu au premier CTA', async ({ page }) => {
+    await page.goto('/');
+
+    const cta = page.getByTestId('pre-sale-cta-limited');
 
     for (let index = 0; index < 12; index += 1) {
       if (await cta.evaluate((node) => node === document.activeElement)) {
