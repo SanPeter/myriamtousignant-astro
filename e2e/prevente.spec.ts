@@ -75,6 +75,38 @@ test.describe('Bloc prévente', () => {
     }
   });
 
+  test('sur iPhone 13 mini les badges restent dans la tuile et la description garde une largeur lisible', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+
+    for (const editionId of ['limited', 'luxe']) {
+      const card = page.getByTestId(`pre-sale-card-${editionId}`);
+      const badge = page.getByTestId(`pre-sale-card-badge-${editionId}`);
+      const summary = page.getByTestId(`pre-sale-card-summary-${editionId}`);
+
+      await expect(card).toBeVisible();
+      await expect(badge).toBeVisible();
+      await expect(summary).toBeVisible();
+
+      const cardBox = await card.boundingBox();
+      const badgeBox = await badge.boundingBox();
+      const summaryBox = await summary.boundingBox();
+
+      expect(cardBox).not.toBeNull();
+      expect(badgeBox).not.toBeNull();
+      expect(summaryBox).not.toBeNull();
+
+      if (!cardBox || !badgeBox || !summaryBox) {
+        throw new Error('Bounding boxes are required for responsive layout assertions.');
+      }
+
+      expect(badgeBox.x).toBeGreaterThanOrEqual(cardBox.x - 1);
+      expect(badgeBox.x + badgeBox.width).toBeLessThanOrEqual(cardBox.x + cardBox.width + 1);
+      expect(summaryBox.width).toBeGreaterThan(cardBox.width * 0.7);
+      expect(badgeBox.y).toBeGreaterThan(summaryBox.y + 8);
+    }
+  });
+
   test('affiche un toast contextuel avant ouverture de Square', async ({ page }) => {
     await page.goto('/');
 
