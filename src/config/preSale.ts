@@ -52,12 +52,12 @@ const copy: PreSaleCopy = {
   detailsLinkLabel: 'En savoir plus',
   editorialParagraphs: [
     "Récit choral est un livre d'artiste issu d'une recherche sur la mémoire, la filiation et la transformation des archives familiales en espace de réflexion partagée.",
-    "Le lancement aura lieu en mai, en parallèle d'une exposition éphémère, présentée du 6 au 9 mai à l'Atrium du métro de Longueuil."
+    "Le lancement aura lieu le 7 mai, à l'Atrium du métro de Longueuil."
   ],
   sharedDetailsTitle: 'Informations de précommande',
   sharedDetailsLines: [
     'Dédicace personnalisée',
-    'Récupération du 6 au 9 mai ou soirée de lancement',
+    'Récupération le 7 mai de 11h à 20h',
     'Envoi postal disponible (15 $)',
     'Expéditions la semaine du 11 mai'
   ],
