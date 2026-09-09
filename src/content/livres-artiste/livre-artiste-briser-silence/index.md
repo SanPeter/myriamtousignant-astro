@@ -3,7 +3,7 @@ type: 'projets'
 title: 'Livre d’artiste "Et si je me permettais de briser ces silences"'
 date: 2024-02-13T19:30:07-05:00
 draft: false
-weight: 1
+weight: 2
 featured: false
 summaryImage: 'images/livre-artiste-01.jpg'
 listImage: 'images/livre-artiste-01.jpg'
