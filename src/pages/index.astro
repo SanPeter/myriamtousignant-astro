@@ -6,25 +6,6 @@ import PreSaleBanner from '../components/PreSaleBanner.astro';
 import StickyPreSaleCta from '../components/StickyPreSaleCta.astro';
 
 // Importer les collections
-const projets = await getCollection('projets', ({ data }) => {
-  return !data.draft && data.featured;
-}).then(items => items.sort((a, b) => {
-  if (!a.data.date || !b.data.date) return 0;
-  return b.data.date.valueOf() - a.data.date.valueOf();
-}));
-
-const expositions = await getCollection('expositions', ({ data }) => {
-  return !data.draft;
-}).then(items => items.sort((a, b) => {
-  // Si startDate est disponible, l'utiliser (spécifique aux expositions)
-  if (a.data.startDate && b.data.startDate) {
-    return b.data.startDate.valueOf() - a.data.startDate.valueOf();
-  }
-  // Sinon utiliser date normale
-  if (!a.data.date || !b.data.date) return 0;
-  return b.data.date.valueOf() - a.data.date.valueOf();
-}));
-
 const mediations = await getCollection('mediations', ({ data }) => {
   return !data.draft;
 }).then(items => items.sort((a, b) => {
@@ -34,8 +15,6 @@ const mediations = await getCollection('mediations', ({ data }) => {
 
 // Importer toutes les images des collections dynamiquement
 const contentImages = import.meta.glob([
-  '../content/projets/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
-  '../content/expositions/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}',
   '../content/mediations/**/*.{jpeg,jpg,png,gif,webp,JPG,JPEG,PNG,GIF,WEBP}'
 ]);
 
@@ -75,24 +54,6 @@ async function resolveContentImage(collection: string, slug: string, imagePath: 
 }
 
 // Préparer les données avec les images résolues
-const projetsWithImages = await Promise.all(
-  projets.slice(0, 3).map(async (projet) => {
-    const image = projet.data.summaryImage 
-      ? await resolveContentImage('projets', projet.id.replace(/\.md$/, ''), projet.data.summaryImage)
-      : null;
-    return { ...projet, resolvedImage: image };
-  })
-);
-
-const expositionsWithImages = await Promise.all(
-  expositions.slice(0, 3).map(async (expo) => {
-    const image = expo.data.summaryImage 
-      ? await resolveContentImage('expositions', expo.id.replace(/\.md$/, ''), expo.data.summaryImage)
-      : null;
-    return { ...expo, resolvedImage: image };
-  })
-);
-
 const mediationsWithImages = await Promise.all(
   mediations.slice(0, 2).map(async (art) => {
     const image = art.data.summaryImage 
@@ -125,77 +86,27 @@ const mediationsWithImages = await Promise.all(
     </div>
   </section>
 
-  <!-- Bourse de création -->
-  <section class="py-12 bg-gray-100">
-    <div class="container mx-auto px-6">
-      <div class="max-w-4xl mx-auto text-center">
-        <p class="text-sm uppercase tracking-wide text-gray-600 mb-3">
-          Conseil des arts de Longueuil · 2026
-        </p>
-        <h2 class="text-3xl font-bold text-gray-800 mb-6">
-          Une bourse de création pour un nouveau projet
-        </h2>
-        <div class="text-lg leading-relaxed text-gray-700 space-y-4">
-          <p>
-            Je suis profondément reconnaissante d'avoir obtenu une bourse de création du Conseil des arts de Longueuil en 2026 pour mon projet d'exposition <em>Pour garder la mémoire vivante</em>.
-          </p>
-          <p>
-            Réunissant les corpus <em>Petites mains</em> et <em>Récit choral</em>, ce projet explore la mémoire, la transmission et les récits qui traversent les générations. En collaboration avec la commissaire Galadriel Avon, il donnera lieu à une exposition et à la création d'un opuscule inspiré du journal de bord.
-          </p>
-          <p>
-            Cette reconnaissance me permettra de poursuivre mes recherches et de développer de nouvelles œuvres au cours de la prochaine année.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Projets Récents -->
+  <!-- Projet en vedette -->
   <section class="py-12 bg-gray-50">
     <div class="container mx-auto px-6">
       <div class="flex flex-col items-start md:flex-row md:justify-between md:items-center mb-8">
-        <h2 class="text-3xl font-bold">Projets en vedette</h2>
-        <a href="/projets" class="text-blue-600 hover:underline inline-flex items-center mt-2 md:mt-0">
-          Tous les projets
+        <h2 class="text-3xl font-bold">Livre d’artiste</h2>
+        <a href="/livres-artiste" class="text-blue-600 hover:underline inline-flex items-center mt-2 md:mt-0">
+          Tous les livres d’artiste
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
         </a>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projetsWithImages.map(projet => (
-          <a href={`/projets/${projet.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 overflow-hidden">
-            {projet.resolvedImage && (
-              <div class="w-full h-48 overflow-hidden">
-                {projet.resolvedImage.type === 'import' ? (
-                  <Image 
-                    src={projet.resolvedImage.value} 
-                    alt={projet.data.title} 
-                    width={400}
-                    height={300}
-                    class="w-full h-full object-cover"
-                  />
-                ) : (
-                  <img 
-                    src={projet.resolvedImage.value} 
-                    alt={projet.data.title} 
-                    width="400"
-                    height="300"
-                    class="w-full h-full object-cover"
-                  />
-                )}
-              </div>
-            )}
-            <div class="p-4">
-              <h3 class="text-xl font-semibold">{projet.data.title}</h3>
-              {projet.data.description && (
-                <p class="mt-2 text-gray-600 line-clamp-2">{projet.data.description}</p>
-              )}
-            </div>
-          </a>
-        ))}
-      </div>
+      <a href="/livres-artiste/recit-choral/" class="block max-w-md mx-auto bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200 overflow-hidden">
+        <div class="w-full h-64 overflow-hidden">
+          <img src="/images/recit-choral-image.png" alt="Livre d’artiste Récit choral" width="400" height="300" class="w-full h-full object-cover" />
+        </div>
+        <div class="p-4">
+          <h3 class="text-xl font-semibold">Livre d’artiste – Récit choral</h3>
+        </div>
+      </a>
     </div>
   </section>
   
@@ -261,57 +172,24 @@ const mediationsWithImages = await Promise.all(
   )}
 
 
-  <!-- Expositions -->
-  <section class="py-12 bg-gray-50">
+  <!-- Entrevues -->
+  <section aria-label="Entrevues" class="py-12 bg-gray-50">
     <div class="container mx-auto px-6">
       <div class="flex flex-col items-start md:flex-row md:justify-between md:items-center mb-8">
-        <h2 class="text-3xl font-bold">Expositions récentes</h2>
-        <a href="/expositions" class="text-blue-600 hover:underline inline-flex items-center mt-2 md:mt-0">
-          Toutes les expositions
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
+        <h2 class="text-3xl font-bold">Entrevues</h2>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {expositionsWithImages.map(expo => (
-          <a href={`/expositions/${expo.id.replace(/\.md$/, '')}`} class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
-            {expo.resolvedImage && (
-              <div class="w-full h-48 overflow-hidden">
-                {expo.resolvedImage.type === 'import' ? (
-                  <Image 
-                    src={expo.resolvedImage.value} 
-                    alt={expo.data.title} 
-                    width={400}
-                    height={300}
-                    class="w-full h-full object-cover"
-                  />
-                ) : (
-                  <img 
-                    src={expo.resolvedImage.value} 
-                    alt={expo.data.title} 
-                    width="400"
-                    height="300"
-                    class="w-full h-full object-cover"
-                  />
-                )}
-              </div>
-            )}
-            <div class="p-4">
-              <h3 class="text-xl font-semibold">{expo.data.title}</h3>
-              {expo.data.location && (
-                <p class="text-sm text-gray-600 mt-1">{expo.data.location}</p>
-              )}
-              {expo.data.startDate && (
-                <p class="text-sm text-gray-600">
-                  {expo.data.startDate.toLocaleDateString('fr-CA')}
-                  {expo.data.endDate && ` au ${expo.data.endDate.toLocaleDateString('fr-CA')}`}
-                </p>
-              )}
-            </div>
-          </a>
-        ))}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="/expositions/dimanche-on-lit/" class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Entre poésie et résistance : Dimanche on lit explore la mémoire et la crise du logement</h3>
+          </div>
+        </a>
+        <a href="/expositions/bonheur-le-matin/" class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Myriam Tousignant tisse les voix des femmes et des générations</h3>
+          </div>
+        </a>
       </div>
     </div>
   </section>
