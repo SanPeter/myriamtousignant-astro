@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import PreSaleBanner from '../components/PreSaleBanner.astro';
 import StickyPreSaleCta from '../components/StickyPreSaleCta.astro';
+import expositionImage from '../content/expositions/pour-garder-la-memoire-vivante/images/invitation.jpg';
 
 // Importer les collections
 const mediations = await getCollection('mediations', ({ data }) => {
@@ -83,6 +84,27 @@ const mediationsWithImages = await Promise.all(
           </a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Exposition à venir -->
+  <section class="py-12 bg-white" aria-labelledby="exposition-a-venir">
+    <div class="container mx-auto px-6">
+      <h2 id="exposition-a-venir" class="text-3xl font-bold mb-8">Exposition à venir</h2>
+      <a href="/expositions/pour-garder-la-memoire-vivante/" class="block max-w-4xl mx-auto bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200 overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+          <div class="md:w-2/5">
+            <Image src={expositionImage} alt="Invitation à l'exposition Pour garder la mémoire vivante" width={675} height={1050} class="w-full h-full object-cover" />
+          </div>
+          <div class="p-6 md:w-3/5">
+            <h3 class="text-2xl font-semibold">Pour garder la mémoire vivante</h3>
+            <p class="mt-3 text-gray-700">Du 19 novembre 2026 au 17 janvier 2027</p>
+            <p class="mt-1 text-gray-600">Galerie Jean-Letarte, Café centre d'art<br />536, boulevard Marie-Victorin, Boucherville (Québec)</p>
+            <p class="mt-4 text-blue-600">Découvrir l'exposition →</p>
+            <p class="mt-3 text-sm text-gray-500">Crédit photo : Jean-Michael Seminaro</p>
+          </div>
+        </div>
+      </a>
     </div>
   </section>
 
